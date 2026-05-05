@@ -1,0 +1,8 @@
+title = "gitleaks config"
+
+[[allowlists]]
+description = "Allowed example & generated files"
+paths = [
+	'\.env\.local\.example$',
+	'src/generated/.*',
+]

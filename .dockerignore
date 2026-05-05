@@ -1,0 +1,27 @@
+# dependencies
+node_modules
+**/node_modules
+
+# next
+.next
+**/.next
+out
+**/out
+
+# pnpm store / caches
+.pnpm-store
+**/.pnpm-store
+.pnpm
+**/.pnpm
+.pnpm-debug.log*
+**/.pnpm-debug.log*
+
+# tooling
+.git
+**/.git
+.DS_Store
+**/.DS_Store
+
+# env
+.env
+.env.*

@@ -1,0 +1,10 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+api:
+  dashboard: true
+
+providers:
+  docker:
+    exposedByDefault: false

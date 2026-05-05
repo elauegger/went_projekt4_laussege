@@ -1,0 +1,18 @@
+FROM node:24-alpine
+
+WORKDIR /app
+
+RUN corepack enable
+
+# pnpm store separat cachen
+ENV PNPM_HOME=/pnpm
+ENV PNPM_STORE_PATH=/pnpm-store
+ENV PATH=$PNPM_HOME:$PATH
+
+COPY package.json pnpm-lock.yaml ./
+RUN --mount=type=cache,target=/pnpm-store pnpm install
+
+COPY . .
+
+EXPOSE 3000
+CMD ["pnpm", "dev"]
