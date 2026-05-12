@@ -1,0 +1,155 @@
+
+<div id="erd" style="padding: 0.5rem 0;"></div>
+<script type="module">
+import mermaid from 'https://esm.sh/mermaid@11/dist/mermaid.esm.min.mjs';
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+await document.fonts.ready;
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'base',
+  fontFamily: '"Anthropic Sans", sans-serif',
+  themeVariables: {
+    darkMode: dark,
+    fontSize: '13px',
+    fontFamily: '"Anthropic Sans", sans-serif',
+    lineColor: dark ? '#9c9a92' : '#73726c',
+    textColor: dark ? '#c2c0b6' : '#3d3d3a',
+    primaryColor: dark ? '#2C2C2A' : '#F1EFE8',
+    primaryBorderColor: dark ? '#5F5E5A' : '#B4B2A9',
+  },
+});
+
+const diagram = `erDiagram
+  USER {
+    uuid id PK
+    string name
+    string email
+    string email_verified
+    string image
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  SESSION {
+    uuid id PK
+    uuid user_id FK
+    string token
+    timestamp expires_at
+    string ip_address
+    string user_agent
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  ACCOUNT {
+    uuid id PK
+    uuid user_id FK
+    string account_id
+    string provider_id
+    string access_token
+    string refresh_token
+    timestamp access_token_expires_at
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  VERIFICATION {
+    uuid id PK
+    string identifier
+    string value
+    timestamp expires_at
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  APPLICATION {
+    uuid id PK
+    uuid user_id FK
+    string title
+    string company
+    string original_filename
+    string file_type
+    string file_url
+    string storage_key
+    bigint file_size_bytes
+    string status
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  AI_ANALYSIS {
+    uuid id PK
+    uuid application_id FK
+    string raw_text_extracted
+    string ai_suggestion_text
+    string model_used
+    int tokens_used
+    string analysis_status
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  IMPROVED_FILE {
+    uuid id PK
+    uuid analysis_id FK
+    uuid user_id FK
+    string file_url
+    string storage_key
+    string file_type
+    bigint file_size_bytes
+    string generation_status
+    boolean is_downloaded
+    timestamp downloaded_at
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  SAVED_SUGGESTION {
+    uuid id PK
+    uuid user_id FK
+    uuid analysis_id FK
+    uuid application_id FK
+    string title
+    string suggestion_text
+    boolean is_applied
+    timestamp created_at
+    timestamp updated_at
+  }
+
+  USER ||--o{ SESSION : "hat"
+  USER ||--o{ ACCOUNT : "verknuepft mit"
+  USER ||--o{ APPLICATION : "laed hoch"
+  USER ||--o{ SAVED_SUGGESTION : "speichert"
+  USER ||--o{ IMPROVED_FILE : "besitzt"
+  APPLICATION ||--|| AI_ANALYSIS : "hat"
+  AI_ANALYSIS ||--o| IMPROVED_FILE : "generiert"
+  AI_ANALYSIS ||--o{ SAVED_SUGGESTION : "quelle von"
+`;
+
+const { svg } = await mermaid.render('erd-svg', diagram);
+document.getElementById('erd').innerHTML = svg;
+
+document.querySelectorAll('#erd svg.erDiagram .node').forEach(node => {
+  const firstPath = node.querySelector('path[d]');
+  if (!firstPath) return;
+  const d = firstPath.getAttribute('d');
+  const nums = d.match(/-?[\d.]+/g)?.map(Number);
+  if (!nums || nums.length < 8) return;
+  const xs = [nums[0], nums[2], nums[4], nums[6]];
+  const ys = [nums[1], nums[3], nums[5], nums[7]];
+  const x = Math.min(...xs), y = Math.min(...ys);
+  const w = Math.max(...xs) - x, h = Math.max(...ys) - y;
+  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+  rect.setAttribute('x', x); rect.setAttribute('y', y);
+  rect.setAttribute('width', w); rect.setAttribute('height', h);
+  rect.setAttribute('rx', '8');
+  for (const a of ['fill', 'stroke', 'stroke-width', 'class', 'style']) {
+    if (firstPath.hasAttribute(a)) rect.setAttribute(a, firstPath.getAttribute(a));
+  }
+  firstPath.replaceWith(rect);
+});
+
+document.querySelectorAll('#erd svg.erDiagram .row-rect-odd path, #erd svg.erDiagram .row-rect-even path').forEach(p => {
+  p.setAttribute('stroke', 'none');
+});
+</script>

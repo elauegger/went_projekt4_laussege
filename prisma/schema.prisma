@@ -17,8 +17,21 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  myUser        MyUsers?
 
   @@map("user")
+}
+
+model MyUsers {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  applications  Application[]
+  improvedFiles ImprovedFile[]
+  savedSuggestions SavedSuggestion[]
+
+  @@map("myusers")
 }
 
 model Session {
@@ -66,6 +79,85 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Application {
+  id               String   @id @default(uuid())
+  myUserId         String
+  title            String
+  company          String
+  originalFilename String
+  fileType         String
+  fileUrl          String
+  storageKey       String
+  fileSizeBytes    BigInt
+  status           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  myUser           MyUsers  @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis         AIAnalysis?
+  savedSuggestions SavedSuggestion[]
+
+  @@index([myUserId])
+  @@map("applications")
+}
+
+model AIAnalysis {
+  id               String   @id @default(uuid())
+  applicationId    String   @unique
+  rawTextExtracted String
+  aiSuggestionText String
+  modelUsed        String
+  tokensUsed       Int
+  analysisStatus   String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  application      Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  improvedFiles    ImprovedFile[]
+  savedSuggestions SavedSuggestion[]
+
+  @@map("ai_analyses")
+}
+
+model ImprovedFile {
+  id               String   @id @default(uuid())
+  analysisId       String
+  myUserId         String
+  fileUrl          String
+  storageKey       String
+  fileType         String
+  fileSizeBytes    BigInt
+  generationStatus String
+  isDownloaded     Boolean  @default(false)
+  downloadedAt     DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  analysis         AIAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  myUser           MyUsers    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@index([myUserId])
+  @@map("improved_files")
+}
+
+model SavedSuggestion {
+  id             String   @id @default(uuid())
+  myUserId       String
+  analysisId     String
+  applicationId  String
+  title          String
+  suggestionText String
+  isApplied      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  myUser         MyUsers  @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis        AIAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([myUserId])
+  @@index([analysisId])
+  @@index([applicationId])
+  @@map("saved_suggestions")
 }
 
 model people {
