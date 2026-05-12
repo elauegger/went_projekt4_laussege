@@ -17,12 +17,12 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
-  myUser        myusers?
+  myUser        my_users?
 
   @@map("user")
 }
 
-model myusers {
+model my_users {
   id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,7 +31,7 @@ model myusers {
   improvedFiles improved_files[]
   savedSuggestions saved_suggestions[]
 
-  @@map("myusers")
+  @@map("my_users")
 }
 
 model Session {
@@ -94,7 +94,7 @@ model applications {
   status           String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  myUser           myusers    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  myUser           my_users    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   analysis         ai_analyses?
   savedSuggestions saved_suggestions[]
 
@@ -133,7 +133,7 @@ model improved_files {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  myUser           myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  myUser           my_users     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
   @@index([analysisId])
   @@index([myUserId])
@@ -150,7 +150,7 @@ model saved_suggestions {
   isApplied      Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  myUser         myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  myUser         my_users     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   analysis        ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
   application     applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
@@ -158,11 +158,4 @@ model saved_suggestions {
   @@index([analysisId])
   @@index([applicationId])
   @@map("saved_suggestions")
-}
-
-model people {
-  id        Int      @id(map: "id") @default(autoincrement())
-  birthdate DateTime @db.Date
-  firstname String   @db.VarChar(50)
-  lastname  String   @db.VarChar(60)
 }
