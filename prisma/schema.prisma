@@ -17,19 +17,19 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
-  myUser        MyUsers?
+  myUser        myusers?
 
   @@map("user")
 }
 
-model MyUsers {
+model myusers {
   id        String   @id
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-  applications  Application[]
-  improvedFiles ImprovedFile[]
-  savedSuggestions SavedSuggestion[]
+  applications  applications[]
+  improvedFiles improved_files[]
+  savedSuggestions saved_suggestions[]
 
   @@map("myusers")
 }
@@ -81,7 +81,7 @@ model Verification {
   @@map("verification")
 }
 
-model Application {
+model applications {
   id               String   @id @default(uuid())
   myUserId         String
   title            String
@@ -94,15 +94,15 @@ model Application {
   status           String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  myUser           MyUsers  @relation(fields: [myUserId], references: [id], onDelete: Cascade)
-  analysis         AIAnalysis?
-  savedSuggestions SavedSuggestion[]
+  myUser           myusers    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis         ai_analyses?
+  savedSuggestions saved_suggestions[]
 
   @@index([myUserId])
   @@map("applications")
 }
 
-model AIAnalysis {
+model ai_analyses {
   id               String   @id @default(uuid())
   applicationId    String   @unique
   rawTextExtracted String
@@ -112,14 +112,14 @@ model AIAnalysis {
   analysisStatus   String
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  application      Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  improvedFiles    ImprovedFile[]
-  savedSuggestions SavedSuggestion[]
+  application      applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  improvedFiles    improved_files[]
+  savedSuggestions saved_suggestions[]
 
   @@map("ai_analyses")
 }
 
-model ImprovedFile {
+model improved_files {
   id               String   @id @default(uuid())
   analysisId       String
   myUserId         String
@@ -132,15 +132,15 @@ model ImprovedFile {
   downloadedAt     DateTime?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  analysis         AIAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  myUser           MyUsers    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  myUser           myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
   @@index([analysisId])
   @@index([myUserId])
   @@map("improved_files")
 }
 
-model SavedSuggestion {
+model saved_suggestions {
   id             String   @id @default(uuid())
   myUserId       String
   analysisId     String
@@ -150,9 +150,9 @@ model SavedSuggestion {
   isApplied      Boolean  @default(false)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  myUser         MyUsers  @relation(fields: [myUserId], references: [id], onDelete: Cascade)
-  analysis        AIAnalysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  myUser         myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis        ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  application     applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
 
   @@index([myUserId])
   @@index([analysisId])
