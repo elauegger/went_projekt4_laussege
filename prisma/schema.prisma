@@ -16,10 +16,22 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  myUser        myusers?
   sessions      Session[]
+  myUser        my_users?
 
   @@map("user")
+}
+
+model my_users {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  applications  applications[]
+  improvedFiles improved_files[]
+  savedSuggestions saved_suggestions[]
+
+  @@map("my_users")
 }
 
 model Session {
@@ -80,8 +92,9 @@ model applications {
   storageKey       String
   fileSizeBytes    BigInt
   status           String
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  myUser           my_users    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   analysis         ai_analyses?
   myUser           myusers             @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   savedSuggestions saved_suggestions[]
@@ -121,7 +134,7 @@ model improved_files {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  myUser           myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  myUser           my_users     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
   @@index([analysisId])
   @@index([myUserId])
