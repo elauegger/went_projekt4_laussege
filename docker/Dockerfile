@@ -47,6 +47,7 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup -S app && adduser -S app -G app
+RUN mkdir -p /app/uploads && chown -R app:app /app/uploads
 
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/next.config.ts ./next.config.ts
