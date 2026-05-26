@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const displayFont = Playfair_Display({
@@ -8,15 +8,21 @@ const displayFont = Playfair_Display({
   weight: ["500", "600", "700"],
 });
 
-const bodyFont = Inter({
-  variable: "--font-body",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Jobsy Dashboard",
-  description: "Resume analysis, job matches, and improvement insights.",
+  title: "Jobsy",
+  description: "KI-gestützte Karriere- und Lebenslaufanalyse in einem eleganten Dashboard.",
 };
 
 export default function RootLayout({
@@ -26,7 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bodyFont.variable} ${displayFont.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

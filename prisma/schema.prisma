@@ -17,8 +17,21 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  myUser        my_users?
 
   @@map("user")
+}
+
+model my_users {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
+  applications  applications[]
+  improvedFiles improved_files[]
+  savedSuggestions saved_suggestions[]
+
+  @@map("my_users")
 }
 
 model Session {
@@ -68,9 +81,111 @@ model Verification {
   @@map("verification")
 }
 
-model people {
-  id        Int      @id(map: "id") @default(autoincrement())
-  birthdate DateTime @db.Date
-  firstname String   @db.VarChar(50)
-  lastname  String   @db.VarChar(60)
+model applications {
+  id               String              @id @default(uuid())
+  myUserId         String
+  title            String
+  company          String
+  originalFilename String
+  fileType         String
+  fileUrl          String
+  storageKey       String
+  fileSizeBytes    BigInt
+  status           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  myUser           my_users    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  analysis         ai_analyses?
+  myUser           myusers             @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  savedSuggestions saved_suggestions[]
+
+  @@index([myUserId])
+  @@map("applications")
+}
+
+model ai_analyses {
+  id               String              @id @default(uuid())
+  applicationId    String              @unique
+  rawTextExtracted String
+  aiSuggestionText String
+  modelUsed        String
+  tokensUsed       Int
+  analysisStatus   String
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  application      applications        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  improvedFiles    improved_files[]
+  savedSuggestions saved_suggestions[]
+
+  @@map("ai_analyses")
+}
+
+model improved_files {
+  id               String      @id @default(uuid())
+  analysisId       String
+  myUserId         String
+  fileUrl          String
+  storageKey       String
+  fileType         String
+  fileSizeBytes    BigInt
+  generationStatus String
+  isDownloaded     Boolean     @default(false)
+  downloadedAt     DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  myUser           my_users     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@index([myUserId])
+  @@map("improved_files")
+}
+
+model saved_suggestions {
+  id             String       @id @default(uuid())
+  myUserId       String
+  analysisId     String
+  applicationId  String
+  title          String
+  suggestionText String
+  isApplied      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  analysis       ai_analyses  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  application    applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  myUser         myusers      @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  @@index([myUserId])
+  @@index([analysisId])
+  @@index([applicationId])
+  @@map("saved_suggestions")
+}
+
+model cv_uploads {
+  id               String   @id @default(uuid())
+  myUserId         String?
+  originalFilename String
+  fileType         String
+  fileUrl          String
+  storageKey       String
+  fileSizeBytes    BigInt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  myUser           myusers? @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  @@index([myUserId])
+  @@map("cv_uploads")
+}
+
+model myusers {
+  id               String              @id
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime
+  applications     applications[]
+  improvedFiles    improved_files[]
+  user             User                @relation(fields: [id], references: [id], onDelete: Cascade)
+  savedSuggestions saved_suggestions[]
+  cvUploads        cv_uploads[]
+
+  @@map("myusers")
 }
