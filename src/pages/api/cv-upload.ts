@@ -160,46 +160,32 @@ export default async function handler(
 
   await fs.writeFile(filePath, uploadedFile.buffer);
 
-  // Try to get user from session for optional authentication
+  const userId = await getUserFromCookies(req);
   let cvRecord = null;
   try {
-    const userId = await getUserFromCookies(req);
-    if (userId) {
-      // Get or create myusers record for this user
-      let myUser = await prisma.myusers.findUnique({
-        where: { id: userId },
-      });
-
-      if (!myUser) {
-        myUser = await prisma.myusers.create({
-          data: { id: userId, updatedAt: new Date() },
-        });
-      }
-
-      // Create CV upload record
-      cvRecord = await prisma.cv_uploads.create({
-        data: {
-          myUserId: userId,
-          originalFilename: originalName,
-          fileType: "application/pdf",
-          fileUrl: `/uploads/${fileName}`,
-          storageKey: fileName,
-          fileSizeBytes: BigInt(uploadedFile.buffer.length),
-        },
-      });
-    }
+    cvRecord = await prisma.cv_uploads.create({
+      data: {
+        userId: userId ?? null,
+        originalFilename: originalName,
+        fileType: "application/pdf",
+        fileUrl: `/uploads/${fileName}`,
+        storageKey: fileName,
+        fileSizeBytes: BigInt(uploadedFile.buffer.length),
+      },
+    });
   } catch (dbError) {
     console.error("Database error while saving CV record:", dbError);
-    // Continue with file-only save if DB fails
+    return res.status(500).json({
+      success: false,
+      error: "Der Upload wurde gespeichert, aber der Datenbankeintrag ist fehlgeschlagen.",
+    });
   }
 
   return res.status(201).json({
     success: true,
-    message: cvRecord
-      ? "PDF erfolgreich hochgeladen und in der Datenbank gespeichert."
-      : "PDF erfolgreich hochgeladen.",
+    message: "PDF erfolgreich hochgeladen und in der Datenbank gespeichert.",
     fileName,
     filePath: `/uploads/${fileName}`,
-    ...(cvRecord && { cvId: cvRecord.id }),
+    cvId: cvRecord.id,
   });
 }

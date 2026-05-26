@@ -3,7 +3,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import "dotenv/config";
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 import { nextCookies } from 'better-auth/next-js';
 import { hashPassword, verifyPassword } from "./password";
 const connectionString = `${process.env.DATABASE_URL}`
