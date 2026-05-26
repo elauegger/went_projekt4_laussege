@@ -16,22 +16,10 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  sessions      Session[]
   myUser        myusers?
+  sessions      Session[]
 
   @@map("user")
-}
-
-model myusers {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-  applications  applications[]
-  improvedFiles improved_files[]
-  savedSuggestions saved_suggestions[]
-
-  @@map("myusers")
 }
 
 model Session {
@@ -82,7 +70,7 @@ model Verification {
 }
 
 model applications {
-  id               String   @id @default(uuid())
+  id               String              @id @default(uuid())
   myUserId         String
   title            String
   company          String
@@ -92,10 +80,10 @@ model applications {
   storageKey       String
   fileSizeBytes    BigInt
   status           String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  myUser           myusers    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
   analysis         ai_analyses?
+  myUser           myusers             @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   savedSuggestions saved_suggestions[]
 
   @@index([myUserId])
@@ -103,16 +91,16 @@ model applications {
 }
 
 model ai_analyses {
-  id               String   @id @default(uuid())
-  applicationId    String   @unique
+  id               String              @id @default(uuid())
+  applicationId    String              @unique
   rawTextExtracted String
   aiSuggestionText String
   modelUsed        String
   tokensUsed       Int
   analysisStatus   String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  application      applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  application      applications        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
   improvedFiles    improved_files[]
   savedSuggestions saved_suggestions[]
 
@@ -120,7 +108,7 @@ model ai_analyses {
 }
 
 model improved_files {
-  id               String   @id @default(uuid())
+  id               String      @id @default(uuid())
   analysisId       String
   myUserId         String
   fileUrl          String
@@ -128,10 +116,10 @@ model improved_files {
   fileType         String
   fileSizeBytes    BigInt
   generationStatus String
-  isDownloaded     Boolean  @default(false)
+  isDownloaded     Boolean     @default(false)
   downloadedAt     DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
   analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
   myUser           myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
@@ -141,18 +129,18 @@ model improved_files {
 }
 
 model saved_suggestions {
-  id             String   @id @default(uuid())
+  id             String       @id @default(uuid())
   myUserId       String
   analysisId     String
   applicationId  String
   title          String
   suggestionText String
-  isApplied      Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  myUser         myusers     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
-  analysis        ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  application     applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  isApplied      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  analysis       ai_analyses  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  application    applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  myUser         myusers      @relation(fields: [myUserId], references: [id], onDelete: Cascade)
 
   @@index([myUserId])
   @@index([analysisId])
@@ -160,9 +148,31 @@ model saved_suggestions {
   @@map("saved_suggestions")
 }
 
-model people {
-  id        Int      @id(map: "id") @default(autoincrement())
-  birthdate DateTime @db.Date
-  firstname String   @db.VarChar(50)
-  lastname  String   @db.VarChar(60)
+model cv_uploads {
+  id               String   @id @default(uuid())
+  myUserId         String?
+  originalFilename String
+  fileType         String
+  fileUrl          String
+  storageKey       String
+  fileSizeBytes    BigInt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  myUser           myusers? @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+
+  @@index([myUserId])
+  @@map("cv_uploads")
+}
+
+model myusers {
+  id               String              @id
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime
+  applications     applications[]
+  improvedFiles    improved_files[]
+  user             User                @relation(fields: [id], references: [id], onDelete: Cascade)
+  savedSuggestions saved_suggestions[]
+  cvUploads        cv_uploads[]
+
+  @@map("myusers")
 }
