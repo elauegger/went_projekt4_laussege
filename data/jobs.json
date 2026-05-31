@@ -1,0 +1,1344 @@
+[
+  {
+    "id": "job-1",
+    "title": "Software Engineer",
+    "company": "Tech Solutions GmbH",
+    "location": "Munich, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 70000,
+      "max": 95000,
+      "currency": "EUR"
+    },
+    "description": "Build and maintain core services for the Jobsy platform with a focus on reliability, performance, and clean APIs.",
+    "requirements": [
+      "3+ years of experience with TypeScript or JavaScript",
+      "Solid understanding of REST APIs and distributed systems",
+      "Experience with PostgreSQL and data modeling",
+      "Comfortable with Git, code reviews, and CI pipelines"
+    ],
+    "responsibilities": [
+      "Design and implement backend services for the platform",
+      "Collaborate with frontend and product teams on features",
+      "Improve observability and monitoring for production services",
+      "Write unit and integration tests for new endpoints"
+    ],
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Docker",
+      "REST APIs"
+    ],
+    "keywords": [
+      "SaaS",
+      "Microservices",
+      "Cloud",
+      "APIs"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-10T08:30:00Z"
+  },
+  {
+    "id": "job-2",
+    "title": "Full Stack Developer",
+    "company": "Digital Innovations AG",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 65000,
+      "max": 90000,
+      "currency": "EUR"
+    },
+    "description": "Own full stack features from discovery to production with a strong focus on user experience and performance.",
+    "requirements": [
+      "Strong React and Next.js experience",
+      "Proficiency with Node.js and REST APIs",
+      "Experience with relational databases",
+      "Comfortable working in a remote-first team"
+    ],
+    "responsibilities": [
+      "Build and ship full stack features end-to-end",
+      "Create reusable UI components and design systems",
+      "Optimize web performance and accessibility",
+      "Partner with design and product on roadmap delivery"
+    ],
+    "skills": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL"
+    ],
+    "keywords": [
+      "UI/UX",
+      "SSR",
+      "GraphQL",
+      "CI/CD"
+    ],
+    "benefits": [
+      "Remote stipend",
+      "Flexible hours",
+      "Annual retreat"
+    ],
+    "remote": true,
+    "createdAt": "2026-05-08T10:00:00Z"
+  },
+  {
+    "id": "job-3",
+    "title": "Backend Developer",
+    "company": "CodeCraft GmbH",
+    "location": "Berlin, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 78000,
+      "max": 105000,
+      "currency": "EUR"
+    },
+    "description": "Lead backend development for a high-throughput data platform with a focus on scalability and correctness.",
+    "requirements": [
+      "5+ years of backend development experience",
+      "Strong knowledge of Node.js or Java",
+      "Experience with message queues and caching",
+      "Proficiency in SQL and database optimization"
+    ],
+    "responsibilities": [
+      "Architect resilient backend systems",
+      "Design data pipelines and processing workflows",
+      "Mentor engineers and review code",
+      "Collaborate on infrastructure and deployment strategy"
+    ],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "Redis",
+      "Kafka",
+      "Docker"
+    ],
+    "keywords": [
+      "Scalability",
+      "Event-driven",
+      "Distributed systems"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-06T09:15:00Z"
+  },
+  {
+    "id": "job-4",
+    "title": "Frontend Developer",
+    "company": "WebWorks GmbH",
+    "location": "Hamburg, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 48000,
+      "max": 62000,
+      "currency": "EUR"
+    },
+    "description": "Craft delightful user interfaces for a modern SaaS analytics suite with emphasis on usability and design quality.",
+    "requirements": [
+      "1-2 years of experience with React",
+      "Understanding of CSS, accessibility, and responsive design",
+      "Basic familiarity with TypeScript",
+      "Portfolio of UI or frontend work"
+    ],
+    "responsibilities": [
+      "Build reusable UI components",
+      "Implement responsive layouts and interactions",
+      "Work closely with designers on visual polish",
+      "Write clear documentation for components"
+    ],
+    "skills": [
+      "React",
+      "TypeScript",
+      "CSS",
+      "TailwindCSS",
+      "Storybook"
+    ],
+    "keywords": [
+      "Design system",
+      "Accessibility",
+      "Frontend"
+    ],
+    "benefits": [
+      "On-site mentoring",
+      "Training budget",
+      "Modern office"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-04T12:45:00Z"
+  },
+  {
+    "id": "job-5",
+    "title": "DevOps Engineer",
+    "company": "CloudOps Studio",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 85000,
+      "max": 115000,
+      "currency": "EUR"
+    },
+    "description": "Scale and secure cloud infrastructure with a strong focus on automation, observability, and reliability.",
+    "requirements": [
+      "5+ years in DevOps or SRE roles",
+      "Hands-on experience with Kubernetes",
+      "Infrastructure-as-code with Terraform",
+      "Strong AWS or GCP expertise"
+    ],
+    "responsibilities": [
+      "Own CI/CD pipelines and release automation",
+      "Improve monitoring, alerting, and on-call practices",
+      "Harden infrastructure security",
+      "Partner with engineering teams on performance"
+    ],
+    "skills": [
+      "Kubernetes",
+      "Terraform",
+      "AWS",
+      "Docker",
+      "CI/CD"
+    ],
+    "keywords": [
+      "Observability",
+      "Infrastructure",
+      "Automation"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Home office budget",
+      "Conference budget"
+    ],
+    "remote": true,
+    "createdAt": "2026-05-02T07:20:00Z"
+  },
+  {
+    "id": "job-6",
+    "title": "Data Engineer",
+    "company": "DataForge Labs",
+    "location": "Vienna, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 72000,
+      "max": 98000,
+      "currency": "EUR"
+    },
+    "description": "Build reliable data pipelines and analytics foundations for product and BI teams.",
+    "requirements": [
+      "Experience with Python and SQL",
+      "ETL pipeline design and maintenance",
+      "Knowledge of data warehousing concepts",
+      "Familiarity with cloud data services"
+    ],
+    "responsibilities": [
+      "Develop and maintain batch and streaming pipelines",
+      "Ensure data quality and lineage",
+      "Optimize warehouse performance",
+      "Collaborate with analysts and ML teams"
+    ],
+    "skills": [
+      "Python",
+      "SQL",
+      "Airflow",
+      "BigQuery",
+      "dbt"
+    ],
+    "keywords": [
+      "Data pipelines",
+      "Analytics",
+      "Warehouse"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-30T11:05:00Z"
+  },
+  {
+    "id": "job-7",
+    "title": "AI Engineer",
+    "company": "NeuralWorks",
+    "location": "Remote (Global)",
+    "employmentType": "Remote",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 95000,
+      "max": 130000,
+      "currency": "EUR"
+    },
+    "description": "Develop and deploy ML models for intelligent matching and personalization in a production SaaS environment.",
+    "requirements": [
+      "Strong ML engineering background",
+      "Experience with model deployment and monitoring",
+      "Knowledge of vector search and embeddings",
+      "Solid Python and PyTorch skills"
+    ],
+    "responsibilities": [
+      "Build model training and evaluation pipelines",
+      "Deploy models with scalable inference",
+      "Work with product to define matching signals",
+      "Measure and improve ranking quality"
+    ],
+    "skills": [
+      "Python",
+      "PyTorch",
+      "ML Ops",
+      "Vector search",
+      "Kubernetes"
+    ],
+    "keywords": [
+      "Semantic matching",
+      "Ranking",
+      "Embeddings"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Equity options",
+      "Flexible schedule"
+    ],
+    "remote": true,
+    "createdAt": "2026-04-28T15:40:00Z"
+  },
+  {
+    "id": "job-8",
+    "title": "Product Engineer",
+    "company": "NextGen Software",
+    "location": "Zurich, Switzerland",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 100000,
+      "max": 135000,
+      "currency": "CHF"
+    },
+    "description": "Own product engineering outcomes, balancing technical execution with a strong product mindset.",
+    "requirements": [
+      "Strong full stack experience",
+      "Proven ability to drive product outcomes",
+      "Experience with modern web stacks",
+      "Leadership and mentoring skills"
+    ],
+    "responsibilities": [
+      "Lead cross-functional delivery for new features",
+      "Translate product goals into technical plans",
+      "Improve the developer experience and tooling",
+      "Ensure quality and reliability across releases"
+    ],
+    "skills": [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "PostgreSQL"
+    ],
+    "keywords": [
+      "Product-led",
+      "Roadmap",
+      "Ownership"
+    ],
+    "benefits": [
+      "Leadership coaching",
+      "Annual bonus",
+      "Relocation support"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-26T09:00:00Z"
+  },
+  {
+    "id": "job-9",
+    "title": "Mobile Engineer",
+    "company": "Atlas Systems",
+    "location": "Amsterdam, Netherlands",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 65000,
+      "max": 88000,
+      "currency": "EUR"
+    },
+    "description": "Build mobile experiences that extend the Jobsy platform to iOS and Android users.",
+    "requirements": [
+      "Experience with React Native or Swift",
+      "Strong understanding of mobile UX patterns",
+      "Experience integrating REST APIs",
+      "Knowledge of release workflows"
+    ],
+    "responsibilities": [
+      "Implement mobile features end-to-end",
+      "Maintain performance and stability",
+      "Collaborate on design flows",
+      "Ship regular updates"
+    ],
+    "skills": [
+      "React Native",
+      "TypeScript",
+      "iOS",
+      "Android",
+      "APIs"
+    ],
+    "keywords": [
+      "Mobile",
+      "App store",
+      "UX"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-24T10:30:00Z"
+  },
+  {
+    "id": "job-10",
+    "title": "QA Engineer",
+    "company": "Brightscale",
+    "location": "Copenhagen, Denmark",
+    "employmentType": "Full-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 46000,
+      "max": 60000,
+      "currency": "EUR"
+    },
+    "description": "Ensure product quality through robust testing and automation practices.",
+    "requirements": [
+      "Experience with automated testing",
+      "Understanding of QA processes",
+      "Familiarity with CI pipelines",
+      "Strong attention to detail"
+    ],
+    "responsibilities": [
+      "Build automated test suites",
+      "Run regression testing",
+      "Document quality metrics",
+      "Collaborate on bug triage"
+    ],
+    "skills": [
+      "Playwright",
+      "Cypress",
+      "TypeScript",
+      "CI/CD",
+      "Testing"
+    ],
+    "keywords": [
+      "Quality",
+      "Automation",
+      "Regression"
+    ],
+    "benefits": [
+      "Training budget",
+      "Mentorship",
+      "Hybrid work"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-22T09:10:00Z"
+  },
+  {
+    "id": "job-11",
+    "title": "Security Engineer",
+    "company": "Hyperion Tech",
+    "location": "Berlin, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 88000,
+      "max": 118000,
+      "currency": "EUR"
+    },
+    "description": "Protect systems and data with proactive security practices and secure-by-design workflows.",
+    "requirements": [
+      "Security engineering experience",
+      "Knowledge of OWASP and threat modeling",
+      "Experience with cloud security tooling",
+      "Incident response exposure"
+    ],
+    "responsibilities": [
+      "Run security assessments",
+      "Implement security controls",
+      "Partner on secure development",
+      "Improve incident readiness"
+    ],
+    "skills": [
+      "Security",
+      "AWS",
+      "OWASP",
+      "SIEM",
+      "Zero Trust"
+    ],
+    "keywords": [
+      "Security",
+      "Compliance",
+      "Risk"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Security training",
+      "Wellness program"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-20T08:45:00Z"
+  },
+  {
+    "id": "job-12",
+    "title": "Site Reliability Engineer",
+    "company": "Nimbus Ventures",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 90000,
+      "max": 120000,
+      "currency": "EUR"
+    },
+    "description": "Operate and improve platform reliability with strong automation and incident response.",
+    "requirements": [
+      "SRE or infrastructure background",
+      "Experience with Kubernetes and monitoring",
+      "On-call and incident response skills",
+      "Automation mindset"
+    ],
+    "responsibilities": [
+      "Own service reliability metrics",
+      "Automate operational workflows",
+      "Improve incident response",
+      "Support capacity planning"
+    ],
+    "skills": [
+      "Kubernetes",
+      "Prometheus",
+      "Terraform",
+      "Linux",
+      "Go"
+    ],
+    "keywords": [
+      "Reliability",
+      "On-call",
+      "Observability"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Home office budget",
+      "Flexible schedule"
+    ],
+    "remote": true,
+    "createdAt": "2026-04-18T12:30:00Z"
+  },
+  {
+    "id": "job-13",
+    "title": "Cloud Engineer",
+    "company": "Aurora Cloud",
+    "location": "Dublin, Ireland",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 70000,
+      "max": 96000,
+      "currency": "EUR"
+    },
+    "description": "Design and operate cloud infrastructure for SaaS workloads with a focus on scalability.",
+    "requirements": [
+      "Cloud platform experience",
+      "Infrastructure-as-code knowledge",
+      "Networking and security fundamentals",
+      "Automation experience"
+    ],
+    "responsibilities": [
+      "Build scalable cloud architectures",
+      "Automate provisioning",
+      "Maintain security baselines",
+      "Optimize cloud spend"
+    ],
+    "skills": [
+      "AWS",
+      "Terraform",
+      "Networking",
+      "Linux",
+      "Docker"
+    ],
+    "keywords": [
+      "Cloud",
+      "Cost optimization",
+      "Infrastructure"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Health allowance"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-16T09:00:00Z"
+  },
+  {
+    "id": "job-14",
+    "title": "Platform Engineer",
+    "company": "OmniStack",
+    "location": "Stockholm, Sweden",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 72000,
+      "max": 98000,
+      "currency": "EUR"
+    },
+    "description": "Build internal platforms that accelerate product teams and improve developer velocity.",
+    "requirements": [
+      "Experience with internal tooling",
+      "Knowledge of CI/CD systems",
+      "API design skills",
+      "Strong collaboration habits"
+    ],
+    "responsibilities": [
+      "Build platform services and tooling",
+      "Improve developer productivity",
+      "Maintain internal documentation",
+      "Partner with infra and product teams"
+    ],
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "Terraform",
+      "Kubernetes",
+      "CI/CD"
+    ],
+    "keywords": [
+      "Developer experience",
+      "Platform",
+      "Automation"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Annual retreat",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-14T11:20:00Z"
+  },
+  {
+    "id": "job-15",
+    "title": "Data Scientist",
+    "company": "Aurum Analytics",
+    "location": "Paris, France",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 88000,
+      "max": 118000,
+      "currency": "EUR"
+    },
+    "description": "Deliver insights and models that drive product decisions and experiments.",
+    "requirements": [
+      "Strong statistics background",
+      "Python and SQL proficiency",
+      "Experience with experimentation",
+      "Ability to communicate findings"
+    ],
+    "responsibilities": [
+      "Build predictive models",
+      "Run experiments and analyses",
+      "Partner with product on KPIs",
+      "Present insights to stakeholders"
+    ],
+    "skills": [
+      "Python",
+      "Pandas",
+      "SQL",
+      "Experimentation",
+      "ML"
+    ],
+    "keywords": [
+      "Analytics",
+      "ML",
+      "Insights"
+    ],
+    "benefits": [
+      "Learning budget",
+      "Flexible hours",
+      "Wellness program"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-12T13:30:00Z"
+  },
+  {
+    "id": "job-16",
+    "title": "Machine Learning Engineer",
+    "company": "BluePeak AI",
+    "location": "Remote (Global)",
+    "employmentType": "Remote",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 98000,
+      "max": 132000,
+      "currency": "USD"
+    },
+    "description": "Productionize ML models and build serving infrastructure for real-time matching.",
+    "requirements": [
+      "ML engineering experience",
+      "Model deployment workflows",
+      "Familiarity with feature stores",
+      "Strong Python skills"
+    ],
+    "responsibilities": [
+      "Deploy models into production",
+      "Build feature pipelines",
+      "Monitor model performance",
+      "Collaborate with data science"
+    ],
+    "skills": [
+      "Python",
+      "TensorFlow",
+      "ML Ops",
+      "Docker",
+      "Kubernetes"
+    ],
+    "keywords": [
+      "MLOps",
+      "Serving",
+      "Pipelines"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Equity options",
+      "Flexible schedule"
+    ],
+    "remote": true,
+    "createdAt": "2026-04-10T09:50:00Z"
+  },
+  {
+    "id": "job-17",
+    "title": "Analytics Engineer",
+    "company": "Vantage Data",
+    "location": "Madrid, Spain",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 68000,
+      "max": 90000,
+      "currency": "EUR"
+    },
+    "description": "Bridge analytics and engineering through reliable models and metric definitions.",
+    "requirements": [
+      "Experience with SQL and modeling",
+      "Familiarity with dbt",
+      "Data warehouse knowledge",
+      "Strong documentation habits"
+    ],
+    "responsibilities": [
+      "Build analytics models",
+      "Maintain data quality checks",
+      "Partner with analysts",
+      "Improve metric definitions"
+    ],
+    "skills": [
+      "SQL",
+      "dbt",
+      "BigQuery",
+      "Python",
+      "Data modeling"
+    ],
+    "keywords": [
+      "Analytics",
+      "Metrics",
+      "Warehouse"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-08T10:00:00Z"
+  },
+  {
+    "id": "job-18",
+    "title": "Solutions Architect",
+    "company": "Vertex Labs",
+    "location": "London, UK",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 105000,
+      "max": 140000,
+      "currency": "EUR"
+    },
+    "description": "Design customer-facing solutions for complex integrations and enterprise deployments.",
+    "requirements": [
+      "Experience with system design",
+      "Customer-facing communication skills",
+      "Knowledge of APIs and integrations",
+      "Cloud architecture familiarity"
+    ],
+    "responsibilities": [
+      "Create solution blueprints",
+      "Support enterprise deployments",
+      "Collaborate with sales and engineering",
+      "Document integration patterns"
+    ],
+    "skills": [
+      "Architecture",
+      "APIs",
+      "Cloud",
+      "Security",
+      "Integrations"
+    ],
+    "keywords": [
+      "Enterprise",
+      "Solutions",
+      "Technical sales"
+    ],
+    "benefits": [
+      "Executive coaching",
+      "Annual bonus",
+      "Flexible schedule"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-06T08:20:00Z"
+  },
+  {
+    "id": "job-19",
+    "title": "UX Engineer",
+    "company": "Nova Digital",
+    "location": "Milan, Italy",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 64000,
+      "max": 86000,
+      "currency": "EUR"
+    },
+    "description": "Bridge design and engineering with pixel-perfect interfaces and prototypes.",
+    "requirements": [
+      "Strong UI engineering skills",
+      "Experience with design systems",
+      "Accessibility best practices",
+      "Collaboration with design teams"
+    ],
+    "responsibilities": [
+      "Implement high-fidelity UI",
+      "Maintain component library",
+      "Prototype interactions",
+      "Improve design tooling"
+    ],
+    "skills": [
+      "React",
+      "CSS",
+      "Design systems",
+      "Accessibility",
+      "Figma"
+    ],
+    "keywords": [
+      "UX",
+      "UI",
+      "Design"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-04T11:40:00Z"
+  },
+  {
+    "id": "job-20",
+    "title": "Product Manager",
+    "company": "Signal Ridge",
+    "location": "Vienna, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 98000,
+      "max": 128000,
+      "currency": "EUR"
+    },
+    "description": "Drive product strategy and execution for growth initiatives across the Jobsy suite.",
+    "requirements": [
+      "Product management experience",
+      "Strong analytical skills",
+      "Ability to define roadmaps",
+      "Excellent stakeholder communication"
+    ],
+    "responsibilities": [
+      "Define product strategy",
+      "Prioritize roadmap items",
+      "Work with design and engineering",
+      "Measure product impact"
+    ],
+    "skills": [
+      "Product strategy",
+      "Analytics",
+      "Roadmapping",
+      "User research",
+      "Agile"
+    ],
+    "keywords": [
+      "Product",
+      "Growth",
+      "Strategy"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Flexible hours",
+      "Annual bonus"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-02T09:15:00Z"
+  },
+  {
+    "id": "job-21",
+    "title": "Chef de Cuisine",
+    "company": "Hotel Alpenblick",
+    "location": "Salzburg, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 42000,
+      "max": 60000,
+      "currency": "EUR"
+    },
+    "description": "Lead the kitchen team, design seasonal menus, and ensure consistent food quality for a premium hotel restaurant.",
+    "requirements": [
+      "5+ years of professional kitchen experience",
+      "Experience leading a kitchen team",
+      "Knowledge of food safety regulations",
+      "Strong organization and cost control skills"
+    ],
+    "responsibilities": [
+      "Create menus and daily specials",
+      "Coordinate kitchen operations",
+      "Ensure quality and presentation standards",
+      "Manage inventory and supplier relationships"
+    ],
+    "skills": [
+      "Menu planning",
+      "Food safety",
+      "Team leadership",
+      "Cost control",
+      "Culinary techniques"
+    ],
+    "keywords": [
+      "Hospitality",
+      "Kitchen",
+      "Fine dining"
+    ],
+    "benefits": [
+      "Staff meals",
+      "Accommodation support",
+      "Seasonal bonus"
+    ],
+    "remote": false,
+    "createdAt": "2026-04-01T08:00:00Z"
+  },
+  {
+    "id": "job-22",
+    "title": "Sous Chef",
+    "company": "Bistro Central",
+    "location": "Graz, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 32000,
+      "max": 45000,
+      "currency": "EUR"
+    },
+    "description": "Support the head chef with daily service, prep, and training of kitchen staff in a busy bistro.",
+    "requirements": [
+      "3+ years of kitchen experience",
+      "Experience with hot and cold stations",
+      "Knowledge of HACCP standards",
+      "Ability to work under pressure"
+    ],
+    "responsibilities": [
+      "Coordinate station workflow",
+      "Prepare mise en place",
+      "Train junior kitchen staff",
+      "Maintain hygiene and safety"
+    ],
+    "skills": [
+      "Prep work",
+      "Knife skills",
+      "Food safety",
+      "Team coordination",
+      "Plating"
+    ],
+    "keywords": [
+      "Restaurant",
+      "Service",
+      "Kitchen"
+    ],
+    "benefits": [
+      "Staff meals",
+      "Training program",
+      "Flexible shifts"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-30T11:00:00Z"
+  },
+  {
+    "id": "job-23",
+    "title": "Baeckerin",
+    "company": "Backstube Morgen",
+    "location": "Innsbruck, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 28000,
+      "max": 38000,
+      "currency": "EUR"
+    },
+    "description": "Produce artisan breads and pastries with a focus on traditional methods and consistent quality.",
+    "requirements": [
+      "Completed baking apprenticeship or equivalent",
+      "Experience with sourdough and artisan bread",
+      "Ability to work early shifts",
+      "Attention to detail"
+    ],
+    "responsibilities": [
+      "Prepare doughs and batters",
+      "Bake breads and pastries",
+      "Maintain baking equipment",
+      "Ensure hygiene standards"
+    ],
+    "skills": [
+      "Baking",
+      "Dough preparation",
+      "Time management",
+      "Food safety",
+      "Quality control"
+    ],
+    "keywords": [
+      "Bakery",
+      "Artisan",
+      "Sourdough"
+    ],
+    "benefits": [
+      "Night shift bonus",
+      "Staff discount",
+      "Stable schedule"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-28T07:30:00Z"
+  },
+  {
+    "id": "job-24",
+    "title": "Restaurant Manager",
+    "company": "Riverside Dining",
+    "location": "Linz, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 42000,
+      "max": 55000,
+      "currency": "EUR"
+    },
+    "description": "Oversee daily restaurant operations, guest experience, and team performance for a high-end venue.",
+    "requirements": [
+      "Leadership experience in hospitality",
+      "Strong guest service mindset",
+      "Scheduling and staffing skills",
+      "Basic financial reporting"
+    ],
+    "responsibilities": [
+      "Manage front-of-house teams",
+      "Maintain service standards",
+      "Handle guest feedback",
+      "Coordinate with kitchen leadership"
+    ],
+    "skills": [
+      "Hospitality management",
+      "Team leadership",
+      "Operations",
+      "Customer service",
+      "Scheduling"
+    ],
+    "keywords": [
+      "Restaurant",
+      "Operations",
+      "Guest experience"
+    ],
+    "benefits": [
+      "Performance bonus",
+      "Meal allowance",
+      "Training budget"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-26T09:20:00Z"
+  },
+  {
+    "id": "job-25",
+    "title": "Pflegefachkraft",
+    "company": "Seniorenzentrum Sonnenuhr",
+    "location": "Klagenfurt, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 33000,
+      "max": 46000,
+      "currency": "EUR"
+    },
+    "description": "Provide compassionate care and support for residents in a modern senior living facility.",
+    "requirements": [
+      "Completed nursing qualification",
+      "Experience in elderly care",
+      "Strong communication skills",
+      "Ability to work in shifts"
+    ],
+    "responsibilities": [
+      "Deliver daily care services",
+      "Monitor health status",
+      "Coordinate with medical staff",
+      "Document care plans"
+    ],
+    "skills": [
+      "Patient care",
+      "Documentation",
+      "Teamwork",
+      "Empathy",
+      "Medication support"
+    ],
+    "keywords": [
+      "Healthcare",
+      "Elderly care",
+      "Nursing"
+    ],
+    "benefits": [
+      "Shift allowance",
+      "Training program",
+      "Stable employment"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-24T08:15:00Z"
+  },
+  {
+    "id": "job-26",
+    "title": "Logistikkoordinator",
+    "company": "Nordwind Logistics",
+    "location": "Vienna, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 36000,
+      "max": 48000,
+      "currency": "EUR"
+    },
+    "description": "Coordinate daily transport and warehouse operations for a fast-moving supply chain.",
+    "requirements": [
+      "Experience in logistics or supply chain",
+      "Strong organizational skills",
+      "Knowledge of ERP or WMS systems",
+      "Ability to prioritize under pressure"
+    ],
+    "responsibilities": [
+      "Plan shipments and routes",
+      "Coordinate with carriers",
+      "Monitor delivery performance",
+      "Maintain inventory records"
+    ],
+    "skills": [
+      "Logistics",
+      "Supply chain",
+      "Planning",
+      "ERP",
+      "Communication"
+    ],
+    "keywords": [
+      "Transport",
+      "Warehouse",
+      "Operations"
+    ],
+    "benefits": [
+      "Performance bonus",
+      "Public transport ticket",
+      "Training budget"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-22T07:45:00Z"
+  },
+  {
+    "id": "job-27",
+    "title": "Sales Manager",
+    "company": "Aurum Commerce",
+    "location": "Zurich, Switzerland",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 78000,
+      "max": 105000,
+      "currency": "CHF"
+    },
+    "description": "Lead a sales team and drive revenue growth across enterprise accounts.",
+    "requirements": [
+      "5+ years in B2B sales",
+      "Experience leading sales teams",
+      "Strong negotiation skills",
+      "Pipeline and CRM expertise"
+    ],
+    "responsibilities": [
+      "Manage sales strategy",
+      "Coach account executives",
+      "Build key customer relationships",
+      "Forecast revenue performance"
+    ],
+    "skills": [
+      "Sales leadership",
+      "Negotiation",
+      "CRM",
+      "Forecasting",
+      "Account management"
+    ],
+    "keywords": [
+      "Sales",
+      "Revenue",
+      "B2B"
+    ],
+    "benefits": [
+      "Commission",
+      "Company car",
+      "Leadership training"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-20T10:05:00Z"
+  },
+  {
+    "id": "job-28",
+    "title": "Marketing Specialist",
+    "company": "Pulse Platform",
+    "location": "Berlin, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 42000,
+      "max": 60000,
+      "currency": "EUR"
+    },
+    "description": "Plan and execute multi-channel marketing campaigns to grow brand awareness.",
+    "requirements": [
+      "Experience in digital marketing",
+      "Knowledge of content and performance campaigns",
+      "Strong analytical skills",
+      "Excellent copywriting"
+    ],
+    "responsibilities": [
+      "Run campaign planning and execution",
+      "Manage content calendar",
+      "Track marketing KPIs",
+      "Coordinate with design and sales"
+    ],
+    "skills": [
+      "SEO",
+      "Content marketing",
+      "Analytics",
+      "Campaign management",
+      "Copywriting"
+    ],
+    "keywords": [
+      "Marketing",
+      "Growth",
+      "Brand"
+    ],
+    "benefits": [
+      "Training budget",
+      "Hybrid work",
+      "Flexible hours"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-18T09:30:00Z"
+  },
+  {
+    "id": "job-29",
+    "title": "Retail Store Manager",
+    "company": "Crescent Retail",
+    "location": "Munich, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 38000,
+      "max": 52000,
+      "currency": "EUR"
+    },
+    "description": "Lead a retail team, drive sales performance, and deliver premium customer experience.",
+    "requirements": [
+      "Retail leadership experience",
+      "Strong customer service mindset",
+      "Inventory management skills",
+      "Ability to coach team members"
+    ],
+    "responsibilities": [
+      "Manage daily store operations",
+      "Drive sales targets",
+      "Oversee merchandising",
+      "Develop staff performance"
+    ],
+    "skills": [
+      "Retail management",
+      "Sales",
+      "Merchandising",
+      "Leadership",
+      "Customer service"
+    ],
+    "keywords": [
+      "Retail",
+      "Store",
+      "Operations"
+    ],
+    "benefits": [
+      "Bonus program",
+      "Staff discount",
+      "Training budget"
+    ],
+    "remote": false,
+    "createdAt": "2026-03-16T08:10:00Z"
+  },
+  {
+    "id": "job-30",
+    "title": "Customer Success Manager",
+    "company": "Signal Ridge",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 52000,
+      "max": 72000,
+      "currency": "EUR"
+    },
+    "description": "Support enterprise customers, drive adoption, and ensure long-term retention.",
+    "requirements": [
+      "Experience in customer success or account management",
+      "Strong communication skills",
+      "Ability to manage multiple accounts",
+      "Comfortable with analytics and KPIs"
+    ],
+    "responsibilities": [
+      "Manage key customer relationships",
+      "Deliver onboarding and training",
+      "Track retention and expansion metrics",
+      "Coordinate feedback with product teams"
+    ],
+    "skills": [
+      "Customer success",
+      "Account management",
+      "Communication",
+      "Analytics",
+      "SaaS"
+    ],
+    "keywords": [
+      "Customer success",
+      "Retention",
+      "Growth"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Flexible schedule",
+      "Learning budget"
+    ],
+    "remote": true,
+    "createdAt": "2026-03-14T10:25:00Z"
+  }
+]

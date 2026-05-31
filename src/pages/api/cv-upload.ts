@@ -160,46 +160,16 @@ export default async function handler(
 
   await fs.writeFile(filePath, uploadedFile.buffer);
 
-  // Try to get user from session for optional authentication
-  let cvRecord = null;
   try {
-    const userId = await getUserFromCookies(req);
-    if (userId) {
-      // Get or create myusers record for this user
-      let myUser = await prisma.myusers.findUnique({
-        where: { id: userId },
-      });
-
-      if (!myUser) {
-        myUser = await prisma.myusers.create({
-          data: { id: userId, updatedAt: new Date() },
-        });
-      }
-
-      // Create CV upload record
-      cvRecord = await prisma.cv_uploads.create({
-        data: {
-          myUserId: userId,
-          originalFilename: originalName,
-          fileType: "application/pdf",
-          fileUrl: `/uploads/${fileName}`,
-          storageKey: fileName,
-          fileSizeBytes: BigInt(uploadedFile.buffer.length),
-        },
-      });
-    }
+    await getUserFromCookies(req);
   } catch (dbError) {
     console.error("Database error while saving CV record:", dbError);
-    // Continue with file-only save if DB fails
   }
 
   return res.status(201).json({
     success: true,
-    message: cvRecord
-      ? "PDF erfolgreich hochgeladen und in der Datenbank gespeichert."
-      : "PDF erfolgreich hochgeladen.",
+    message: "PDF erfolgreich hochgeladen.",
     fileName,
     filePath: `/uploads/${fileName}`,
-    ...(cvRecord && { cvId: cvRecord.id }),
   });
 }

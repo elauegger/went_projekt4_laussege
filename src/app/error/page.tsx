@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 
 function ErrorContent() {
   const params = useSearchParams()
-  const message = params.get('message') ?? 'Something went wrong.'
+  const message = params?.get('message') ?? 'Something went wrong.'
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
