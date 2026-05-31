@@ -11,12 +11,15 @@ export async function signUpAction(formData: FormData) {
   const name = formData.get("name") as string;
   //const emailVerified = 0; // Set emailVerified to 1 (true) upon sign-up
 
+  const captcha = (formData.get("captcha") as string) || null;
+
   await auth.api.signUpEmail({
     body: {
       email,
       password,
       name,
     },
+    ...(captcha ? { headers: { "x-captcha-response": captcha } } : {}),
   });
 
   redirect("/");
@@ -26,12 +29,15 @@ export async function signInAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   try {
-  await auth.api.signInEmail({
-    body: {
-      email,
-      password,
-    },
-  });
+    const captcha = (formData.get("captcha") as string) || null;
+
+    await auth.api.signInEmail({
+      body: {
+        email,
+        password,
+      },
+      ...(captcha ? { headers: { "x-captcha-response": captcha } } : {}),
+    });
   } catch (err: unknown) {
     console.error("Sign-in error:", err)
 

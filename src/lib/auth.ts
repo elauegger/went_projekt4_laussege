@@ -3,9 +3,11 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import "dotenv/config";
 import { PrismaPg } from '@prisma/adapter-pg'
-import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
 import { nextCookies } from 'better-auth/next-js';
 import { hashPassword, verifyPassword } from "./password";
+import { captcha } from "better-auth/plugins"; 
+
 const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString })
@@ -28,6 +30,11 @@ export const auth = betterAuth({
       tenantId: process.env.MICROSOFT_TENANT_ID,
     }
   },
-  plugins: [nextCookies()]
+  plugins: [nextCookies(),
+     captcha({ 
+            provider: "cloudflare-turnstile", // or google-recaptcha, hcaptcha, captchafox
+            secretKey: process.env.TURNSTILE_SECRET_KEY!, 
+        }), 
+  ]
 });
 

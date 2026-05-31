@@ -8,30 +8,21 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  myUser        my_users?
+  id               String              @id
+  name             String
+  email            String              @unique
+  emailVerified    Boolean             @default(false)
+  image            String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  accounts         Account[]
+  sessions         Session[]
+  applications     applications[]
+  improvedFiles    improved_files[]
+  savedSuggestions saved_suggestions[]
+  cvUploads        cv_uploads[]
 
   @@map("user")
-}
-
-model my_users {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [id], references: [id], onDelete: Cascade)
-  applications  applications[]
-  improvedFiles improved_files[]
-  savedSuggestions saved_suggestions[]
-
-  @@map("my_users")
 }
 
 model Session {
@@ -83,7 +74,7 @@ model Verification {
 
 model applications {
   id               String              @id @default(uuid())
-  myUserId         String
+  userId           String
   title            String
   company          String
   originalFilename String
@@ -92,14 +83,13 @@ model applications {
   storageKey       String
   fileSizeBytes    BigInt
   status           String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  myUser           my_users    @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   analysis         ai_analyses?
-  myUser           myusers             @relation(fields: [myUserId], references: [id], onDelete: Cascade)
   savedSuggestions saved_suggestions[]
 
-  @@index([myUserId])
+  @@index([userId])
   @@map("applications")
 }
 
@@ -123,7 +113,7 @@ model ai_analyses {
 model improved_files {
   id               String      @id @default(uuid())
   analysisId       String
-  myUserId         String
+  userId           String
   fileUrl          String
   storageKey       String
   fileType         String
@@ -134,16 +124,16 @@ model improved_files {
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   analysis         ai_analyses @relation(fields: [analysisId], references: [id], onDelete: Cascade)
-  myUser           my_users     @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([analysisId])
-  @@index([myUserId])
+  @@index([userId])
   @@map("improved_files")
 }
 
 model saved_suggestions {
   id             String       @id @default(uuid())
-  myUserId       String
+  userId         String
   analysisId     String
   applicationId  String
   title          String
@@ -153,9 +143,9 @@ model saved_suggestions {
   updatedAt      DateTime     @updatedAt
   analysis       ai_analyses  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
   application    applications @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  myUser         myusers      @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([myUserId])
+  @@index([userId])
   @@index([analysisId])
   @@index([applicationId])
   @@map("saved_suggestions")
@@ -163,7 +153,7 @@ model saved_suggestions {
 
 model cv_uploads {
   id               String   @id @default(uuid())
-  myUserId         String?
+  userId           String?
   originalFilename String
   fileType         String
   fileUrl          String
@@ -171,21 +161,8 @@ model cv_uploads {
   fileSizeBytes    BigInt
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  myUser           myusers? @relation(fields: [myUserId], references: [id], onDelete: Cascade)
+  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([myUserId])
+  @@index([userId])
   @@map("cv_uploads")
-}
-
-model myusers {
-  id               String              @id
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime
-  applications     applications[]
-  improvedFiles    improved_files[]
-  user             User                @relation(fields: [id], references: [id], onDelete: Cascade)
-  savedSuggestions saved_suggestions[]
-  cvUploads        cv_uploads[]
-
-  @@map("myusers")
 }
