@@ -1,5 +1,5 @@
 "use client";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "../lib/auth-client";
 import { useCallback } from "react";
 
 export function LoginMicrosoft() {

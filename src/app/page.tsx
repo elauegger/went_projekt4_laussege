@@ -2,22 +2,24 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 
-import { auth } from "@/lib/auth";
+import { auth } from "../lib/auth";
 import { signOutAction } from "./actions/auth";
 
 type NavItem = {
   label: string;
+  href: string;
   active?: boolean;
 };
 
 const sidebarItems: NavItem[] = [
-  { label: "Dashboard", active: true },
-  { label: "Lebensläufe" },
-  { label: "Analyse" },
-  { label: "Verbesserungen" },
-  { label: "Job-Matching" },
-  { label: "Vergleich" },
-  { label: "Einstellungen" },
+  { label: "Dashboard", href: "/", active: true },
+  { label: "Jobs", href: "/jobs" },
+  { label: "Lebensläufe", href: "/cv-upload" },
+  { label: "Analyse", href: "/dashboard" },
+  { label: "Verbesserungen", href: "/dashboard" },
+  { label: "Job-Matching", href: "/dashboard" },
+  { label: "Vergleich", href: "/dashboard" },
+  { label: "Einstellungen", href: "/dashboard" },
 ];
 
 const progressRows = [
@@ -147,7 +149,7 @@ export default async function Home() {
                 {sidebarItems.map((item) => (
                   <Link
                     key={item.label}
-                    href={item.label === "Dashboard" ? "/" : "/cv-upload"}
+                    href={item.href}
                     className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm transition ${item.active
                       ? "bg-[#f3ebcf] text-[#55603a] shadow-sm"
                       : "text-[#efe7c8] hover:bg-white/8"
@@ -243,7 +245,7 @@ export default async function Home() {
                 {sidebarItems.map((item) => (
                   <Link
                     key={item.label}
-                    href={item.label === "Dashboard" ? "/" : "/cv-upload"}
+                    href={item.href}
                     className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${item.active
                       ? "border-[#c8be9d] bg-[#efe6cd] text-[#55603a]"
                       : "border-[#ddd2b8] bg-white/70 text-[#6d6958]"

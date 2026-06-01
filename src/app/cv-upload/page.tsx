@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CvUploadForm } from "@/components/cv-upload-form";
+import { CvUploadForm } from "../../components/cv-upload-form";
 
 export const metadata = {
   title: "CV Upload",

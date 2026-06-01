@@ -1,5 +1,5 @@
 import { signInAction } from "../actions/auth";
-import TurnstileWidget from "@/components/turnstile-widget";
+import TurnstileWidget from "../../components/turnstile-widget";
 
 export default function SignInPage() {
   return (
