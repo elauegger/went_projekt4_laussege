@@ -248,6 +248,25 @@ docker compose exec -T db psql -U postgres mydb < backup.sql
 docker compose exec web printenv | grep BETTER_AUTH
 ```
 
+### CV Upload
+
+```bash
+# PDF per HTTP-Client testen
+curl -X POST http://localhost:3000/api/cv-upload \
+	-F "cv=@./example-cv.pdf;type=application/pdf"
+```
+
+**Funktionalität:**
+- Der Upload-Endpunkt erwartet das Formularfeld `cv`
+- Akzeptiert nur PDF-Dateien (Validierung auf Extension, MIME-Type und PDF-Signatur)
+- Speichert die Datei lokal unter `uploads/` mit eindeutigem Namen (Timestamp + UUID)
+- **Speichert Metadaten in PostgreSQL** (Dateiname, Größe, Pfad) falls Benutzer authentifiziert ist
+- Rückgabe: `{success, message, fileName, filePath, cvId?}` (cvId vorhanden, wenn Benutzer authentifiziert)
+
+**Datenbankschema:**
+- `cv_uploads` Tabelle mit Feldern: `id, myUserId, originalFilename, fileType, fileUrl, storageKey, fileSizeBytes, createdAt, updatedAt`
+- Optionale Benutzer-Verknüpfung (anonyme Uploads möglich)
+
 ### Service neu starten
 
 ```bash

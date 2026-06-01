@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useCallback } from 'react';
-import { authClient } from '@/lib/auth-client';
+import { authClient } from '../lib/auth-client';
 
 export function User() {
   const { data: session, isPending, error, refetch } = authClient.useSession();

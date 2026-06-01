@@ -1,0 +1,1402 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DatabaseModel VersionId="2.4">
+  <Name>went_projekt4_laussege</Name>
+  <Description>Prisma schema export for Redgate</Description>
+  <DatabaseEngine>
+    <Name>postgresql</Name>
+    <Version>PostgreSQL 18</Version>
+  </DatabaseEngine>
+  <Counters>
+    <Counter>
+      <Name>table</Name>
+      <Value>9</Value>
+      <Prefix>t</Prefix>
+    </Counter>
+    <Counter>
+      <Name>column</Name>
+      <Value>79</Value>
+      <Prefix>c</Prefix>
+    </Counter>
+    <Counter>
+      <Name>view</Name>
+      <Value>0</Value>
+      <Prefix>v</Prefix>
+    </Counter>
+    <Counter>
+      <Name>view_column</Name>
+      <Value>0</Value>
+      <Prefix>vc</Prefix>
+    </Counter>
+    <Counter>
+      <Name>reference</Name>
+      <Value>10</Value>
+      <Prefix>r</Prefix>
+    </Counter>
+    <Counter>
+      <Name>reference_column</Name>
+      <Value>10</Value>
+      <Prefix>rc</Prefix>
+    </Counter>
+    <Counter>
+      <Name>table_display</Name>
+      <Value>9</Value>
+      <Prefix>td</Prefix>
+    </Counter>
+    <Counter>
+      <Name>view_display</Name>
+      <Value>0</Value>
+      <Prefix>vd</Prefix>
+    </Counter>
+    <Counter>
+      <Name>reference_display</Name>
+      <Value>10</Value>
+      <Prefix>rd</Prefix>
+    </Counter>
+  </Counters>
+  <AdditionalSQLBeforeCreate/>
+  <AdditionalSQLAfterCreate/>
+  <AdditionalSQLBeforeDrop/>
+  <AdditionalSQLAfterDrop/>
+  <Tables>
+    <Table Id="t1">
+      <Name>user</Name>
+      <Description>BetterAuth users</Description>
+      <Columns>
+        <Column Id="c1">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>User identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c2">
+          <Name>name</Name>
+          <Type>varchar</Type>
+          <Description>User name</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c3">
+          <Name>email</Name>
+          <Type>varchar</Type>
+          <Description>User email</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c4">
+          <Name>emailVerified</Name>
+          <Type>boolean</Type>
+          <Description>Email verification status</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>false</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c5">
+          <Name>image</Name>
+          <Type>varchar</Type>
+          <Description>Profile image URL</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c6">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c7">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>user_pkey</Name>
+        <Columns>
+          <Column>c1</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t2">
+      <Name>my_users</Name>
+      <Description>Application user bridge</Description>
+      <Columns>
+        <Column Id="c8">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>User identifier (1:1 with user)</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c9">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c10">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>my_users_pkey</Name>
+        <Columns>
+          <Column>c8</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t3">
+      <Name>session</Name>
+      <Description>BetterAuth sessions</Description>
+      <Columns>
+        <Column Id="c11">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Session identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c12">
+          <Name>expiresAt</Name>
+          <Type>timestamp</Type>
+          <Description>Session expiration</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c13">
+          <Name>token</Name>
+          <Type>varchar</Type>
+          <Description>Session token</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c14">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c15">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c16">
+          <Name>ipAddress</Name>
+          <Type>varchar</Type>
+          <Description>Client IP address</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c17">
+          <Name>userAgent</Name>
+          <Type>varchar</Type>
+          <Description>Client user agent</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c18">
+          <Name>userId</Name>
+          <Type>varchar</Type>
+          <Description>User reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>session_pkey</Name>
+        <Columns>
+          <Column>c11</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t4">
+      <Name>account</Name>
+      <Description>BetterAuth accounts</Description>
+      <Columns>
+        <Column Id="c19">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Account identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c20">
+          <Name>accountId</Name>
+          <Type>varchar</Type>
+          <Description>Provider account id</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c21">
+          <Name>providerId</Name>
+          <Type>varchar</Type>
+          <Description>Provider id</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c22">
+          <Name>userId</Name>
+          <Type>varchar</Type>
+          <Description>User reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c23">
+          <Name>accessToken</Name>
+          <Type>varchar</Type>
+          <Description>Access token</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c24">
+          <Name>refreshToken</Name>
+          <Type>varchar</Type>
+          <Description>Refresh token</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c25">
+          <Name>idToken</Name>
+          <Type>varchar</Type>
+          <Description>ID token</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c26">
+          <Name>accessTokenExpiresAt</Name>
+          <Type>timestamp</Type>
+          <Description>Access token expiration</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c27">
+          <Name>refreshTokenExpiresAt</Name>
+          <Type>timestamp</Type>
+          <Description>Refresh token expiration</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c28">
+          <Name>scope</Name>
+          <Type>varchar</Type>
+          <Description>Scopes</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c29">
+          <Name>password</Name>
+          <Type>varchar</Type>
+          <Description>Hashed password</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c30">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c31">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>account_pkey</Name>
+        <Columns>
+          <Column>c19</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t5">
+      <Name>verification</Name>
+      <Description>BetterAuth verifications</Description>
+      <Columns>
+        <Column Id="c32">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Verification identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c33">
+          <Name>identifier</Name>
+          <Type>varchar</Type>
+          <Description>Verification identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c34">
+          <Name>value</Name>
+          <Type>varchar</Type>
+          <Description>Verification value</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c35">
+          <Name>expiresAt</Name>
+          <Type>timestamp</Type>
+          <Description>Expiration timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c36">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c37">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>verification_pkey</Name>
+        <Columns>
+          <Column>c32</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t6">
+      <Name>applications</Name>
+      <Description>Uploaded applications</Description>
+      <Columns>
+        <Column Id="c38">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Application identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>uuid()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c39">
+          <Name>myUserId</Name>
+          <Type>varchar</Type>
+          <Description>App user reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c40">
+          <Name>title</Name>
+          <Type>varchar</Type>
+          <Description>Title</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c41">
+          <Name>company</Name>
+          <Type>varchar</Type>
+          <Description>Company</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c42">
+          <Name>originalFilename</Name>
+          <Type>varchar</Type>
+          <Description>Original file name</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c43">
+          <Name>fileType</Name>
+          <Type>varchar</Type>
+          <Description>File type</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c44">
+          <Name>fileUrl</Name>
+          <Type>varchar</Type>
+          <Description>File URL</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c45">
+          <Name>storageKey</Name>
+          <Type>varchar</Type>
+          <Description>Storage key</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c46">
+          <Name>fileSizeBytes</Name>
+          <Type>bigint</Type>
+          <Description>File size in bytes</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c47">
+          <Name>status</Name>
+          <Type>varchar</Type>
+          <Description>Application status</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c48">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c49">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>applications_pkey</Name>
+        <Columns>
+          <Column>c38</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t7">
+      <Name>ai_analyses</Name>
+      <Description>AI analysis results</Description>
+      <Columns>
+        <Column Id="c50">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Analysis identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>uuid()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c51">
+          <Name>applicationId</Name>
+          <Type>varchar</Type>
+          <Description>Application reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c52">
+          <Name>rawTextExtracted</Name>
+          <Type>varchar</Type>
+          <Description>Extracted raw text</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c53">
+          <Name>aiSuggestionText</Name>
+          <Type>varchar</Type>
+          <Description>AI suggestion text</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c54">
+          <Name>modelUsed</Name>
+          <Type>varchar</Type>
+          <Description>Model used</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c55">
+          <Name>tokensUsed</Name>
+          <Type>integer</Type>
+          <Description>Tokens used</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c56">
+          <Name>analysisStatus</Name>
+          <Type>varchar</Type>
+          <Description>Analysis status</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c57">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c58">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>ai_analyses_pkey</Name>
+        <Columns>
+          <Column>c50</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t8">
+      <Name>improved_files</Name>
+      <Description>Improved files</Description>
+      <Columns>
+        <Column Id="c59">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Improved file identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>uuid()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c60">
+          <Name>analysisId</Name>
+          <Type>varchar</Type>
+          <Description>Analysis reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c61">
+          <Name>myUserId</Name>
+          <Type>varchar</Type>
+          <Description>App user reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c62">
+          <Name>fileUrl</Name>
+          <Type>varchar</Type>
+          <Description>File URL</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c63">
+          <Name>storageKey</Name>
+          <Type>varchar</Type>
+          <Description>Storage key</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c64">
+          <Name>fileType</Name>
+          <Type>varchar</Type>
+          <Description>File type</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c65">
+          <Name>fileSizeBytes</Name>
+          <Type>bigint</Type>
+          <Description>File size in bytes</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c66">
+          <Name>generationStatus</Name>
+          <Type>varchar</Type>
+          <Description>Generation status</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c67">
+          <Name>isDownloaded</Name>
+          <Type>boolean</Type>
+          <Description>Downloaded flag</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>false</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c68">
+          <Name>downloadedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Downloaded timestamp</Description>
+          <Nullable>true</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c69">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c70">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>improved_files_pkey</Name>
+        <Columns>
+          <Column>c59</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+    <Table Id="t9">
+      <Name>saved_suggestions</Name>
+      <Description>Saved suggestions</Description>
+      <Columns>
+        <Column Id="c71">
+          <Name>id</Name>
+          <Type>varchar</Type>
+          <Description>Suggestion identifier</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>uuid()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c72">
+          <Name>myUserId</Name>
+          <Type>varchar</Type>
+          <Description>App user reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c73">
+          <Name>analysisId</Name>
+          <Type>varchar</Type>
+          <Description>Analysis reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c74">
+          <Name>applicationId</Name>
+          <Type>varchar</Type>
+          <Description>Application reference</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c75">
+          <Name>title</Name>
+          <Type>varchar</Type>
+          <Description>Suggestion title</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c76">
+          <Name>suggestionText</Name>
+          <Type>varchar</Type>
+          <Description>Suggestion text</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c77">
+          <Name>isApplied</Name>
+          <Type>boolean</Type>
+          <Description>Applied flag</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>false</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c78">
+          <Name>createdAt</Name>
+          <Type>timestamp</Type>
+          <Description>Creation timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue>now()</DefaultValue>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+        <Column Id="c79">
+          <Name>updatedAt</Name>
+          <Type>timestamp</Type>
+          <Description>Last update timestamp</Description>
+          <Nullable>false</Nullable>
+          <DefaultValue/>
+          <CheckExpression/>
+          <Properties/>
+        </Column>
+      </Columns>
+      <PrimaryKey>
+        <Name>saved_suggestions_pkey</Name>
+        <Columns>
+          <Column>c71</Column>
+        </Columns>
+      </PrimaryKey>
+      <AlternateKeys/>
+      <Indexes/>
+      <TableChecks/>
+      <AdditionalSQLBefore/>
+      <AdditionalSQLAfter/>
+      <Properties/>
+    </Table>
+  </Tables>
+  <ExternalTables/>
+  <Views/>
+  <MaterializedViews/>
+  <References>
+    <Reference Id="r1">
+      <Name>fk_session_userId</Name>
+      <Description/>
+      <PKTable>t1</PKTable>
+      <FKTable>t3</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c1</PKColumn>
+          <FKColumn>c18</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r2">
+      <Name>fk_account_userId</Name>
+      <Description/>
+      <PKTable>t1</PKTable>
+      <FKTable>t4</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c1</PKColumn>
+          <FKColumn>c22</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r3">
+      <Name>fk_my_users_userId</Name>
+      <Description/>
+      <PKTable>t1</PKTable>
+      <FKTable>t2</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c1</PKColumn>
+          <FKColumn>c8</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..1</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r4">
+      <Name>fk_applications_myUserId</Name>
+      <Description/>
+      <PKTable>t2</PKTable>
+      <FKTable>t6</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c8</PKColumn>
+          <FKColumn>c39</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r5">
+      <Name>fk_ai_analyses_applicationId</Name>
+      <Description/>
+      <PKTable>t6</PKTable>
+      <FKTable>t7</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c38</PKColumn>
+          <FKColumn>c51</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..1</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r6">
+      <Name>fk_improved_files_analysisId</Name>
+      <Description/>
+      <PKTable>t7</PKTable>
+      <FKTable>t8</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c50</PKColumn>
+          <FKColumn>c60</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r7">
+      <Name>fk_improved_files_myUserId</Name>
+      <Description/>
+      <PKTable>t2</PKTable>
+      <FKTable>t8</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c8</PKColumn>
+          <FKColumn>c61</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r8">
+      <Name>fk_saved_suggestions_myUserId</Name>
+      <Description/>
+      <PKTable>t2</PKTable>
+      <FKTable>t9</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c8</PKColumn>
+          <FKColumn>c72</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r9">
+      <Name>fk_saved_suggestions_analysisId</Name>
+      <Description/>
+      <PKTable>t7</PKTable>
+      <FKTable>t9</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c50</PKColumn>
+          <FKColumn>c73</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+    <Reference Id="r10">
+      <Name>fk_saved_suggestions_applicationId</Name>
+      <Description/>
+      <PKTable>t6</PKTable>
+      <FKTable>t9</FKTable>
+      <PKRole/>
+      <FKRole/>
+      <ReferenceColumns>
+        <ReferenceColumn>
+          <PKColumn>c38</PKColumn>
+          <FKColumn>c74</FKColumn>
+        </ReferenceColumn>
+      </ReferenceColumns>
+      <Cardinality>1..*</Cardinality>
+      <Mandatory>true</Mandatory>
+      <OnUpdateAction>Cascade</OnUpdateAction>
+      <OnDeleteAction>Cascade</OnDeleteAction>
+      <Properties/>
+    </Reference>
+  </References>
+  <Sequences/>
+  <Notes/>
+  <Areas/>
+  <Texts/>
+  <TableDisplays>
+    <TableDisplay Id="td1">
+      <X>100</X>
+      <Y>100</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t1</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td2">
+      <X>400</X>
+      <Y>100</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t2</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td3">
+      <X>700</X>
+      <Y>100</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t3</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td4">
+      <X>1000</X>
+      <Y>100</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t4</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td5">
+      <X>100</X>
+      <Y>350</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t5</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td6">
+      <X>400</X>
+      <Y>350</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t6</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td7">
+      <X>700</X>
+      <Y>350</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t7</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td8">
+      <X>1000</X>
+      <Y>350</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t8</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+    <TableDisplay Id="td9">
+      <X>100</X>
+      <Y>600</Y>
+      <Width>200</Width>
+      <Height>100</Height>
+      <LineColor>#000000</LineColor>
+      <FillColor>#FFFFFF</FillColor>
+      <Table>t9</Table>
+      <FixedSize>false</FixedSize>
+    </TableDisplay>
+  </TableDisplays>
+  <ExternalTableDisplays/>
+  <ViewDisplays/>
+  <MaterializedViewDisplays/>
+  <ReferenceDisplays>
+    <ReferenceDisplay Id="rd1">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td1</PkTableDisplay>
+      <FkTableDisplay>td3</FkTableDisplay>
+      <Reference>r1</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd2">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td1</PkTableDisplay>
+      <FkTableDisplay>td4</FkTableDisplay>
+      <Reference>r2</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd3">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td1</PkTableDisplay>
+      <FkTableDisplay>td2</FkTableDisplay>
+      <Reference>r3</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd4">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td2</PkTableDisplay>
+      <FkTableDisplay>td6</FkTableDisplay>
+      <Reference>r4</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd5">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td6</PkTableDisplay>
+      <FkTableDisplay>td7</FkTableDisplay>
+      <Reference>r5</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd6">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td7</PkTableDisplay>
+      <FkTableDisplay>td8</FkTableDisplay>
+      <Reference>r6</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd7">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td2</PkTableDisplay>
+      <FkTableDisplay>td8</FkTableDisplay>
+      <Reference>r7</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd8">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td2</PkTableDisplay>
+      <FkTableDisplay>td9</FkTableDisplay>
+      <Reference>r8</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd9">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td7</PkTableDisplay>
+      <FkTableDisplay>td9</FkTableDisplay>
+      <Reference>r9</Reference>
+    </ReferenceDisplay>
+    <ReferenceDisplay Id="rd10">
+      <Color>#000000</Color>
+      <Type>Vertical_2CP</Type>
+      <ControlPoints>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+        <ControlPoint>
+          <X>0</X>
+          <Y>0</Y>
+        </ControlPoint>
+      </ControlPoints>
+      <PkTableDisplay>td6</PkTableDisplay>
+      <FkTableDisplay>td9</FkTableDisplay>
+      <Reference>r10</Reference>
+    </ReferenceDisplay>
+  </ReferenceDisplays>
+  <Properties/>
+</DatabaseModel>

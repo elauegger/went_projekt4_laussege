@@ -1,0 +1,276 @@
+[
+  {
+    "id": "job-1",
+    "title": "Software Engineer",
+    "company": "Tech Solutions GmbH",
+    "location": "Munich, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 70000,
+      "max": 95000,
+      "currency": "EUR"
+    },
+    "description": "Build and maintain core services for the Jobsy platform with a focus on reliability, performance, and clean APIs.",
+    "requirements": [
+      "3+ years of experience with TypeScript or JavaScript",
+      "Solid understanding of REST APIs and distributed systems",
+      "Experience with PostgreSQL and data modeling",
+      "Comfortable with Git, code reviews, and CI pipelines"
+    ],
+    "responsibilities": [
+      "Design and implement backend services for the platform",
+      "Collaborate with frontend and product teams on features",
+      "Improve observability and monitoring for production services",
+      "Write unit and integration tests for new endpoints"
+    ],
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Docker",
+      "REST APIs"
+    ],
+    "keywords": [
+      "SaaS",
+      "Microservices",
+      "Cloud",
+      "APIs"
+    ],
+    "benefits": [
+      "Hybrid work",
+      "Learning budget",
+      "Modern hardware"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-10T08:30:00Z"
+  },
+  {
+    "id": "job-2",
+    "title": "Full Stack Developer",
+    "company": "Digital Innovations AG",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 65000,
+      "max": 90000,
+      "currency": "EUR"
+    },
+    "description": "Own full stack features from discovery to production with a strong focus on user experience and performance.",
+    "requirements": [
+      "Strong React and Next.js experience",
+      "Proficiency with Node.js and REST APIs",
+      "Experience with relational databases",
+      "Comfortable working in a remote-first team"
+    ],
+    "responsibilities": [
+      "Build and ship full stack features end-to-end",
+      "Create reusable UI components and design systems",
+      "Optimize web performance and accessibility",
+      "Partner with design and product on roadmap delivery"
+    ],
+    "skills": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL"
+    ],
+    "keywords": [
+      "Remote",
+      "Frontend",
+      "Backend",
+      "Product"
+    ],
+    "benefits": [
+      "Remote-first",
+      "Flexible hours",
+      "Home office budget"
+    ],
+    "remote": true,
+    "createdAt": "2026-05-12T10:15:00Z"
+  },
+  {
+    "id": "job-3",
+    "title": "Backend Developer",
+    "company": "CloudOps Studio",
+    "location": "Berlin, Germany",
+    "employmentType": "Contract",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 85000,
+      "max": 115000,
+      "currency": "EUR"
+    },
+    "description": "Design reliable backend services for internal tools and customer-facing APIs.",
+    "requirements": [
+      "Strong experience with Node.js and PostgreSQL",
+      "Experience designing scalable APIs",
+      "Good understanding of CI/CD and deployment pipelines",
+      "Ability to work independently with product teams"
+    ],
+    "responsibilities": [
+      "Implement backend endpoints and services",
+      "Improve observability and tracing",
+      "Review code and support architecture decisions",
+      "Partner with DevOps on deployment workflows"
+    ],
+    "skills": [
+      "Node.js",
+      "PostgreSQL",
+      "REST APIs",
+      "Docker",
+      "CI/CD"
+    ],
+    "keywords": [
+      "APIs",
+      "Cloud",
+      "Observability",
+      "Scaling"
+    ],
+    "benefits": [
+      "Contract flexibility",
+      "Hybrid work",
+      "Autonomy"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-15T09:00:00Z"
+  },
+  {
+    "id": "job-4",
+    "title": "Junior Software Engineer",
+    "company": "WebWorks GmbH",
+    "location": "Hamburg, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 48000,
+      "max": 65000,
+      "currency": "EUR"
+    },
+    "description": "Join a product team and learn to build modern web features with guidance from experienced engineers.",
+    "requirements": [
+      "Basic knowledge of JavaScript or TypeScript",
+      "Interest in React and frontend workflows",
+      "Willingness to learn testing and Git workflows",
+      "Clear communication and teamwork"
+    ],
+    "responsibilities": [
+      "Implement small features and fixes",
+      "Write tests with support from senior engineers",
+      "Participate in code reviews",
+      "Learn the product and delivery process"
+    ],
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Git"
+    ],
+    "keywords": [
+      "Entry-level",
+      "Frontend",
+      "Learning",
+      "Teamwork"
+    ],
+    "benefits": [
+      "Mentorship",
+      "Training budget",
+      "Hybrid work"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-18T11:45:00Z"
+  },
+  {
+    "id": "job-5",
+    "title": "Data Analyst",
+    "company": "DataForge Labs",
+    "location": "Vienna, Austria",
+    "employmentType": "Part-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 52000,
+      "max": 72000,
+      "currency": "EUR"
+    },
+    "description": "Work with product and operations teams to turn raw data into actionable insights.",
+    "requirements": [
+      "Experience with SQL and dashboarding",
+      "Ability to define metrics and analyze trends",
+      "Comfortable with data cleaning and reporting",
+      "Strong communication skills"
+    ],
+    "responsibilities": [
+      "Build reports and dashboards",
+      "Analyze product usage and funnels",
+      "Support decision-making with data",
+      "Maintain data quality checks"
+    ],
+    "skills": [
+      "SQL",
+      "Analytics",
+      "Dashboards",
+      "Excel",
+      "Python"
+    ],
+    "keywords": [
+      "BI",
+      "Insights",
+      "Reporting",
+      "Data"
+    ],
+    "benefits": [
+      "Flexible schedule",
+      "Learning opportunities"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-19T07:20:00Z"
+  },
+  {
+    "id": "job-6",
+    "title": "Product Engineer",
+    "company": "NextGen Software",
+    "location": "Remote (Global)",
+    "employmentType": "Remote",
+    "seniority": "Lead",
+    "salaryRange": {
+      "min": 100000,
+      "max": 135000,
+      "currency": "USD"
+    },
+    "description": "Drive product features across the stack and help shape the technical direction of the team.",
+    "requirements": [
+      "Strong full stack product mindset",
+      "Experience leading technical decisions",
+      "Comfortable with fast iteration cycles",
+      "Ability to mentor others"
+    ],
+    "responsibilities": [
+      "Own high-impact product features",
+      "Collaborate with design and product managers",
+      "Guide architecture and engineering practices",
+      "Mentor other engineers"
+    ],
+    "skills": [
+      "Next.js",
+      "React",
+      "Node.js",
+      "Leadership",
+      "Product Thinking"
+    ],
+    "keywords": [
+      "Leadership",
+      "Product",
+      "Remote",
+      "Architecture"
+    ],
+    "benefits": [
+      "Global remote",
+      "Competitive pay",
+      "Ownership"
+    ],
+    "remote": true,
+    "createdAt": "2026-05-20T13:10:00Z"
+  }
+]
