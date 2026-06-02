@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import multer from "multer";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
+import { auth } from "../../lib/auth";
 
 type UploadRequest = NextApiRequest & {
   file?: {
@@ -61,29 +62,13 @@ function isPdfBuffer(buffer: Buffer) {
 
 async function getUserFromCookies(req: UploadRequest): Promise<string | null> {
   try {
-    const cookies = req.headers.cookie;
-    if (!cookies) return null;
-
-    // Parse cookies to find better-auth session token
-    const cookieObj = Object.fromEntries(
-      cookies.split("; ").map((c) => {
-        const [key, ...val] = c.split("=");
-        return [key, val.join("=")];
-      })
-    );
-
-    const sessionToken = cookieObj["better-auth.session_token"];
-    if (!sessionToken) return null;
-
-    // Get session from database
-    const session = await prisma.session.findUnique({
-      where: { token: sessionToken },
-      include: { user: true },
+    const session = await auth.api.getSession({
+      headers: req.headers,
     });
 
-    return session?.userId || null;
+    return session?.user?.id ?? null;
   } catch (error) {
-    console.error("Error getting user from cookies:", error);
+    console.error("Error getting user from session:", error);
     return null;
   }
 }
@@ -160,12 +145,32 @@ export default async function handler(
 
   await fs.writeFile(filePath, uploadedFile.buffer);
 
-  await getUserFromCookies(req);
+  const userId = await getUserFromCookies(req);
+  const fileUrl = `/uploads/${fileName}`;
+
+  try {
+    await prisma.cv_uploads.create({
+      data: {
+        userId,
+        originalFilename: originalName,
+        fileType: uploadedFile.mimetype,
+        fileUrl,
+        storageKey: fileName,
+        fileSizeBytes: BigInt(uploadedFile.buffer.length),
+      },
+    });
+  } catch (error) {
+    console.error("Failed to write cv_uploads metadata:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Der Upload wurde gespeichert, aber der Datenbank-Eintrag schlug fehl.",
+    });
+  }
 
   return res.status(201).json({
     success: true,
     message: "PDF erfolgreich hochgeladen.",
     fileName,
-    filePath: `/uploads/${fileName}`,
+    filePath: fileUrl,
   });
 }
