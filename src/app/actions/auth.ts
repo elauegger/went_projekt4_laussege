@@ -1,9 +1,107 @@
 "use server";
 
+import fs from "node:fs/promises";
+import path from "node:path";
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-
 import { auth } from "../../lib/auth";
+import { prisma } from "../../lib/prisma";
+
+
+export async function changePasswordAction(formData: FormData) {
+  const currentPassword = formData.get("currentPassword") as string;
+  const newPassword = formData.get("newPassword") as string;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    throw new Error("Not authenticated");
+  }
+
+  try {
+    await auth.api.changePassword({
+      headers: await headers(),
+      body: {
+        currentPassword,
+        newPassword,
+      },
+    });
+  } catch (err: any) {
+    console.error("Password change error:", err);
+
+    throw new Error("Current password is incorrect or invalid request");
+  }
+
+  redirect("/profile?success=password");
+}
+
+export async function updateProfileAction(formData: FormData) {
+  const name = formData.get("name") as string;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    throw new Error("Not authenticated");
+  }
+
+  await prisma.user.update({
+    where: {
+      id: session.user.id,
+    },
+    data: {
+      name,
+    },
+  });
+
+  redirect("/profile");
+}
+
+export async function deleteCvUploadAction(formData: FormData) {
+  const cvId = formData.get("cvId") as string | null;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    throw new Error("Not authenticated");
+  }
+
+  if (!cvId) {
+    redirect("/profile");
+  }
+
+  const existingCv = await prisma.cv_uploads.findFirst({
+    where: {
+      id: cvId,
+      userId: session.user.id,
+    },
+    select: {
+      id: true,
+      storageKey: true,
+    },
+  });
+
+  if (!existingCv) {
+    redirect("/profile");
+  }
+
+  const uploadPath = path.join(process.cwd(), "uploads", existingCv.storageKey);
+  await fs.unlink(uploadPath).catch(() => undefined);
+
+  await prisma.cv_uploads.delete({
+    where: {
+      id: existingCv.id,
+    },
+  });
+
+  redirect("/profile");
+}
 
 export async function signUpAction(formData: FormData) {
   const email = formData.get("email") as string;

@@ -77,7 +77,7 @@ export function CvUploadForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-3">
-        <label htmlFor="cv" className="text-sm font-medium text-[#4f503f]">
+        <label htmlFor="cv" className=" text-sm font-medium text-[#4f503f]">
           Lebenslauf als PDF
         </label>
         <input
@@ -87,7 +87,7 @@ export function CvUploadForm() {
           type="file"
           accept="application/pdf"
           required
-          className="block w-full cursor-pointer rounded-3xl border border-[#d7cbac] bg-[#fcf8ef] px-4 py-4 text-sm text-[#5b5a48] file:mr-4 file:rounded-full file:border-0 file:bg-[#6d7a49] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#f8f3e3] hover:border-[#cdbf99] focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
+          className="block w-full cursor-pointer rounded-3xl border border-[#d7cbac] bg-[#fcf8ef] px-4 py-4 text-sm text-[#5b5a48] file:mr-4 file:rounded-full file:border-0 file:bg-[#6d7a49] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#f8f3e3] hover:border-[#cdbf99] focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40 mt-3"
         />
         <p className="text-xs leading-5 text-[#7a745f]">
           Nur PDF-Dateien, bis 10 MB. Die Datei wird lokal im uploads-Verzeichnis gespeichert und optional mit der Session verknüpft.
@@ -97,9 +97,18 @@ export function CvUploadForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center rounded-full bg-[#6d7a49] px-5 py-3 text-sm font-semibold text-[#f8f3e3] transition hover:bg-[#5f6b40] disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#6d7a49] px-5 py-3 text-sm font-semibold text-[#f8f3e3] transition hover:bg-[#5f6b40] disabled:cursor-not-allowed disabled:opacity-60"
+        aria-busy={isSubmitting}
       >
-        {isSubmitting ? "Upload läuft..." : "PDF hochladen"}
+        {isSubmitting ? (
+          <>
+            <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Upload läuft...
+          </>
+        ) : "PDF hochladen"}
       </button>
 
       {status.kind !== "idle" ? (
