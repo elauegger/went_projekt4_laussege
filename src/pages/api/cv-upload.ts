@@ -1,8 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import type { IncomingHttpHeaders } from "node:http";
 
 import multer from "multer";
+import { PDFParse } from "pdf-parse";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
@@ -60,10 +62,46 @@ function isPdfBuffer(buffer: Buffer) {
   return buffer.length >= 4 && buffer.subarray(0, 4).toString("utf8") === "%PDF";
 }
 
+function normalizeExtractedText(text: string) {
+  return text
+    .replace(/\u0000/g, "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+async function extractPdfText(buffer: Buffer) {
+  const parser = new PDFParse({ data: buffer });
+  try {
+    const parsed = await parser.getText();
+    return normalizeExtractedText(parsed.text ?? "");
+  } finally {
+    await parser.destroy().catch(() => undefined);
+  }
+}
+
+function toHeaders(headers: IncomingHttpHeaders): Headers {
+  const normalized = new Headers();
+
+  for (const [key, value] of Object.entries(headers)) {
+    if (typeof value === "string") {
+      normalized.set(key, value);
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      normalized.set(key, value.join(", "));
+    }
+  }
+
+  return normalized;
+}
+
 async function getUserFromCookies(req: UploadRequest): Promise<string | null> {
   try {
     const session = await auth.api.getSession({
-      headers: req.headers,
+      headers: toHeaders(req.headers),
     });
 
     return session?.user?.id ?? null;
@@ -136,6 +174,24 @@ export default async function handler(
     });
   }
 
+  let extractedText = "";
+  try {
+    extractedText = await extractPdfText(uploadedFile.buffer);
+  } catch (error) {
+    console.error("PDF extraction failed:", error);
+    return res.status(422).json({
+      success: false,
+      error: "PDF konnte nicht gelesen werden. Bitte eine intakte PDF-Datei hochladen.",
+    });
+  }
+
+  if (!extractedText) {
+    return res.status(422).json({
+      success: false,
+      error: "Es konnte kein auswertbarer Text aus der PDF extrahiert werden.",
+    });
+  }
+
   const uploadsDir = path.join(process.cwd(), "uploads");
   await fs.mkdir(uploadsDir, { recursive: true });
 
@@ -157,19 +213,27 @@ export default async function handler(
         fileUrl,
         storageKey: fileName,
         fileSizeBytes: BigInt(uploadedFile.buffer.length),
+        extractedText,
       },
     });
   } catch (error) {
     console.error("Failed to write cv_uploads metadata:", error);
-    return res.status(500).json({
-      success: false,
-      error: "Der Upload wurde gespeichert, aber der Datenbank-Eintrag schlug fehl.",
+    return res.status(201).json({
+      success: true,
+      message:
+        "PDF hochgeladen. Hinweis: Der Datenbank-Eintrag konnte nicht gespeichert werden.",
+      metadataSaved: false,
+      extractedText,
+      fileName,
+      filePath: fileUrl,
     });
   }
 
   return res.status(201).json({
     success: true,
     message: "PDF erfolgreich hochgeladen.",
+    metadataSaved: true,
+    extractedText,
     fileName,
     filePath: fileUrl,
   });
