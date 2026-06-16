@@ -28,6 +28,8 @@ const parseBoolean = (value?: string) => {
   return undefined;
 };
 
+// Alex schwul
+
 const parseSeniority = (value?: string): Job['seniority'] | undefined => {
   if (!value) {
     return undefined;
