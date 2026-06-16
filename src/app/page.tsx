@@ -219,6 +219,7 @@ export default async function Home() {
                   >
                     <span className="text-lg">◌</span>
                   </button>
+                  <Link href="profile">
                   <div className="flex h-11 items-center gap-3 rounded-full border border-[#d7ccb0] bg-white/80 px-3 pr-4">
                     <div className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_30%_30%,#f3e8c4,#b7c08b)]" />
                     <div className="hidden sm:block">
@@ -228,6 +229,7 @@ export default async function Home() {
                       <p className="text-[11px] text-[#7f785f]">Career profile</p>
                     </div>
                   </div>
+                  </Link>
                   {authenticated ? (
                     <form action={signOutAction}>
                       <button
