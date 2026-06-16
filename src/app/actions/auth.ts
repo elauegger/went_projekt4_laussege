@@ -27,13 +27,13 @@ export async function changePasswordAction(formData: FormData) {
         newPassword,
       },
     });
-  } catch (err: any) {
+    } catch (err: any) {
     console.error("Password change error:", err);
 
-    // optional sauberer UX-Fallback
     throw new Error("Current password is incorrect or invalid request");
   }
-alert("Passwort erfolgreich geändernt");
+
+  redirect("/profile?success=password");
 }
 
 export async function updateProfileAction(formData: FormData) {
