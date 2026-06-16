@@ -8,6 +8,7 @@ import { PDFParse } from "pdf-parse";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
+import { analyzeCV } from "../../lib/cv-analysis";
 
 type UploadRequest = NextApiRequest & {
   file?: {
@@ -175,6 +176,7 @@ export default async function handler(
   }
 
   let extractedText = "";
+
   try {
     extractedText = await extractPdfText(uploadedFile.buffer);
   } catch (error) {
@@ -190,6 +192,14 @@ export default async function handler(
       success: false,
       error: "Es konnte kein auswertbarer Text aus der PDF extrahiert werden.",
     });
+  }
+
+  let analysis = null;
+
+  try {
+    analysis = await analyzeCV(extractedText);
+  } catch (error) {
+    console.error("AI analysis failed:", error);
   }
 
   const uploadsDir = path.join(process.cwd(), "uploads");
@@ -218,12 +228,14 @@ export default async function handler(
     });
   } catch (error) {
     console.error("Failed to write cv_uploads metadata:", error);
+
     return res.status(201).json({
       success: true,
       message:
         "PDF hochgeladen. Hinweis: Der Datenbank-Eintrag konnte nicht gespeichert werden.",
       metadataSaved: false,
       extractedText,
+      analysis,
       fileName,
       filePath: fileUrl,
     });
@@ -234,6 +246,7 @@ export default async function handler(
     message: "PDF erfolgreich hochgeladen.",
     metadataSaved: true,
     extractedText,
+    analysis,
     fileName,
     filePath: fileUrl,
   });
