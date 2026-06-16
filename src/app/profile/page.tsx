@@ -1,10 +1,15 @@
+import Link from "next/link";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
 import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
-import { updateProfileAction } from "../actions/auth";
-import { changePasswordAction } from "../actions/auth";
+import {
+  changePasswordAction,
+  deleteCvUploadAction,
+  updateProfileAction,
+} from "../actions/auth";
 
 function SectionCard({
   title,
@@ -59,9 +64,17 @@ export default async function ProfilePage() {
           <p className="text-[10px] uppercase tracking-[0.42em] text-[#8d8667]">
             Profilbereich
           </p>
-          <h1 className="mt-3 font-serif text-4xl text-[#4d5240]">
-            Hallo {displayName}
-          </h1>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <h1 className="font-serif text-4xl text-[#4d5240]">
+              Hallo {displayName}
+            </h1>
+            <Link
+              href="/"
+              className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+            >
+              Zurück zu Home
+            </Link>
+          </div>
           <p className="mt-3 text-sm text-[#6f6a58]">
             Hier kannst du deine Daten verwalten, dein Profil bearbeiten und deine Lebensläufe einsehen.
           </p>
@@ -110,41 +123,41 @@ export default async function ProfilePage() {
             </form>
           </SectionCard>
           {/* PASSWORD CHANGE */}
-<SectionCard title="Passwort ändern">
-  <form action={changePasswordAction} className="space-y-4">
+          <SectionCard title="Passwort ändern">
+            <form action={changePasswordAction} className="space-y-4">
 
-    <div>
-      <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
-        Aktuelles Passwort
-      </label>
-      <input
-        type="password"
-        name="currentPassword"
-        className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm"
-        required
-      />
-    </div>
+              <div>
+                <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
+                  Aktuelles Passwort
+                </label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm"
+                  required
+                />
+              </div>
 
-    <div>
-      <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
-        Neues Passwort
-      </label>
-      <input
-        type="password"
-        name="newPassword"
-        className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm"
-        required
-      />
-    </div>
+              <div>
+                <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
+                  Neues Passwort
+                </label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm"
+                  required
+                />
+              </div>
 
-    <button
-      type="submit"
-      className="rounded-full bg-[#74824a] px-5 py-2.5 text-sm font-semibold text-[#f8f3e3] hover:bg-[#65743f]"
-    >
-      Passwort aktualisieren
-    </button>
-  </form>
-</SectionCard>
+              <button
+                type="submit"
+                className="rounded-full bg-[#74824a] px-5 py-2.5 text-sm font-semibold text-[#f8f3e3] hover:bg-[#65743f]"
+              >
+                Passwort aktualisieren
+              </button>
+            </form>
+          </SectionCard>
         </div>
 
         {/* CV SECTION */}
@@ -158,24 +171,40 @@ export default async function ProfilePage() {
               {user.cvUploads.map((cv) => (
                 <div
                   key={cv.id}
-                  className="rounded-2xl border border-[#e4dabc] bg-white/70 p-4"
+                  className="relative rounded-2xl border border-[#e4dabc] bg-white/70 p-4"
                 >
-                  <p className="text-sm font-medium text-[#4f5341]">
-                    {cv.originalFilename}
-                  </p>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-[#4f5341]">
+                        {cv.originalFilename}
+                      </p>
+                    </div>
+                    <form action={deleteCvUploadAction} className="shrink-0">
+                      <input type="hidden" name="cvId" value={cv.id} />
+                      <button
+                        type="submit"
+                        className="rounded-full border border-[#e8a5a5] bg-[#fef2f2] p-1.5 text-[#d32f2f] transition hover:bg-[#ffe8e8]"
+                        title="Lebenslauf löschen"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </form>
+                  </div>
 
-                  <div className="mt-2 space-y-1 text-xs text-[#7c765d]">
+                  <div className="mt-3 space-y-1 text-xs text-[#7c765d]">
                     <p>Typ: {cv.fileType}</p>
                     <p>Größe: {Math.round(Number(cv.fileSizeBytes) / 1024)} KB</p>
                   </div>
 
-                  <a
-                    href={cv.fileUrl}
-                    target="_blank"
-                    className="mt-3 inline-block text-sm text-[#74824a] underline"
-                  >
-                    Öffnen
-                  </a>
+                  <div className="mt-3">
+                    <a
+                      href={cv.fileUrl}
+                      target="_blank"
+                      className="text-sm text-[#74824a] underline"
+                    >
+                      Öffnen
+                    </a>
+                  </div>
                 </div>
               ))}
             </div>

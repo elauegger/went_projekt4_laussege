@@ -76,7 +76,7 @@ export default function SignInPage() {
           <form action={signInAction} className="mt-8 space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="email">
-                Email
+                Email <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="email"
@@ -85,12 +85,15 @@ export default function SignInPage() {
                 placeholder="name@beispiel.de"
                 required
                 autoComplete="email"
+                aria-required="true"
+                aria-label="Email-Adresse"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
+              <p className="text-xs text-[#7a745f]">Geben Sie Ihre registrierte E-Mail-Adresse ein.</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="password">
-                Passwort
+                Passwort <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="password"
@@ -99,11 +102,18 @@ export default function SignInPage() {
                 placeholder="Dein Passwort"
                 required
                 autoComplete="current-password"
+                minLength={8}
+                aria-required="true"
+                aria-label="Passwort"
+                aria-describedby="password-help"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
+              <p id="password-help" className="text-xs text-[#7a745f]">Mindestens 8 Zeichen.</p>
             </div>
 
-            <TurnstileWidget />
+            <div role="region" aria-label="Verifizierung">
+              <TurnstileWidget />
+            </div>
 
             <button
               type="submit"
