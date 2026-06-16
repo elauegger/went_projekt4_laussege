@@ -6,11 +6,11 @@ import TurnstileWidget from "../../components/turnstile-widget";
 
 export default function SignUpPage() {
   return (
-<main className="min-h-screen px-4 py-10 text-[var(--color-ink)] sm:px-6 lg:px-10 bg-cover bg-center"
-    style={{
-    backgroundImage: "url('/handshake1.png')",
-  }}>      
-      <div className="mx-auto w-3/4 lg:w-1/2 mt-20 ">
+    <main className="min-h-screen px-4 py-4 text-[var(--color-ink)] sm:px-6 sm:py-6 lg:px-10 bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage: "url('/handshake1.png')",
+      }}>
+      <div className="mx-auto w-3/4 lg:w-1/2">
         <section className="rounded-[32px] border border-[var(--color-line)] bg-white/60 p-8 shadow-[0_20px_60px_rgba(92,83,50,0.14)] backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div>
@@ -75,7 +75,7 @@ export default function SignUpPage() {
               />
             </div>
 
-            {/* <TurnstileWidget /> */}
+            <TurnstileWidget />
 
             <button
               type="submit"

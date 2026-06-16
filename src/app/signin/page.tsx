@@ -3,18 +3,18 @@ import Link from "next/link";
 
 import { signInAction } from "../actions/auth";
 import { LoginMicrosoft } from "../../components/loginMicrosoft";
-// import TurnstileWidget from "../../components/turnstile-widget";
+import TurnstileWidget from "../../components/turnstile-widget";
 
 export default function SignInPage() {
   return (
-    <main className="min-h-screen px-4 py-10 text-[var(--color-ink)] sm:px-6 lg:px-10 bg-cover bg-center"
-    style={{
-    backgroundImage: "url('/handshake1.png')",
-  }}>
-      <div className="mx-auto w-3/4 lg:w-1/2 mt-20 ">
+    <main className="min-h-screen px-4 py-4 text-[var(--color-ink)] sm:px-6 sm:py-6 lg:px-10 bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage: "url('/handshake1.png')",
+      }}>
+      <div className="mx-auto w-3/4 lg:w-1/2">
 
-       
-         {/*<section className="relative overflow-hidden rounded-[32px] border border-[var(--color-line)] bg-[var(--color-surface)] shadow-[0_24px_70px_rgba(92,83,50,0.16)]">
+
+        {/*<section className="relative overflow-hidden rounded-[32px] border border-[var(--color-line)] bg-[var(--color-surface)] shadow-[0_24px_70px_rgba(92,83,50,0.16)]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(125,138,98,0.24),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(210,194,160,0.35),transparent_45%)]" />
           <div className="relative z-10 flex h-full flex-col justify-between gap-8 p-8">
             <div>
@@ -103,7 +103,7 @@ export default function SignInPage() {
               />
             </div>
 
-            {/* <TurnstileWidget /> */}
+            <TurnstileWidget />
 
             <button
               type="submit"
