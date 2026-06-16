@@ -10,12 +10,17 @@ export const metadata = {
   description: "PDF-Lebenslauf lokal hochladen und speichern.",
 };
 
+function formatBytes(bytes: bigint) {
+  const mb = Number(bytes) / 1024 / 1024;
+  return `${mb.toFixed(2)} MB`;
+}
+
 export default async function CvUploadPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const uploads = session?.user
+  const cvs = session?.user
     ? await prisma.cv_uploads.findMany({
       where: {
         userId: session.user.id,
@@ -26,7 +31,7 @@ export default async function CvUploadPage() {
       select: {
         id: true,
         originalFilename: true,
-        fileUrl: true,
+        storageKey: true,
         fileSizeBytes: true,
         createdAt: true,
       },
@@ -78,10 +83,10 @@ export default async function CvUploadPage() {
             <div className="flex h-full flex-col rounded-4xl border border-[#e2d7bb] bg-white/70 p-6 sm:p-7">
               <div className="mb-6 flex items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold text-[#534f3f]">
-                  Vergangene Lebensläufe
+                  Vergangene CV
                 </h2>
                 <div className="rounded-full border border-[#ded2ad] bg-[#f6efda] px-3 py-1 text-xs font-medium text-[#746f5a]">
-                  {uploads.length} Einträge
+                  {cvs.length} Einträge
                 </div>
               </div>
 
@@ -91,29 +96,39 @@ export default async function CvUploadPage() {
                     Bitte anmelden, um vergangene Uploads als Links zu sehen.
                   </p>
                 </div>
-              ) : uploads.length === 0 ? (
+              ) : cvs.length === 0 ? (
                 <div className="flex h-full items-center justify-center rounded-3xl border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
                   <p className="text-sm text-[#6f6a58]">
                     Noch keine vergangenen Uploads vorhanden.
                   </p>
                 </div>
               ) : (
-                <div className="h-full max-h-105 space-y-3 overflow-y-auto pr-1">
-                  {uploads.map((upload) => (
-                    <a
-                      key={upload.id}
-                      href={upload.fileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block rounded-3xl border border-[#e4dabc] bg-[#fffdf7] px-4 py-3 transition hover:border-[#d5c8a5] hover:bg-white"
+                <div className="h-70 max-h-900 space-y-4 overflow-y-auto pr-1">
+                  {cvs.map((cv) => (
+                    <div
+                      key={cv.id}
+                      className="rounded-3xl border border-[#e2d7bb] bg-white/75 p-5"
                     >
-                      <p className="truncate text-sm font-semibold text-[#4f5341]">
-                        {upload.originalFilename}
-                      </p>
-                      <p className="mt-1 text-xs text-[#7a745f]">
-                        {Math.max(1, Math.round(Number(upload.fileSizeBytes) / 1024))} KB · {new Date(upload.createdAt).toLocaleDateString("de-DE")}
-                      </p>
-                    </a>
+                      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <h3 className="truncate text-sm font-semibold text-[#4f5341]" title={cv.originalFilename}>
+                            {cv.originalFilename}
+                          </h3>
+                          <p className="mt-1 text-sm text-[#7a745f]">
+                            Hochgeladen am {cv.createdAt.toLocaleDateString("de-AT")} · {formatBytes(cv.fileSizeBytes)}
+                          </p>
+                        </div>
+
+                        <a
+                          href={`/api/cv-upload/${cv.storageKey}/file`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-full border border-[#cfc39f] bg-[#efe6cc] px-4 py-2 text-sm font-medium text-[#5b5a47] transition hover:bg-[#e8dcba]"
+                        >
+                          PDF öffnen
+                        </a>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
