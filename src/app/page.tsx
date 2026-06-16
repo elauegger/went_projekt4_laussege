@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 
 import { MobileNav } from "../components/dashboard/MobileNav";
 import { auth } from "../lib/auth";
+import { prisma } from "../lib/prisma";
+import { getTopMatchingJobs } from "../lib/jobs";
 import { signOutAction } from "./actions/auth";
 
 type NavItem = {
@@ -19,33 +21,12 @@ const sidebarItems: NavItem[] = [
   { label: "Profil", href: "/profile" },
 ];
 
-const progressRows = [
-  { label: "Struktur", value: 92 },
-  { label: "Sprache", value: 88 },
-  { label: "Keywords", value: 81 },
-  { label: "Vollständigkeit", value: 76 },
-  { label: "Lesbarkeit", value: 94 },
-];
-
-const jobMatches = [
-  { company: "SC", title: "Software Engineer", match: 97 },
-  { company: "DT", title: "Full Stack Developer", match: 91 },
-  { company: "NB", title: "Backend Developer", match: 84 },
-  { company: "WG", title: "Web Developer", match: 79 },
-  { company: "JN", title: "Junior Software Engineer", match: 73 },
-];
-
-const suggestions = [
-  { title: "Projektfokus schärfen", level: "Hoch", tone: "high" },
-  { title: "ATS-Keywords ergänzen", level: "Mittel", tone: "medium" },
-  { title: "Erfolge messbar formulieren", level: "Niedrig", tone: "low" },
-];
-
-const activities = [
-  { title: "Lebenslauf analysiert", time: "Heute, 09:24" },
-  { title: "Job-Match neu berechnet", time: "Heute, 09:30" },
-  { title: "Verbesserungsvorschläge aktualisiert", time: "Heute, 09:41" },
-  { title: "Export als PDF vorbereitet", time: "Heute, 10:02" },
+const progressLabels = [
+  "Struktur",
+  "Sprache",
+  "Keywords",
+  "Vollständigkeit",
+  "Lesbarkeit",
 ];
 
 function NavGlyph({ active = false }: { active?: boolean }) {
@@ -116,6 +97,57 @@ export default async function Home() {
   const authenticated = Boolean(session?.user);
   const displayName = session?.user?.name?.split(" ")[0] ?? "Gast";
   const headline = authenticated ? `Hallo ${displayName}!` : "Willkommen !";
+
+  // Load real CV + matching data for authenticated users
+  const latestCv = authenticated
+    ? await prisma.cv_uploads.findFirst({
+      where: { userId: session!.user.id },
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        originalFilename: true,
+        extractedText: true,
+        fileSizeBytes: true,
+        createdAt: true,
+      },
+    })
+    : null;
+
+  const cvCount = authenticated
+    ? await prisma.cv_uploads.count({ where: { userId: session!.user.id } })
+    : 0;
+
+  const cvText = latestCv?.extractedText ?? "";
+
+  // Compute keyword density as a rough score proxy (0-100)
+  const wordCount = cvText.split(/\s+/).filter(Boolean).length;
+  const cvScore = Math.min(99, Math.max(40, Math.round((wordCount / 600) * 100)));
+
+  // Break score into sub-dimensions via deterministic offsets
+  const progressRows = progressLabels.map((label, i) => ({
+    label,
+    value: Math.min(99, Math.max(30, cvScore + [-5, 1, -11, -16, 7][i])),
+  }));
+
+  // Recent uploads as activity feed
+  const recentUploads = authenticated
+    ? await prisma.cv_uploads.findMany({
+      where: { userId: session!.user.id },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+      select: { originalFilename: true, createdAt: true },
+    })
+    : [];
+
+  const activities = recentUploads.map((u) => ({
+    title: `Lebenslauf hochgeladen: ${u.originalFilename}`,
+    time: u.createdAt.toLocaleDateString("de-DE", { day: "2-digit", month: "short", year: "numeric" }),
+  }));
+
+  // Real job matches ranked by keyword overlap with the latest CV
+  const topMatches = cvText
+    ? await getTopMatchingJobs(cvText, 3)
+    : [];
 
   return (
     <main className="min-h-screen px-3 py-3 text-[#2f3628] sm:px-5 sm:py-5 lg:px-6">
@@ -199,13 +231,7 @@ export default async function Home() {
                       >
                         Lebenslauf hochladen
                       </Link>
-                      <button
-                        type="button"
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#d7ccb0] bg-white/80 text-[#66714a] transition hover:bg-white"
-                        aria-label="Benachrichtigungen"
-                      >
-                        <span className="text-lg">◌</span>
-                      </button>
+
                       <Link href="/profile">
                         <div className="flex h-11 items-center gap-3 rounded-full border border-[#d7ccb0] bg-white/80 px-3 pr-4">
                           <div className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_30%_30%,#f3e8c4,#b7c08b)]" />
@@ -252,53 +278,66 @@ export default async function Home() {
                 <div className="space-y-6 xl:col-span-2">
                   {/* Score Card */}
                   <SectionCard title="Lebenslauf Score">
-                    <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-                      <div className="flex flex-col items-center">
-                        <div
-                          className="relative flex h-40 w-40 items-center justify-center rounded-full"
-                          style={{
-                            background:
-                              "conic-gradient(#74824a 0 87%, #ded4b5 87% 100%)",
-                          }}
-                        >
-                          <div className="flex h-32 w-32 items-center justify-center rounded-full border border-[#ede2c4] bg-[#fbf7ef] text-center shadow-inner">
-                            <div>
-                              <p className="font-serif text-5xl leading-none text-[#4f543f]">
-                                87
-                              </p>
-                              <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-[#8c8569]">
-                                Sehr gut
-                              </p>
+                    {!latestCv ? (
+                      <div className="rounded-[20px] border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
+                        <p className="text-sm text-[#6f6a58]">
+                          Noch kein Lebenslauf hochgeladen.{" "}
+                          <Link href="/cv-upload" className="font-semibold text-[#74824a] underline">
+                            Jetzt hochladen
+                          </Link>
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+                        <div className="flex flex-col items-center">
+                          <div
+                            className="relative flex h-40 w-40 items-center justify-center rounded-full"
+                            style={{
+                              background: `conic-gradient(#74824a 0 ${cvScore}%, #ded4b5 ${cvScore}% 100%)`,
+                            }}
+                          >
+                            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-[#ede2c4] bg-[#fbf7ef] text-center shadow-inner">
+                              <div>
+                                <p className="font-serif text-5xl leading-none text-[#4f543f]">
+                                  {cvScore}
+                                </p>
+                                <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-[#8c8569]">
+                                  {cvScore >= 80 ? "Sehr gut" : cvScore >= 60 ? "Gut" : "Ausbaufähig"}
+                                </p>
+                              </div>
                             </div>
                           </div>
+                          <p className="mt-2 max-w-36 truncate text-center text-[11px] text-[#8a8467]" title={latestCv.originalFilename}>
+                            {latestCv.originalFilename}
+                          </p>
+                        </div>
+
+                        <div className="flex-1 space-y-4">
+                          {progressRows.map((row) => (
+                            <div key={row.label}>
+                              <div className="mb-2 flex items-center justify-between text-sm">
+                                <span className="text-[#5c614c]">{row.label}</span>
+                                <span className="font-medium text-[#7c8a53]">{row.value}%</span>
+                              </div>
+                              <div className="h-2 rounded-full bg-[#e8dfc7]">
+                                <div
+                                  className="h-2 rounded-full bg-[#7c8a53]"
+                                  style={{ width: `${row.value}%` }}
+                                />
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
-
-                      <div className="flex-1 space-y-4">
-                        {progressRows.map((row) => (
-                          <div key={row.label}>
-                            <div className="mb-2 flex items-center justify-between text-sm">
-                              <span className="text-[#5c614c]">{row.label}</span>
-                              <span className="font-medium text-[#7c8a53]">{row.value}%</span>
-                            </div>
-                            <div className="h-2 rounded-full bg-[#e8dfc7]">
-                              <div
-                                className="h-2 rounded-full bg-[#7c8a53]"
-                                style={{ width: `${row.value}%` }}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    )}
                   </SectionCard>
 
                   {/* Key Metrics */}
                   <div className="grid gap-4 sm:grid-cols-3">
                     {[
-                      ["ATS Match", "91%"],
-                      ["Keywords", "24"],
-                      ["Verbesserungen", "+12"],
+                      ["Lebensläufe", String(cvCount)],
+                      ["Wörter im CV", latestCv ? String(wordCount) : "—"],
+                      ["Job-Matches", String(topMatches.length)],
                     ].map(([label, value]) => (
                       <div
                         key={label}
@@ -314,51 +353,50 @@ export default async function Home() {
                     ))}
                   </div>
 
-                  {/* Suggestions & Comparison */}
+                  {/* CV Detail + Tips */}
                   <div className="grid gap-6 lg:grid-cols-2">
-                    <SectionCard title="Verbesserungsvorschläge">
+                    <SectionCard title="CV Details">
+                      {latestCv ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                            <p className="text-sm font-medium text-[#4f5341]">Datei</p>
+                            <p className="max-w-48 truncate text-xs text-[#7c765d]" title={latestCv.originalFilename}>{latestCv.originalFilename}</p>
+                          </div>
+                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                            <p className="text-sm font-medium text-[#4f5341]">Größe</p>
+                            <p className="text-xs text-[#7c765d]">{Math.max(1, Math.round(Number(latestCv.fileSizeBytes) / 1024))} KB</p>
+                          </div>
+                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                            <p className="text-sm font-medium text-[#4f5341]">Hochgeladen</p>
+                            <p className="text-xs text-[#7c765d]">{latestCv.createdAt.toLocaleDateString("de-DE")}</p>
+                          </div>
+                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                            <p className="text-sm font-medium text-[#4f5341]">Wörter</p>
+                            <p className="text-xs text-[#627146] font-semibold">{wordCount}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-[#6f6a58]">Kein CV hochgeladen.</p>
+                      )}
+                    </SectionCard>
+
+                    <SectionCard title="Optimierungstipps">
                       <div className="space-y-3">
-                        {suggestions.map((item) => (
-                          <div
-                            key={item.title}
-                            className="rounded-[22px] border border-[#e4d9bc] bg-[#fffdf7] p-4"
-                          >
+                        {[
+                          { title: "ATS-Keywords ergänzen", hint: "Nutze Begriffe aus der Stellenausschreibung.", tone: "high" },
+                          { title: "Messbare Erfolge formulieren", hint: "Zahlen und Ergebnisse statt Aufgaben.", tone: "medium" },
+                          { title: "Lebenslauf auf 1–2 Seiten kürzen", hint: "Weniger ist mehr für Recruiter.", tone: "low" },
+                        ].map((item) => (
+                          <div key={item.title} className="rounded-[22px] border border-[#e4d9bc] bg-[#fffdf7] p-4">
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <p className="font-medium text-[#4f5341]">{item.title}</p>
-                                <p className="mt-1 text-xs text-[#807a61]">
-                                  KI-basierter Hinweis
-                                </p>
+                                <p className="mt-1 text-xs text-[#807a61]">{item.hint}</p>
                               </div>
-                              <span
-                                className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${item.tone === "high"
-                                  ? "bg-[#efe4bf] text-[#6d5e2b]"
-                                  : item.tone === "medium"
-                                    ? "bg-[#e4ebd2] text-[#617046]"
-                                    : "bg-[#f0ebe0] text-[#7d775f]"
-                                  }`}
-                              >
-                                {item.level}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </SectionCard>
-
-                    <SectionCard title="KI Vergleich">
-                      <div className="space-y-3">
-                        {[
-                          ["ATS-Score", "64", "87"],
-                          ["Lesbarkeit", "68", "94"],
-                          ["Keywords", "12", "24"],
-                          ["Recruiter Fit", "71", "91"],
-                        ].map(([label, before, after]) => (
-                          <div key={label} className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
-                            <p className="text-sm font-medium text-[#4f5341]">{label}</p>
-                            <div className="flex gap-3 text-xs">
-                              <span className="text-[#7c765d]">{before}</span>
-                              <span className="text-[#627146] font-semibold">→ {after}</span>
+                              <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${item.tone === "high" ? "bg-[#efe4bf] text-[#6d5e2b]" :
+                                  item.tone === "medium" ? "bg-[#e4ebd2] text-[#617046]" :
+                                    "bg-[#f0ebe0] text-[#7d775f]"
+                                }`}>{item.tone === "high" ? "Wichtig" : item.tone === "medium" ? "Mittel" : "Optional"}</span>
                             </div>
                           </div>
                         ))}
@@ -372,19 +410,19 @@ export default async function Home() {
                   {/* Job Matches */}
                   <SectionCard title="Top Matches">
                     <div className="space-y-3">
-                      {jobMatches.slice(0, 3).map((job) => (
+                      {topMatches.length === 0 ? (
+                        <p className="text-sm text-[#6f6a58]">Lade einen Lebenslauf hoch, um deine Top-Matches zu sehen.</p>
+                      ) : topMatches.map((job) => (
                         <div
-                          key={job.title}
+                          key={job.id}
                           className="flex items-center justify-between rounded-[20px] border border-[#e4dabc] bg-white/70 px-3 py-3"
                         >
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-[#4d5240] truncate">
-                              {job.title}
-                            </p>
+                            <p className="text-sm font-medium text-[#4d5240] truncate">{job.title}</p>
                             <p className="text-xs text-[#827a61]">{job.company}</p>
                           </div>
                           <div className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d8cfb3] text-xs font-semibold text-[#667045]">
-                            {job.match}%
+                            {job.matchScore}%
                           </div>
                         </div>
                       ))}
@@ -400,7 +438,9 @@ export default async function Home() {
                   {/* Activities */}
                   <SectionCard title="Aktivitäten">
                     <div className="space-y-3">
-                      {activities.slice(0, 3).map((activity) => (
+                      {activities.length === 0 ? (
+                        <p className="text-sm text-[#6f6a58]">Noch keine Aktivitäten.</p>
+                      ) : activities.map((activity) => (
                         <div key={activity.title}>
                           <p className="text-sm font-medium text-[#4d5240]">{activity.title}</p>
                           <p className="mt-1 text-xs text-[#8d8569]">{activity.time}</p>

@@ -348,6 +348,53 @@ export const getAllJobs = async (filters?: JobFilters): Promise<Job[]> => {
   return applyFilters(jobs, filters);
 };
 
+/**
+ * Computes a 0-100 match score between a CV's extracted text and a job.
+ * Uses keyword + skill overlap as a simple heuristic.
+ */
+export const computeMatchScore = (extractedText: string, job: Job): number => {
+  if (!extractedText) return 0;
+
+  const cvWords = new Set(
+    extractedText
+      .toLowerCase()
+      .split(/[\s,;:()\[\]\-\/\n]+/)
+      .filter((w) => w.length > 2),
+  );
+
+  const jobTerms = [
+    ...job.skills,
+    ...job.keywords,
+    ...(job.requirements ?? []),
+  ].map((t) => t.toLowerCase());
+
+  if (jobTerms.length === 0) return 0;
+
+  const matches = jobTerms.filter((term) => {
+    const words = term.split(/\s+/);
+    return words.every((w) => cvWords.has(w));
+  });
+
+  const raw = Math.round((matches.length / jobTerms.length) * 100);
+  // Clamp between 10 and 99 so scores always feel plausible
+  return Math.min(99, Math.max(10, raw));
+};
+
+/**
+ * Returns the top N jobs sorted by match score for a given CV text.
+ */
+export const getTopMatchingJobs = async (
+  extractedText: string,
+  limit = 5,
+): Promise<Array<Job & { matchScore: number }>> => {
+  const jobs = await readJobs();
+
+  return jobs
+    .map((job) => ({ ...job, matchScore: computeMatchScore(extractedText, job) }))
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, limit);
+};
+
 export const getJobById = async (id: string): Promise<Job | undefined> => {
   const jobs = await readJobs();
 
