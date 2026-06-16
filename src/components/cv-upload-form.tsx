@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 type UploadState =
   | { kind: "idle"; message: string }
@@ -8,6 +9,7 @@ type UploadState =
   | { kind: "error"; message: string };
 
 export function CvUploadForm() {
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<UploadState>({
@@ -59,6 +61,9 @@ export function CvUploadForm() {
         kind: "success",
         message: payload?.message || "PDF erfolgreich hochgeladen.",
       });
+
+      // Refresh server components so the upload list updates without a manual reload
+      router.refresh();
     } catch (error) {
       const message =
         error instanceof Error
