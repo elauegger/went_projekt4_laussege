@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getAllJobs } from '../../lib/jobs';
 import type { Job } from '../../types/job';
 import { JobFilters } from '../../components/jobs/JobFilters';
@@ -112,51 +113,68 @@ export default async function JobsPage({
   };
 
   return (
-    <main className="min-h-screen px-4 py-6 text-[var(--color-ink)] sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-[1200px] space-y-8">
-        <JobPanel className="p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[var(--color-muted)]">
+    <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-6xl space-y-6">
+
+        {/* HEADER */}
+        <div className="rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] p-8 shadow-[0_24px_90px_rgba(98,87,55,0.14)]">
+          <p className="text-[10px] uppercase tracking-[0.42em] text-[#8d8667]">
             Jobsy Karriereboard
           </p>
-          <h1 className="mt-4 font-serif text-4xl text-[var(--color-ink)] sm:text-5xl">
-            Jobs fuer deinen naechsten Schritt
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--color-muted)] sm:text-base">
-            Entdecke aktuelle Rollen und finde Positionen, die zu deinen Skills
-            und deiner Senioritaet passen.
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <h1 className="font-serif text-4xl text-[#4d5240]">
+              Jobs für deinen nächsten Schritt
+            </h1>
+            <Link
+              href="/"
+              className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+            >
+              Zurück zu Home
+            </Link>
+          </div>
+          <p className="mt-3 text-sm text-[#6f6a58]">
+            Entdecke aktuelle Rollen und finde Positionen, die zu deinen Skills und deiner Seniörität passen.
           </p>
-          <p className="mt-6 text-xs text-[var(--color-muted)]">
-            {totalCount} offene Positionen
-          </p>
-        </JobPanel>
+        </div>
 
-        <JobFilters
-          values={{
-            q,
-            skill,
-            company,
-            location,
-            employmentType: employmentType ?? '',
-            seniority: seniority ?? '',
-            remote: remoteValue ?? '',
-            sort: sortValue ?? '',
-          }}
-        />
+        {/* FILTERS & CONTENT */}
+        <div className="space-y-6">
+          <JobFilters
+            values={{
+              q,
+              skill,
+              company,
+              location,
+              employmentType: employmentType ?? '',
+              seniority: seniority ?? '',
+              remote: remoteValue ?? '',
+              sort: sortValue ?? '',
+            }}
+          />
 
-        {pageJobs.length ? (
-          <JobGroupList jobs={pageJobs} />
-        ) : (
-          <JobPanel className="p-8 text-center text-sm text-[var(--color-muted)]">
-            Keine Jobs gefunden. Passe die Filter an oder leere die Suche.
-          </JobPanel>
-        )}
+          {pageJobs.length ? (
+            <div className="space-y-1 text-sm text-[#8a8467]">
+              <p className="font-medium">{totalCount} Positionen insgesamt • Seite {safePage} von {totalPages}</p>
+            </div>
+          ) : null}
 
-        <JobPagination
-          currentPage={safePage}
-          totalPages={totalPages}
-          basePath="/jobs"
-          query={paginationQuery}
-        />
+          {pageJobs.length ? (
+            <JobGroupList jobs={pageJobs} />
+          ) : (
+            <div className="rounded-[28px] border border-[#e5dcc1] bg-white/75 p-8 text-center shadow-[0_14px_40px_rgba(116,101,65,0.07)] backdrop-blur">
+              <p className="text-sm text-[#6f6a58]">
+                Keine Jobs gefunden. Passe die Filter an oder leere die Suche.
+              </p>
+            </div>
+          )}
+
+          <JobPagination
+            currentPage={safePage}
+            totalPages={totalPages}
+            basePath="/jobs"
+            query={paginationQuery}
+          />
+        </div>
       </div>
     </main>
   );

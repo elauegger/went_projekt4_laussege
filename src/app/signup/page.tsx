@@ -32,7 +32,7 @@ export default function SignUpPage() {
           <form action={signUpAction} className="mt-8 space-y-5">
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="name">
-                Name
+                Name <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="name"
@@ -41,12 +41,14 @@ export default function SignUpPage() {
                 placeholder="Dein Name"
                 required
                 autoComplete="name"
+                aria-required="true"
+                aria-label="Vor- und Nachname"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="email">
-                Email
+                Email <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="email"
@@ -55,12 +57,15 @@ export default function SignUpPage() {
                 placeholder="name@beispiel.de"
                 required
                 autoComplete="email"
+                aria-required="true"
+                aria-label="Email-Adresse"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
+              <p className="text-xs text-[#7a745f]">Nutzen Sie eine gültige E-Mail-Adresse.</p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="password">
-                Passwort
+                Passwort <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="password"
@@ -69,13 +74,18 @@ export default function SignUpPage() {
                 placeholder="Mindestens 8 Zeichen"
                 required
                 minLength={8}
-                title="Password must be at least 8 characters"
                 autoComplete="new-password"
+                aria-required="true"
+                aria-label="Passwort"
+                aria-describedby="password-help"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
+              <p id="password-help" className="text-xs text-[#7a745f]">Mindestens 8 Zeichen, mit Groß- und Kleinbuchstaben und Sonderzeichen empfohlen.</p>
             </div>
 
-            <TurnstileWidget />
+            <div role="region" aria-label="Verifizierung">
+              <TurnstileWidget />
+            </div>
 
             <button
               type="submit"

@@ -1,5 +1,7 @@
 "use server";
 
+import fs from "node:fs/promises";
+import path from "node:path";
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -27,7 +29,7 @@ export async function changePasswordAction(formData: FormData) {
         newPassword,
       },
     });
-    } catch (err: any) {
+  } catch (err: any) {
     console.error("Password change error:", err);
 
     throw new Error("Current password is incorrect or invalid request");
@@ -53,6 +55,48 @@ export async function updateProfileAction(formData: FormData) {
     },
     data: {
       name,
+    },
+  });
+
+  redirect("/profile");
+}
+
+export async function deleteCvUploadAction(formData: FormData) {
+  const cvId = formData.get("cvId") as string | null;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    throw new Error("Not authenticated");
+  }
+
+  if (!cvId) {
+    redirect("/profile");
+  }
+
+  const existingCv = await prisma.cv_uploads.findFirst({
+    where: {
+      id: cvId,
+      userId: session.user.id,
+    },
+    select: {
+      id: true,
+      storageKey: true,
+    },
+  });
+
+  if (!existingCv) {
+    redirect("/profile");
+  }
+
+  const uploadPath = path.join(process.cwd(), "uploads", existingCv.storageKey);
+  await fs.unlink(uploadPath).catch(() => undefined);
+
+  await prisma.cv_uploads.delete({
+    where: {
+      id: existingCv.id,
     },
   });
 
