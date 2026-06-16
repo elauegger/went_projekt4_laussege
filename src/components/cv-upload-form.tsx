@@ -77,7 +77,7 @@ export function CvUploadForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-3">
-        <label htmlFor="cv" className="text-sm font-medium text-[#4f503f]">
+        <label htmlFor="cv" className=" text-sm font-medium text-[#4f503f]">
           Lebenslauf als PDF
         </label>
         <input
@@ -87,7 +87,7 @@ export function CvUploadForm() {
           type="file"
           accept="application/pdf"
           required
-          className="block w-full cursor-pointer rounded-3xl border border-[#d7cbac] bg-[#fcf8ef] px-4 py-4 text-sm text-[#5b5a48] file:mr-4 file:rounded-full file:border-0 file:bg-[#6d7a49] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#f8f3e3] hover:border-[#cdbf99] focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
+          className="block w-full cursor-pointer rounded-3xl border border-[#d7cbac] bg-[#fcf8ef] px-4 py-4 text-sm text-[#5b5a48] file:mr-4 file:rounded-full file:border-0 file:bg-[#6d7a49] file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#f8f3e3] hover:border-[#cdbf99] focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40 mt-3"
         />
         <p className="text-xs leading-5 text-[#7a745f]">
           Nur PDF-Dateien, bis 10 MB. Die Datei wird lokal im uploads-Verzeichnis gespeichert und optional mit der Session verknüpft.
