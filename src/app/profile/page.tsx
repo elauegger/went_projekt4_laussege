@@ -68,12 +68,20 @@ export default async function ProfilePage() {
             <h1 className="font-serif text-4xl text-[#4d5240]">
               Hallo {displayName}
             </h1>
-            <Link
-              href="/"
-              className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
-            >
-              Zurück zu Home
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/ai-analysis"
+                className="rounded-full border border-[#d6caa9] bg-[#e8f0d4] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#dce8c4]"
+              >
+                KI-Analyse
+              </Link>
+              <Link
+                href="/"
+                className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+              >
+                Zurück zu Home
+              </Link>
+            </div>
           </div>
           <p className="mt-3 text-sm text-[#6f6a58]">
             Hier kannst du deine Daten verwalten, dein Profil bearbeiten und deine Lebensläufe einsehen.

@@ -152,17 +152,25 @@ model saved_suggestions {
 }
 
 model cv_uploads {
-  id               String   @id @default(uuid())
+  id               String  @id @default(uuid())
   userId           String?
   originalFilename String
   fileType         String
   fileUrl          String
   storageKey       String
   fileSizeBytes    BigInt
-  extractedText    String?  @db.Text
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extractedText    String? @db.Text
+
+  analysisScore        Int?
+  analysisStrengths    Json?
+  analysisWeaknesses   Json?
+  analysisImprovements Json?
+  analysisModelUsed    String?
+  analyzedAt           DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("cv_uploads")
