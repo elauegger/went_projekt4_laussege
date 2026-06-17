@@ -19,6 +19,7 @@ const sidebarItems: NavItem[] = [
   { label: "Jobs", href: "/jobs" },
   { label: "Lebensläufe", href: "/cv-upload" },
   { label: "Profil", href: "/profile" },
+  { label: "KI-Analyse", href: "/ai-analysis"},
 ];
 
 const progressLabels = [
