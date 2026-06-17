@@ -6,6 +6,7 @@ import { randomUUID } from "crypto";
 
 import { prisma } from "../../../lib/prisma";
 import { auth } from "../../../lib/auth";
+import { extractTextFromPDF } from "../../../lib/pdf-extract";
 
 export async function GET() {
   const session = await auth.api.getSession({
@@ -80,6 +81,15 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
     await writeFile(absolutePath, buffer);
 
+    // Extract text from PDF
+    let extractedText = "";
+    try {
+      extractedText = await extractTextFromPDF(buffer);
+    } catch (error) {
+      console.error("PDF text extraction error:", error);
+      // Continue without extracted text - this is not fatal
+    }
+
     const fileUrl = `/api/cv-upload/${storageKey}/file`;
 
     const savedUpload = await prisma.cv_uploads.create({
@@ -90,6 +100,7 @@ export async function POST(request: NextRequest) {
         fileUrl,
         storageKey,
         fileSizeBytes: BigInt(file.size),
+        extractedText: extractedText || null,
       },
     });
 

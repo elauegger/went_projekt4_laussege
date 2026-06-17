@@ -39,7 +39,7 @@ export async function analyzeCV(extractedText: string): Promise<CVAnalysis> {
       {
         role: "system",
         content:
-        "Du bist ein HR-Recruiter. Bewerte deterministisch und konsistent. Verwende bei gleichem Lebenslauf immer dieselbe Bewertung. Antworte ausschließlich mit gültigem JSON. Arrays enthalten nur Strings. Achte auf das Alter der Bewerber, und bewerte dementsprechend. Sei also nicht zu streng, wenn junge Leute noch wenig Erfahrung haben.",      },
+        "Bewerte deterministisch und konsistent. Verwende bei gleichem Lebenslauf immer dieselbe Bewertung. Antworte ausschließlich mit gültigem JSON. Arrays enthalten nur Strings. Achte auf das Alter der Bewerber, und bewerte dementsprechend. Sei also nicht zu streng, wenn junge Leute noch wenig Erfahrung haben. Bewerte die Qualität des Lebenslaufes. Wenn es sich nicht um einen Lebenslauf handelt, vergebe dementsprechend weniger Punkte.",      },
       {
         role: "user",
         content: `
