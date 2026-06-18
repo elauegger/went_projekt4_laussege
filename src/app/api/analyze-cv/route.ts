@@ -1,7 +1,10 @@
 import { headers } from "next/headers";
+import { readFile } from "fs/promises";
+import path from "path";
 import { auth } from "../../../lib/auth";
 import { prisma } from "../../../lib/prisma";
 import { analyzeCV } from "../../../lib/cv-analysis";
+import { extractTextFromPDF } from "../../../lib/pdf-extract";
 import type { CVAnalysis } from "../../../lib/cv-analysis";
 
 function stringArrayFromJson(value: unknown): string[] {
@@ -37,9 +40,35 @@ export async function POST(request: Request) {
       return Response.json({ error: "CV not found" }, { status: 404 });
     }
 
-    if (!cvUpload.extractedText) {
+    let extractedText = cvUpload.extractedText?.trim() ?? "";
+
+    if (!extractedText) {
+      try {
+        const absolutePath = path.join(
+          process.cwd(),
+          "uploads",
+          cvUpload.storageKey,
+        );
+        const buffer = await readFile(absolutePath);
+        extractedText = (await extractTextFromPDF(buffer)).trim();
+
+        if (extractedText) {
+          await prisma.cv_uploads.update({
+            where: { id: cvUpload.id },
+            data: { extractedText },
+          });
+        }
+      } catch (error) {
+        console.error("CV re-extraction error:", error);
+      }
+    }
+
+    if (!extractedText) {
       return Response.json(
-        { error: "No extracted text available for this CV" },
+        {
+          error:
+            "No extracted text available for this CV. The PDF may contain only scanned images.",
+        },
         { status: 400 },
       );
     }
@@ -66,7 +95,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const analysis = await analyzeCV(cvUpload.extractedText);
+    const analysis = await analyzeCV(extractedText);
 
     await prisma.cv_uploads.update({
       where: {
