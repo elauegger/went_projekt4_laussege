@@ -8,6 +8,12 @@ import { prisma } from "../lib/prisma";
 import { getTopMatchingJobs } from "../lib/jobs";
 import { signOutAction } from "./actions/auth";
 
+function stringArrayFromJson(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.filter((item): item is string => typeof item === "string");
+}
+
 type NavItem = {
   label: string;
   href: string;
@@ -19,15 +25,7 @@ const sidebarItems: NavItem[] = [
   { label: "Jobs", href: "/jobs" },
   { label: "Lebensläufe", href: "/cv-upload" },
   { label: "Profil", href: "/profile" },
-  { label: "KI-Analyse", href: "/ai-analysis"},
-];
-
-const progressLabels = [
-  "Struktur",
-  "Sprache",
-  "Keywords",
-  "Vollständigkeit",
-  "Lesbarkeit",
+  { label: "KI-Analyse", href: "/ai-analysis" },
 ];
 
 function NavGlyph({ active = false }: { active?: boolean }) {
@@ -99,7 +97,6 @@ export default async function Home() {
   const displayName = session?.user?.name?.split(" ")[0] ?? "Gast";
   const headline = authenticated ? `Hallo ${displayName}!` : "Willkommen !";
 
-  // Load real CV + matching data for authenticated users
   const latestCv = authenticated
     ? await prisma.cv_uploads.findFirst({
       where: { userId: session!.user.id },
@@ -110,6 +107,11 @@ export default async function Home() {
         extractedText: true,
         fileSizeBytes: true,
         createdAt: true,
+        analysisScore: true,
+        analysisStrengths: true,
+        analysisWeaknesses: true,
+        analysisImprovements: true,
+        analyzedAt: true,
       },
     })
     : null;
@@ -118,19 +120,23 @@ export default async function Home() {
     ? await prisma.cv_uploads.count({ where: { userId: session!.user.id } })
     : 0;
 
-  const cvText = latestCv?.extractedText ?? "";
+  const latestAnalysis =
+    latestCv &&
+      latestCv.analysisScore !== null &&
+      latestCv.analysisStrengths &&
+      latestCv.analysisWeaknesses &&
+      latestCv.analysisImprovements
+      ? {
+        score: latestCv.analysisScore,
+        strengths: stringArrayFromJson(latestCv.analysisStrengths),
+        weaknesses: stringArrayFromJson(latestCv.analysisWeaknesses),
+        improvements: stringArrayFromJson(latestCv.analysisImprovements),
+        analyzedAt: latestCv.analyzedAt,
+      }
+      : null;
 
-  // Compute keyword density as a rough score proxy (0-100)
-  const wordCount = cvText.split(/\s+/).filter(Boolean).length;
-  const cvScore = Math.min(99, Math.max(40, Math.round((wordCount / 600) * 100)));
+  const cvText = latestCv?.extractedText?.trim() ?? "";
 
-  // Break score into sub-dimensions via deterministic offsets
-  const progressRows = progressLabels.map((label, i) => ({
-    label,
-    value: Math.min(99, Math.max(30, cvScore + [-5, 1, -11, -16, 7][i])),
-  }));
-
-  // Recent uploads as activity feed
   const recentUploads = authenticated
     ? await prisma.cv_uploads.findMany({
       where: { userId: session!.user.id },
@@ -142,13 +148,14 @@ export default async function Home() {
 
   const activities = recentUploads.map((u) => ({
     title: `Lebenslauf hochgeladen: ${u.originalFilename}`,
-    time: u.createdAt.toLocaleDateString("de-DE", { day: "2-digit", month: "short", year: "numeric" }),
+    time: u.createdAt.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }),
   }));
 
-  // Real job matches ranked by keyword overlap with the latest CV
-  const topMatches = cvText
-    ? await getTopMatchingJobs(cvText, 3)
-    : [];
+  const topMatches = cvText ? await getTopMatchingJobs(cvText, 3) : [];
 
   return (
     <main className="min-h-screen px-3 py-3 text-[#2f3628] sm:px-5 sm:py-5 lg:px-6">
@@ -274,198 +281,199 @@ export default async function Home() {
             </header>
 
             {authenticated ? (
-              <div className="grid flex-1 gap-6 px-4 py-6 lg:px-6 xl:grid-cols-3 xl:px-8">
-                {/* LEFT COLUMN - Main Analysis */}
-                <div className="space-y-6 xl:col-span-2">
-                  {/* Score Card */}
-                  <SectionCard title="Lebenslauf Score">
-                    {!latestCv ? (
-                      <div className="rounded-[20px] border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
-                        <p className="text-sm text-[#6f6a58]">
-                          Noch kein Lebenslauf hochgeladen.{" "}
-                          <Link href="/cv-upload" className="font-semibold text-[#74824a] underline">
-                            Jetzt hochladen
-                          </Link>
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-                        <div className="flex flex-col items-center">
-                          <div
-                            className="relative flex h-40 w-40 items-center justify-center rounded-full"
-                            style={{
-                              background: `conic-gradient(#74824a 0 ${cvScore}%, #ded4b5 ${cvScore}% 100%)`,
-                            }}
-                          >
-                            <div className="flex h-32 w-32 items-center justify-center rounded-full border border-[#ede2c4] bg-[#fbf7ef] text-center shadow-inner">
-                              <div>
-                                <p className="font-serif text-5xl leading-none text-[#4f543f]">
-                                  {cvScore}
-                                </p>
-                                <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-[#8c8569]">
-                                  {cvScore >= 80 ? "Sehr gut" : cvScore >= 60 ? "Gut" : "Ausbaufähig"}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <p className="mt-2 max-w-36 truncate text-center text-[11px] text-[#8a8467]" title={latestCv.originalFilename}>
-                            {latestCv.originalFilename}
-                          </p>
-                        </div>
-
-                        <div className="flex-1 space-y-4">
-                          {progressRows.map((row) => (
-                            <div key={row.label}>
-                              <div className="mb-2 flex items-center justify-between text-sm">
-                                <span className="text-[#5c614c]">{row.label}</span>
-                                <span className="font-medium text-[#7c8a53]">{row.value}%</span>
-                              </div>
-                              <div className="h-2 rounded-full bg-[#e8dfc7]">
-                                <div
-                                  className="h-2 rounded-full bg-[#7c8a53]"
-                                  style={{ width: `${row.value}%` }}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </SectionCard>
-
-                  {/* Key Metrics */}
-                  <div className="grid gap-4 sm:grid-cols-3">
-                    {[
-                      ["Lebensläufe", String(cvCount)],
-                      ["Wörter im CV", latestCv ? String(wordCount) : "—"],
-                      ["Job-Matches", String(topMatches.length)],
-                    ].map(([label, value]) => (
-                      <div
-                        key={label}
-                        className="rounded-[28px] border border-[#e5dcc1] bg-white/75 p-5 text-center shadow-[0_14px_40px_rgba(116,101,65,0.07)] backdrop-blur"
+              <div className="flex flex-1 flex-col gap-6 px-4 py-6 lg:px-6 xl:px-8">
+                <SectionCard title="Letzter Lebenslauf Score" className="w-full">
+                  {!latestCv ? (
+                    <div className="rounded-[20px] border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
+                      <p className="text-sm text-[#6f6a58]">
+                        Noch kein Lebenslauf hochgeladen. {" "}
+                        <Link href="/cv-upload" className="font-semibold text-[#74824a] underline">
+                          Jetzt hochladen
+                        </Link>
+                      </p>
+                    </div>
+                  ) : !latestAnalysis ? (
+                    <div className="rounded-[20px] border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
+                      <p className="text-sm text-[#6f6a58]">
+                        Für diesen Lebenslauf ist noch keine gespeicherte KI-Analyse vorhanden.
+                      </p>
+                      <Link
+                        href="/ai-analysis"
+                        className="mt-3 inline-flex rounded-full bg-[#74824a] px-4 py-2 text-sm font-semibold text-[#f8f3e3] transition hover:bg-[#65743f]"
                       >
-                        <p className="text-[10px] uppercase tracking-[0.35em] text-[#8a8467]">
-                          {label}
-                        </p>
-                        <p className="mt-3 font-serif text-4xl text-[#4f543f]">
-                          {value}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CV Detail + Tips */}
-                  <div className="grid gap-6 lg:grid-cols-2">
-                    <SectionCard title="CV Details">
-                      {latestCv ? (
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
-                            <p className="text-sm font-medium text-[#4f5341]">Datei</p>
-                            <p className="max-w-48 truncate text-xs text-[#7c765d]" title={latestCv.originalFilename}>{latestCv.originalFilename}</p>
-                          </div>
-                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
-                            <p className="text-sm font-medium text-[#4f5341]">Größe</p>
-                            <p className="text-xs text-[#7c765d]">{Math.max(1, Math.round(Number(latestCv.fileSizeBytes) / 1024))} KB</p>
-                          </div>
-                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
-                            <p className="text-sm font-medium text-[#4f5341]">Hochgeladen</p>
-                            <p className="text-xs text-[#7c765d]">{latestCv.createdAt.toLocaleDateString("de-DE")}</p>
-                          </div>
-                          <div className="flex items-center justify-between rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
-                            <p className="text-sm font-medium text-[#4f5341]">Wörter</p>
-                            <p className="text-xs text-[#627146] font-semibold">{wordCount}</p>
+                        Analyse öffnen
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+                      <div className="flex flex-col items-center xl:min-w-52">
+                        <div
+                          className="relative flex h-40 w-40 items-center justify-center rounded-full"
+                          style={{
+                            background: `conic-gradient(#74824a 0 ${latestAnalysis.score}%, #ded4b5 ${latestAnalysis.score}% 100%)`,
+                          }}
+                        >
+                          <div className="flex h-32 w-32 items-center justify-center rounded-full border border-[#ede2c4] bg-[#fbf7ef] text-center shadow-inner">
+                            <div>
+                              <p className="font-serif text-5xl leading-none text-[#4f543f]">
+                                {latestAnalysis.score}
+                              </p>
+                              <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-[#8c8569]">
+                                {latestAnalysis.score >= 80 ? "Sehr gut" : latestAnalysis.score >= 60 ? "Gut" : "Ausbaufähig"}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      ) : (
-                        <p className="text-sm text-[#6f6a58]">Kein CV hochgeladen.</p>
-                      )}
-                    </SectionCard>
+                        <p className="mt-2 max-w-40 truncate text-center text-[11px] text-[#8a8467]" title={latestCv.originalFilename}>
+                          {latestCv.originalFilename}
+                        </p>
+                        {latestAnalysis.analyzedAt ? (
+                          <p className="mt-2 text-[11px] text-[#8a8467]">
+                            Analysiert am {latestAnalysis.analyzedAt.toLocaleDateString("de-DE")}
+                          </p>
+                        ) : null}
+                      </div>
 
-                    <SectionCard title="Optimierungstipps">
-                      <div className="space-y-3">
+                      <div className="grid min-w-0 flex-1 gap-4 md:grid-cols-3">
                         {[
-                          { title: "ATS-Keywords ergänzen", hint: "Nutze Begriffe aus der Stellenausschreibung.", tone: "high" },
-                          { title: "Messbare Erfolge formulieren", hint: "Zahlen und Ergebnisse statt Aufgaben.", tone: "medium" },
-                          { title: "Lebenslauf auf 1–2 Seiten kürzen", hint: "Weniger ist mehr für Recruiter.", tone: "low" },
-                        ].map((item) => (
-                          <div key={item.title} className="rounded-[22px] border border-[#e4d9bc] bg-[#fffdf7] p-4">
-                            <div className="flex items-start justify-between gap-3">
-                              <div>
-                                <p className="font-medium text-[#4f5341]">{item.title}</p>
-                                <p className="mt-1 text-xs text-[#807a61]">{item.hint}</p>
-                              </div>
-                              <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${item.tone === "high" ? "bg-[#efe4bf] text-[#6d5e2b]" :
-                                  item.tone === "medium" ? "bg-[#e4ebd2] text-[#617046]" :
-                                    "bg-[#f0ebe0] text-[#7d775f]"
-                                }`}>{item.tone === "high" ? "Wichtig" : item.tone === "medium" ? "Mittel" : "Optional"}</span>
-                            </div>
+                          { label: "Stärken", items: latestAnalysis.strengths },
+                          { label: "Schwachstellen", items: latestAnalysis.weaknesses },
+                          { label: "Empfehlungen", items: latestAnalysis.improvements },
+                        ].map(({ label, items }) => (
+                          <div key={label} className="overflow-hidden rounded-[20px] border border-[#e4d8bc] bg-white/70 p-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#8a8467]">
+                              {label}
+                            </p>
+                            {items.length > 0 ? (
+                              <ul className="mt-3 space-y-2">
+                                {items.map((item) => (
+                                  <li key={item} className="flex gap-2 text-sm leading-6 text-[#4f5341]">
+                                    <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-[#74824a]" />
+                                    <span className="min-w-0 wrap-break-word">{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="mt-3 text-sm text-[#7c765d]">Keine Angaben gespeichert.</p>
+                            )}
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+                </SectionCard>
+
+                <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(320px,1fr)]">
+                  <div className="space-y-6">
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      {[
+                        ["Lebensläufe", String(cvCount)],
+                        ["Letzte Analyse", latestAnalysis?.analyzedAt ? latestAnalysis.analyzedAt.toLocaleDateString("de-DE") : "—"],
+                        ["Job-Matches", String(topMatches.length)],
+                      ].map(([label, value]) => (
+                        <div
+                          key={label}
+                          className="rounded-[28px] border border-[#e5dcc1] bg-white/75 p-5 text-center shadow-[0_14px_40px_rgba(116,101,65,0.07)] backdrop-blur"
+                        >
+                          <p className="text-[10px] uppercase tracking-[0.35em] text-[#8a8467]">
+                            {label}
+                          </p>
+                          <p className="mt-3 font-serif text-4xl text-[#4f543f]">
+                            {value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid gap-6 lg:grid-cols-2">
+                      <SectionCard title="CV Details">
+                        {latestCv ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                              <p className="text-sm font-medium text-[#4f5341]">Datei</p>
+                              <p className="min-w-0 truncate text-right text-xs text-[#7c765d]" title={latestCv.originalFilename}>
+                                {latestCv.originalFilename}
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                              <p className="text-sm font-medium text-[#4f5341]">Größe</p>
+                              <p className="text-xs text-[#7c765d]">
+                                {Math.max(1, Math.round(Number(latestCv.fileSizeBytes) / 1024))} KB
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                              <p className="text-sm font-medium text-[#4f5341]">Hochgeladen</p>
+                              <p className="text-xs text-[#7c765d]">
+                                {latestCv.createdAt.toLocaleDateString("de-DE")}
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
+                              <p className="text-sm font-medium text-[#4f5341]">Analyse</p>
+                              <p className="text-xs font-semibold text-[#627146]">
+                                {latestAnalysis ? "Gespeichert" : "Nicht vorhanden"}
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-[#6f6a58]">Kein CV hochgeladen.</p>
+                        )}
+                      </SectionCard>
+
+                      <SectionCard title="Aktivitäten">
+                        <div className="space-y-3">
+                          {activities.length === 0 ? (
+                            <p className="text-sm text-[#6f6a58]">Noch keine Aktivitäten.</p>
+                          ) : (
+                            activities.map((activity) => (
+                              <div key={activity.title} className="overflow-hidden">
+                                <p className="truncate text-sm font-medium text-[#4d5240]" title={activity.title}>
+                                  {activity.title}
+                                </p>
+                                <p className="mt-1 truncate text-xs text-[#8d8569]" title={activity.time}>
+                                  {activity.time}
+                                </p>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      </SectionCard>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <SectionCard title="Top Matches">
+                      <div className="space-y-3">
+                        {topMatches.length === 0 ? (
+                          <p className="text-sm text-[#6f6a58]">
+                            Lade einen Lebenslauf hoch, um deine Top-Matches zu sehen.
+                          </p>
+                        ) : topMatches.map((job) => (
+                          <div
+                            key={job.id}
+                            className="flex items-center justify-between gap-3 overflow-hidden rounded-[20px] border border-[#e4dabc] bg-white/70 px-3 py-3"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-medium text-[#4d5240]" title={job.title}>
+                                {job.title}
+                              </p>
+                              <p className="truncate text-xs text-[#827a61]" title={job.company}>
+                                {job.company}
+                              </p>
+                            </div>
+                            <div className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d8cfb3] text-xs font-semibold text-[#667045]">
+                              {job.matchScore}%
+                            </div>
+                          </div>
+                        ))}
+                        <Link
+                          href="/jobs"
+                          className="mt-3 block rounded-full border border-[#d7ccb0] bg-white/70 px-4 py-2 text-center text-xs font-medium text-[#6e7456] transition hover:bg-white"
+                        >
+                          Alle Jobs anzeigen
+                        </Link>
+                      </div>
                     </SectionCard>
                   </div>
-                </div>
-
-                {/* RIGHT COLUMN - Sidebar */}
-                <div className="space-y-6">
-                  {/* Job Matches */}
-                  <SectionCard title="Top Matches">
-                    <div className="space-y-3">
-                      {topMatches.length === 0 ? (
-                        <p className="text-sm text-[#6f6a58]">Lade einen Lebenslauf hoch, um deine Top-Matches zu sehen.</p>
-                      ) : topMatches.map((job) => (
-                        <div
-                          key={job.id}
-                          className="flex items-center justify-between rounded-[20px] border border-[#e4dabc] bg-white/70 px-3 py-3"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-[#4d5240] truncate">{job.title}</p>
-                            <p className="text-xs text-[#827a61]">{job.company}</p>
-                          </div>
-                          <div className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#d8cfb3] text-xs font-semibold text-[#667045]">
-                            {job.matchScore}%
-                          </div>
-                        </div>
-                      ))}
-                      <Link
-                        href="/jobs"
-                        className="mt-3 block rounded-full border border-[#d7ccb0] bg-white/70 px-4 py-2 text-center text-xs font-medium text-[#6e7456] transition hover:bg-white"
-                      >
-                        Alle Jobs anzeigen
-                      </Link>
-                    </div>
-                  </SectionCard>
-
-                  {/* Activities */}
-                  <SectionCard title="Aktivitäten">
-                    <div className="space-y-3">
-                      {activities.length === 0 ? (
-                        <p className="text-sm text-[#6f6a58]">Noch keine Aktivitäten.</p>
-                      ) : activities.map((activity) => (
-                        <div key={activity.title}>
-                          <p className="text-sm font-medium text-[#4d5240]">{activity.title}</p>
-                          <p className="mt-1 text-xs text-[#8d8569]">{activity.time}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </SectionCard>
-
-                  {/* Status */}
-                  <SectionCard title="Nächster Schritt">
-                    <div className="space-y-4">
-                      <p className="text-sm leading-relaxed text-[#67614c]">
-                        Der Lebenslauf ist strukturell stark. Zusätzliche Keywords
-                        und präzisere Erfolgsformulierungen helfen weiter.
-                      </p>
-                      <Link
-                        href="/cv-upload"
-                        className="inline-flex rounded-full bg-[#74824a] px-4 py-2 text-sm font-semibold text-[#f8f3e3] transition hover:bg-[#65743f]"
-                      >
-                        Upload öffnen
-                      </Link>
-                    </div>
-                  </SectionCard>
-
                 </div>
               </div>
             ) : (
@@ -480,7 +488,6 @@ export default async function Home() {
                   <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-[#6f6a58]">
                     Die Dashboard-Details, Empfehlungen und Match-Analysen sind nur nach dem Login sichtbar.
                   </p>
-
                 </div>
               </div>
             )}

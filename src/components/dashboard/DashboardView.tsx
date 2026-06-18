@@ -171,10 +171,9 @@ const priorityStyles: Record<string, string> = {
 };
 
 const logoSrc = '/jobsy-logo.svg';
-const uploadInputId = 'resume-upload';
 const assistantFormId = 'assistant-form';
 const cardBaseClass =
-  'rounded-[24px] border border-[#D9D1C7]/40 bg-[#FAF7F2] p-5 shadow-[0_10px_30px_rgba(0,0,0,0.03)]';
+  'overflow-hidden rounded-[20px] border border-[#D9D1C7]/50 bg-[#FAF7F2] p-4 shadow-[0_10px_30px_rgba(0,0,0,0.03)] sm:p-5';
 
 type DashboardViewProps = {
   displayName: string;
@@ -192,8 +191,8 @@ const Sidebar = ({
   email: string;
   initials: string;
 }) => (
-  <aside className="hidden lg:sticky lg:top-4 lg:flex lg:w-[220px] lg:flex-col">
-    <div className="relative flex h-full flex-col rounded-[24px] bg-[linear-gradient(180deg,#6D7C59_0%,#556347_100%)] p-4 text-white shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
+  <aside className="hidden lg:sticky lg:top-4 lg:flex lg:max-h-[calc(100vh-2rem)] lg:w-[230px] lg:flex-col">
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[22px] bg-[linear-gradient(180deg,#6D7C59_0%,#556347_100%)] p-4 text-white shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
       <div className="pointer-events-none absolute inset-3 rounded-[22px] bg-white/5" />
       <div
         className="pointer-events-none absolute -bottom-10 -left-8 h-44 w-44 opacity-30"
@@ -216,21 +215,21 @@ const Sidebar = ({
           </p>
         </div>
 
-        <nav className="mt-6 space-y-2">
+        <nav className="mt-6 min-h-0 space-y-2 overflow-y-auto pr-1">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className={`flex h-12 items-center gap-3 rounded-2xl px-3 text-[13px] font-semibold transition ${
+              className={`flex min-h-11 items-center gap-3 rounded-2xl px-3 py-2 text-[13px] font-semibold transition ${
                 item.active
                   ? 'bg-white/10 text-white backdrop-blur-md'
                   : 'text-white/70 hover:bg-white/10 hover:text-white'
               }`}
             >
-              <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-white/10">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-white/10">
                 <AppIcon icon={item.icon} className="text-white" />
               </span>
-              {item.label}
+              <span className="min-w-0 truncate">{item.label}</span>
             </a>
           ))}
         </nav>
@@ -241,9 +240,9 @@ const Sidebar = ({
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-[11px] font-semibold text-white">
                 {initials}
               </div>
-              <div className="flex-1">
-                <div className="text-[12px] font-semibold">{displayName}</div>
-                <div className="text-[10px] text-white/70">{email}</div>
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-[12px] font-semibold">{displayName}</div>
+                <div className="truncate text-[10px] text-white/70">{email}</div>
               </div>
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white/80">
                 <AppIcon icon={ChevronRight} className="h-[14px] w-[14px]" />
@@ -256,13 +255,7 @@ const Sidebar = ({
   </aside>
 );
 
-const MobileHeader = ({
-  initials,
-  uploadInputId,
-}: {
-  initials: string;
-  uploadInputId: string;
-}) => (
+const MobileHeader = ({ initials }: { initials: string }) => (
   <div className="lg:hidden space-y-4">
     <div className="flex items-center justify-between gap-3 rounded-[24px] border border-[#D9D1C7]/40 bg-[#FAF7F2] px-4 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.03)]">
       <div className="flex items-center gap-2">
@@ -270,14 +263,13 @@ const MobileHeader = ({
         <div className="font-display text-lg">Jobsy</div>
       </div>
       <div className="flex items-center gap-2">
-        <label
-          htmlFor={uploadInputId}
-          role="button"
+        <a
+          href="/cv-upload"
           aria-label="Lebenslauf hochladen"
-          className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-[var(--color-olive)] text-sm font-semibold text-white"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-olive)] text-sm font-semibold text-white"
         >
           +
-        </label>
+        </a>
         <button
           type="button"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D9D1C7]/40 bg-white text-[var(--color-olive-strong)]"
@@ -321,16 +313,14 @@ const MobileHeader = ({
 const Header = ({
   name,
   initials,
-  uploadInputId,
 }: {
   name: string;
   initials: string;
-  uploadInputId: string;
 }) => (
-  <header className={`${cardBaseClass} flex max-h-[110px] flex-wrap items-center justify-between gap-6`}>
-    <div>
-      <div className="flex items-center gap-2 font-display text-[44px] leading-none tracking-[-0.04em]">
-        <span className="font-semibold">Hallo {name}!</span>
+  <header className={`${cardBaseClass} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between`}>
+    <div className="min-w-0">
+      <div className="flex min-w-0 items-center gap-2 font-display text-3xl font-semibold leading-tight sm:text-4xl">
+        <span className="min-w-0 break-words">Hallo {name}!</span>
         <span className="text-[var(--color-olive)]">
           <AppIcon icon={Hand} className="h-[18px] w-[18px]" />
         </span>
@@ -339,18 +329,17 @@ const Header = ({
         Bereit fuer deinen naechsten Karriereschritt?
       </p>
     </div>
-    <div className="flex flex-wrap items-center gap-3">
-      <label
-        htmlFor={uploadInputId}
-        role="button"
+    <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto sm:justify-end">
+      <a
+        href="/cv-upload"
         aria-label="Lebenslauf hochladen"
-        className="inline-flex h-10 cursor-pointer items-center gap-3 rounded-full bg-[var(--color-olive)] px-5 text-[14px] font-semibold text-white shadow-[0_8px_20px_rgba(122,139,99,0.22)]"
+        className="inline-flex h-10 min-w-0 flex-1 items-center justify-center gap-3 rounded-full bg-[var(--color-olive)] px-5 text-[14px] font-semibold text-white shadow-[0_8px_20px_rgba(122,139,99,0.22)] sm:flex-none"
       >
         <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-[14px] leading-none">
           +
         </span>
-        Lebenslauf hochladen
-      </label>
+        <span className="truncate">Lebenslauf hochladen</span>
+      </a>
       <button
         type="button"
         className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D9D1C7]/40 bg-white text-[var(--color-olive-strong)]"
@@ -368,23 +357,21 @@ const AnalysisCard = ({
   score,
   dash,
   circumference,
-  uploadInputId,
 }: {
   score: number;
   dash: number;
   circumference: number;
-  uploadInputId: string;
 }) => (
   <section id="analyse" className={cardBaseClass}>
-    <div>
-      <div className="text-[16px] font-semibold">
+    <div className="min-w-0">
+      <div className="break-words text-[16px] font-semibold">
         Lebenslauf Analyse - Software Engineer.pdf
       </div>
       <p className="mt-2 text-[11px] text-[var(--color-muted)]">
         Analysiert am 25.04.2026
       </p>
     </div>
-    <div className="mt-4 grid gap-5 lg:grid-cols-[150px_1fr]">
+    <div className="mt-4 grid gap-5 md:grid-cols-[150px_minmax(0,1fr)]">
       <div className="flex flex-col items-center justify-center rounded-[20px] bg-[var(--color-surface-strong)] p-3">
         <div className="relative flex h-[150px] w-[150px] items-center justify-center">
           <svg className="h-full w-full" viewBox="0 0 150 150">
@@ -423,12 +410,12 @@ const AnalysisCard = ({
       <div className="space-y-3">
         {criteria.map((item) => (
           <div key={item.label} className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-2xl bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
               <AppIcon icon={item.icon} />
             </span>
-            <div className="flex-1">
-              <div className="flex items-center justify-between text-[13px] font-semibold">
-                <span>{item.label}</span>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-3 text-[13px] font-semibold">
+                <span className="min-w-0 truncate">{item.label}</span>
                 <span className="text-[var(--color-muted)]">{item.score}/100</span>
               </div>
               <div className="mt-2 h-[5px] rounded-full bg-[var(--color-track)]">
@@ -442,32 +429,31 @@ const AnalysisCard = ({
         ))}
       </div>
     </div>
-    <div className="mt-4 flex flex-wrap items-center gap-3">
+    <div className="mt-4 grid gap-3 sm:grid-cols-2">
       <button
         type="button"
         className="h-10 rounded-full border border-[#D9D1C7]/40 bg-white px-5 text-[14px] font-semibold text-[var(--color-olive-strong)]"
       >
         Details anzeigen
       </button>
-      <label
-        htmlFor={uploadInputId}
-        role="button"
+      <a
+        href="/cv-upload"
         aria-label="Neuanalyse starten"
-        className="flex h-10 cursor-pointer items-center rounded-full bg-[var(--color-olive)] px-5 text-[14px] font-semibold text-white"
+        className="flex h-10 items-center justify-center rounded-full bg-[var(--color-olive)] px-5 text-center text-[14px] font-semibold text-white"
       >
         Neuanalyse starten
-      </label>
+      </a>
     </div>
   </section>
 );
 
 const MatchesCard = () => (
   <section id="job-matching" className={cardBaseClass}>
-    <div className="flex items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="text-[16px] font-semibold">Top Job-Matches</div>
       <button
         type="button"
-        className="text-[11px] font-semibold text-[var(--color-olive-strong)]"
+        className="rounded-full bg-[var(--color-surface-strong)] px-3 py-2 text-[11px] font-semibold text-[var(--color-olive-strong)]"
       >
         Alle anzeigen
       </button>
@@ -476,22 +462,22 @@ const MatchesCard = () => (
       {matches.map((match) => (
         <div
           key={match.role}
-          className="flex h-[72px] items-center justify-between gap-4"
+          className="flex min-h-[72px] items-center justify-between gap-4 py-3"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <div
-              className={`flex h-10 w-10 items-center justify-center rounded-2xl text-[12px] font-semibold ${
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-[12px] font-semibold ${
                 match.logoClass
               }`}
             >
               {match.logo}
             </div>
-            <div>
-              <div className="text-[13px] font-semibold">{match.role}</div>
-              <div className="text-[11px] text-[var(--color-muted)]">{match.company}</div>
+            <div className="min-w-0">
+              <div className="truncate text-[13px] font-semibold">{match.role}</div>
+              <div className="truncate text-[11px] text-[var(--color-muted)]">{match.company}</div>
             </div>
           </div>
-          <div className="relative h-12 w-12">
+          <div className="relative h-12 w-12 shrink-0">
             <svg className="h-full w-full" viewBox="0 0 48 48">
               <circle
                 cx="24"
@@ -535,33 +521,33 @@ const ImprovementsCard = () => (
     id="verbesserungen"
     className={`${cardBaseClass} flex h-full min-h-[220px] flex-col`}
   >
-    <div className="flex items-center justify-between gap-4">
-      <div>
-        <div className="text-[16px] font-semibold">Verbesserungsvorschlaege</div>
+    <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="min-w-0">
+        <div className="break-words text-[16px] font-semibold">Verbesserungsvorschlaege</div>
         <div className="mt-2 text-[11px] text-[var(--color-muted)]">
           10 konkrete Vorschlaege
         </div>
       </div>
       <button
         type="button"
-        className="h-10 rounded-full border border-[#D9D1C7]/40 bg-white px-4 text-[14px] font-semibold text-[var(--color-olive-strong)]"
+        className="min-h-10 rounded-full border border-[#D9D1C7]/40 bg-white px-4 py-2 text-[14px] font-semibold text-[var(--color-olive-strong)]"
       >
-        Alle Vorschlaege anzeigen
+        Vorschlaege anzeigen
       </button>
     </div>
     <div className="mt-4 space-y-3">
       {improvements.map((item) => (
         <div
           key={item.title}
-          className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#D9D1C7]/40 bg-[#FAF7F2] p-4"
+          className="grid gap-3 rounded-2xl border border-[#D9D1C7]/40 bg-[#FAF7F2] p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
         >
-          <div className="flex items-center gap-3">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
               <AppIcon icon={item.icon} />
             </span>
-            <div>
-              <div className="text-[13px] font-semibold">{item.title}</div>
-              <div className="text-[11px] text-[var(--color-muted)]">{item.detail}</div>
+            <div className="min-w-0">
+              <div className="break-words text-[13px] font-semibold">{item.title}</div>
+              <div className="mt-1 break-words text-[11px] text-[var(--color-muted)]">{item.detail}</div>
             </div>
           </div>
           <span
@@ -579,30 +565,30 @@ const ImprovementsCard = () => (
 
 const ComparisonCard = () => (
   <section id="vergleich" className={`${cardBaseClass} flex h-full min-h-[220px] flex-col`}>
-    <div className="text-[16px] font-semibold">
+    <div className="break-words text-[16px] font-semibold">
       Vergleich: Mit KI vs. Ohne KI
     </div>
     <div className="mt-4 rounded-[20px] border border-[#D9D1C7]/40 bg-[#FAF7F2] p-4">
-      <div className="grid grid-cols-[1fr_auto_auto] text-[11px] font-semibold text-[var(--color-muted)]">
-        <span>Kriterium</span>
-        <span>Ohne KI</span>
-        <span>Mit KI</span>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-3 text-[11px] font-semibold text-[var(--color-muted)]">
+        <span className="min-w-0 truncate">Kriterium</span>
+        <span className="whitespace-nowrap">Ohne KI</span>
+        <span className="whitespace-nowrap">Mit KI</span>
       </div>
       <div className="mt-4 space-y-3 text-[13px]">
         {comparisonRows.map((row) => (
-          <div key={row.label} className="grid grid-cols-[1fr_auto_auto] items-center gap-3">
-            <span className="font-semibold">{row.label}</span>
-            <span className="text-[var(--color-muted)]">{row.without}/100</span>
-            <span className="font-semibold text-[var(--color-olive-strong)]">
+          <div key={row.label} className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3">
+            <span className="min-w-0 truncate font-semibold">{row.label}</span>
+            <span className="whitespace-nowrap text-[var(--color-muted)]">{row.without}/100</span>
+            <span className="whitespace-nowrap font-semibold text-[var(--color-olive-strong)]">
               {row.with}/100
             </span>
           </div>
         ))}
       </div>
     </div>
-    <div className="mt-auto flex items-center gap-2 rounded-2xl bg-[var(--color-surface-strong)] px-4 py-3 text-[11px] text-[var(--color-olive-strong)]">
-      <AppIcon icon={ArrowRight} className="h-[16px] w-[16px]" />
-      <span>
+    <div className="mt-auto flex items-start gap-2 rounded-2xl bg-[var(--color-surface-strong)] px-4 py-3 text-[11px] text-[var(--color-olive-strong)]">
+      <AppIcon icon={ArrowRight} className="h-[16px] w-[16px] shrink-0" />
+      <span className="min-w-0 break-words">
         Verbesserungspotenzial: +22% hoehere Chance auf ein Vorstellungsgespraech
       </span>
     </div>
@@ -611,31 +597,31 @@ const ComparisonCard = () => (
 
 const ActivitiesCard = () => (
   <section id="aktivitaeten" className={`${cardBaseClass} flex h-full min-h-[220px] flex-col`}>
-    <div className="flex items-center justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="text-[16px] font-semibold">Letzte Aktivitaeten</div>
       <button
         type="button"
-        className="text-[11px] font-semibold text-[var(--color-olive-strong)]"
+        className="rounded-full bg-[var(--color-surface-strong)] px-3 py-2 text-[11px] font-semibold text-[var(--color-olive-strong)]"
       >
-        Alle Aktivitaeten anzeigen
+        Alle anzeigen
       </button>
     </div>
     <div className="mt-4 space-y-3">
       {activities.map((activity) => (
         <div
           key={activity.title}
-          className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#D9D1C7]/40 bg-[#FAF7F2] px-4 py-3"
+          className="grid gap-3 rounded-2xl border border-[#D9D1C7]/40 bg-[#FAF7F2] px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
         >
-          <div className="flex items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
               <AppIcon icon={activity.icon} />
             </span>
-            <div>
-              <div className="text-[13px] font-semibold">{activity.title}</div>
-              <div className="text-[11px] text-[var(--color-muted)]">{activity.detail}</div>
+            <div className="min-w-0">
+              <div className="break-words text-[13px] font-semibold">{activity.title}</div>
+              <div className="mt-1 break-words text-[11px] text-[var(--color-muted)]">{activity.detail}</div>
             </div>
           </div>
-          <div className="text-[11px] text-[var(--color-muted)]">{activity.time}</div>
+          <div className="whitespace-nowrap text-[11px] text-[var(--color-muted)]">{activity.time}</div>
         </div>
       ))}
     </div>
@@ -644,16 +630,16 @@ const ActivitiesCard = () => (
 
 const AssistantCard = () => (
   <section id="assistant" className={`${cardBaseClass} flex flex-wrap items-center justify-between gap-4`}>
-    <div className="flex items-center gap-3">
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
+    <div className="flex min-w-0 items-center gap-3">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-[var(--color-olive-strong)]">
         <AppIcon icon={Sparkles} className="h-[18px] w-[18px]" />
       </span>
-      <div className="font-display text-[16px] font-semibold">Jobsy KI-Assistent</div>
+      <div className="min-w-0 break-words font-display text-[16px] font-semibold">Jobsy KI-Assistent</div>
     </div>
-    <form id={assistantFormId} action="#assistant" method="get">
+    <form id={assistantFormId} action="#assistant" method="get" className="w-full sm:w-auto">
       <button
         type="submit"
-        className="h-10 rounded-full bg-[var(--color-olive-strong)] px-5 text-[14px] font-semibold text-white"
+        className="h-10 w-full rounded-full bg-[var(--color-olive-strong)] px-5 text-[14px] font-semibold text-white sm:w-auto"
       >
         Jetzt fragen
       </button>
@@ -673,32 +659,24 @@ export const DashboardView = ({
   const dash = (score / 100) * circumference;
 
   return (
-    <div className="h-screen overflow-hidden bg-[var(--color-canvas)] text-[var(--color-ink)]">
-      <div className="mx-auto flex h-full w-full max-w-[1440px] gap-4 px-6 py-4">
+    <div className="min-h-screen bg-[var(--color-canvas)] text-[var(--color-ink)]">
+      <div className="mx-auto flex w-full max-w-[1440px] gap-4 px-4 py-4 sm:px-6">
         <Sidebar displayName={displayName} email={email} initials={initials} />
 
-        <main id="dashboard" className="flex min-h-0 flex-1 flex-col space-y-4 overflow-hidden">
-          <input
-            id={uploadInputId}
-            type="file"
-            accept=".pdf,.doc,.docx,application/pdf"
-            className="sr-only"
-            aria-label="Lebenslauf hochladen"
-          />
-          <MobileHeader initials={initials} uploadInputId={uploadInputId} />
-          <Header name={name} initials={initials} uploadInputId={uploadInputId} />
+        <main id="dashboard" className="flex min-w-0 flex-1 flex-col space-y-4">
+          <MobileHeader initials={initials} />
+          <Header name={name} initials={initials} />
 
-          <div className="grid gap-4 lg:grid-cols-[1.6fr_0.9fr]">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.95fr)]">
             <AnalysisCard
               score={score}
               dash={dash}
               circumference={circumference}
-              uploadInputId={uploadInputId}
             />
             <MatchesCard />
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-4 xl:grid-cols-3">
             <ImprovementsCard />
             <ComparisonCard />
             <ActivitiesCard />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertCircle, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import type { CVAnalysis } from "../../lib/cv-analysis";
 
 interface CVUpload {
@@ -121,12 +121,20 @@ export default function AIAnalysisClient({
             <h1 className="font-serif text-4xl text-[#4d5240]">
               Lebenslauf-Analyse
             </h1>
-            <Link
-              href="/"
-              className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
-            >
-              Zurück
-            </Link>
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                href="/cv-upload"
+                className="rounded-full bg-[#74824a] px-4 py-2 text-xs font-semibold text-[#f8f3e3] shadow-sm transition hover:bg-[#65743f]"
+              >
+                CV hochladen
+              </Link>
+              <Link
+                href="/"
+                className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+              >
+                Zurück
+              </Link>
+            </div>
           </div>
           <p className="mt-3 text-sm text-[#6f6a58]">
             Hier kannst du deine Lebensläufe von unserer KI analysieren lassen
@@ -149,10 +157,18 @@ export default function AIAnalysisClient({
         {/* CV LIST */}
         <SectionCard title="Ihre Lebensläufe">
           {cvUploads.length === 0 ? (
-            <p className="text-sm text-[#6f6a58]">
-              Keine CVs hochgeladen. Bitte laden Sie zuerst einen Lebenslauf
-              hoch.
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-sm text-[#6f6a58]">
+                Keine CVs hochgeladen. Bitte laden Sie zuerst einen Lebenslauf
+                hoch.
+              </p>
+              <Link
+                href="/cv-upload"
+                className="rounded-full bg-[#74824a] px-4 py-2 text-xs font-semibold text-[#f8f3e3] shadow-sm transition hover:bg-[#65743f]"
+              >
+                Zum CV Upload
+              </Link>
+            </div>
           ) : (
             <div className="space-y-4">
               {cvUploads.map((cv) => {
