@@ -58,12 +58,20 @@ export default async function CvUploadPage() {
               </h1>
             </div>
 
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-[#cfc39f] bg-[#efe6cc] px-4 py-2 text-sm font-medium text-[#5b5a47] transition hover:bg-[#e8dcba]"
-            >
-              Zur Startseite
-            </Link>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/ai-analysis"
+                className="inline-flex items-center justify-center rounded-full bg-[#74824a] px-4 py-2 text-sm font-medium text-[#f8f3e3] transition hover:bg-[#65743f]"
+              >
+                Zur Analyse
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center rounded-full border border-[#cfc39f] bg-[#efe6cc] px-4 py-2 text-sm font-medium text-[#5b5a47] transition hover:bg-[#e8dcba]"
+              >
+                Zur Startseite
+              </Link>
+            </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
