@@ -272,5 +272,462 @@
     ],
     "remote": true,
     "createdAt": "2026-05-20T13:10:00Z"
+  },
+  {
+    "id": "job-7",
+    "title": "Innenarchitekt/in",
+    "company": "Studio Raumwerk GmbH",
+    "location": "Vienna, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 48000,
+      "max": 68000,
+      "currency": "EUR"
+    },
+    "description": "Entwickle Innenraumkonzepte für Wohn-, Hospitality- und Office-Projekte von der ersten Idee bis zur Umsetzung.",
+    "requirements": [
+      "Abgeschlossenes Studium in Innenarchitektur oder Raumgestaltung",
+      "Sicherer Umgang mit AutoCAD, Vectorworks oder Archicad",
+      "Erfahrung mit Materialkonzepten, Farbkonzepten und Möbelplanung",
+      "Gutes Gespür für Kundenberatung, Präsentation und Projektkoordination"
+    ],
+    "responsibilities": [
+      "Erstelle Grundrisse, Moodboards und 3D-Visualisierungen",
+      "Plane Materialien, Licht, Möbel und Oberflächen",
+      "Stimme Entwürfe mit Kunden, Gewerken und Lieferanten ab",
+      "Begleite Projekte bis zur Ausführung und Abnahme"
+    ],
+    "skills": [
+      "Innenarchitektur",
+      "Raumgestaltung",
+      "AutoCAD",
+      "Vectorworks",
+      "Archicad",
+      "3D Visualisierung",
+      "Materialkonzept",
+      "Möbelplanung"
+    ],
+    "keywords": [
+      "Interior Design",
+      "Innenarchitekt",
+      "Grundriss",
+      "Lichtplanung",
+      "Farbkonzept",
+      "Moodboard",
+      "Hospitality",
+      "Wohnraum"
+    ],
+    "benefits": [
+      "Kreative Projekte",
+      "Weiterbildungsbudget",
+      "Flexible Arbeitszeiten"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-21T09:00:00Z"
+  },
+  {
+    "id": "job-8",
+    "title": "Junior Interior Designer",
+    "company": "Nordlicht Design Studio",
+    "location": "Hamburg, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 38000,
+      "max": 50000,
+      "currency": "EUR"
+    },
+    "description": "Unterstütze ein interdisziplinäres Designteam bei Retail-, Office- und Wohnprojekten.",
+    "requirements": [
+      "Erste praktische Erfahrung in Interior Design oder Innenarchitektur",
+      "Kenntnisse in SketchUp, Adobe Creative Suite oder Vectorworks",
+      "Interesse an Materialien, Einrichtung und Raumkonzepten",
+      "Strukturierte Arbeitsweise und Freude an Präsentationen"
+    ],
+    "responsibilities": [
+      "Unterstütze bei Entwurf, Recherche und Bemusterung",
+      "Erstelle Präsentationsunterlagen, Moodboards und Layouts",
+      "Pflege Material- und Möbelbibliotheken",
+      "Bereite Kundentermine und Designabstimmungen vor"
+    ],
+    "skills": [
+      "Interior Design",
+      "Innenarchitektur",
+      "SketchUp",
+      "Adobe Creative Suite",
+      "Moodboard",
+      "Raumkonzept",
+      "Materialrecherche"
+    ],
+    "keywords": [
+      "Einrichtung",
+      "Retail Design",
+      "Office Design",
+      "Möbel",
+      "Farben",
+      "Materialien",
+      "Visualisierung"
+    ],
+    "benefits": [
+      "Mentoring",
+      "Design-Workshops",
+      "Team-Events"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-22T09:30:00Z"
+  },
+  {
+    "id": "job-9",
+    "title": "Architekt/in Hochbau",
+    "company": "Atelier Bauform AG",
+    "location": "Zurich, Switzerland",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 90000,
+      "max": 120000,
+      "currency": "CHF"
+    },
+    "description": "Plane anspruchsvolle Wohn- und Gewerbebauten in einem erfahrenen Architekturteam.",
+    "requirements": [
+      "Abgeschlossenes Architekturstudium",
+      "Mehrjährige Erfahrung in Entwurfs- und Ausführungsplanung",
+      "Sicherer Umgang mit Archicad, Revit oder AutoCAD",
+      "Kenntnisse in Baukoordination, Normen und Detailplanung"
+    ],
+    "responsibilities": [
+      "Entwickle Entwurfs-, Genehmigungs- und Ausführungspläne",
+      "Koordiniere Fachplaner, Bauherren und Behörden",
+      "Erstelle Details, Ausschreibungsgrundlagen und Dokumentationen",
+      "Begleite Projekte vom Konzept bis zur Realisierung"
+    ],
+    "skills": [
+      "Architektur",
+      "Hochbau",
+      "Archicad",
+      "Revit",
+      "AutoCAD",
+      "Ausführungsplanung",
+      "Baukoordination",
+      "Detailplanung"
+    ],
+    "keywords": [
+      "Architekt",
+      "Bauplanung",
+      "Entwurf",
+      "Genehmigungsplanung",
+      "Wohnbau",
+      "Gewerbebau"
+    ],
+    "benefits": [
+      "Moderne Planungssoftware",
+      "Weiterbildung",
+      "ÖV-Zuschuss"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-23T08:45:00Z"
+  },
+  {
+    "id": "job-10",
+    "title": "Grafikdesigner/in",
+    "company": "Brandhaus Kreativagentur",
+    "location": "Berlin, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 42000,
+      "max": 58000,
+      "currency": "EUR"
+    },
+    "description": "Gestalte Markenauftritte, Kampagnen und digitale Designs für Kunden aus Kultur, Handel und Technologie.",
+    "requirements": [
+      "Erfahrung in Grafikdesign, Branding oder Kommunikationsdesign",
+      "Sicherer Umgang mit Adobe Creative Suite und Figma",
+      "Gutes Auge für Typografie, Layout und Bildsprache",
+      "Portfolio mit Marken-, Print- oder Digitalprojekten"
+    ],
+    "responsibilities": [
+      "Entwickle Logos, Layouts und visuelle Kampagnen",
+      "Erstelle Social-Media-Assets, Präsentationen und Printprodukte",
+      "Arbeite eng mit Strategie, Text und Account Management zusammen",
+      "Bereite Designs für Produktion und digitale Übergabe vor"
+    ],
+    "skills": [
+      "Grafikdesign",
+      "Branding",
+      "Adobe Creative Suite",
+      "Figma",
+      "Typografie",
+      "Layout",
+      "Printdesign"
+    ],
+    "keywords": [
+      "Kommunikationsdesign",
+      "Corporate Design",
+      "Illustration",
+      "Social Media",
+      "Kampagne",
+      "Portfolio"
+    ],
+    "benefits": [
+      "Kreatives Team",
+      "Agentur-Events",
+      "Flexible Arbeitszeiten"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-24T11:15:00Z"
+  },
+  {
+    "id": "job-11",
+    "title": "Marketing Manager/in",
+    "company": "Growth Garden GmbH",
+    "location": "Remote (EU)",
+    "employmentType": "Remote",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 52000,
+      "max": 72000,
+      "currency": "EUR"
+    },
+    "description": "Plane und steuere digitale Marketingkampagnen für wachstumsorientierte B2B- und B2C-Marken.",
+    "requirements": [
+      "Erfahrung im Online Marketing oder Kampagnenmanagement",
+      "Kenntnisse in SEO, Social Media, E-Mail-Marketing oder Performance Marketing",
+      "Sicherer Umgang mit Analytics und Reporting",
+      "Strukturierte Planung und starke Kommunikationsfähigkeiten"
+    ],
+    "responsibilities": [
+      "Plane Kampagnen über mehrere Kanäle",
+      "Analysiere KPIs und leite Optimierungen ab",
+      "Koordiniere Content, Design und externe Dienstleister",
+      "Erstelle Reports und präsentiere Ergebnisse"
+    ],
+    "skills": [
+      "Online Marketing",
+      "SEO",
+      "Social Media",
+      "Google Analytics",
+      "E-Mail-Marketing",
+      "Kampagnenmanagement",
+      "Reporting"
+    ],
+    "keywords": [
+      "Marketing",
+      "Performance Marketing",
+      "Content",
+      "Brand",
+      "Lead Generation",
+      "Conversion"
+    ],
+    "benefits": [
+      "Remote work",
+      "Weiterbildungsbudget",
+      "Flexible Stunden"
+    ],
+    "remote": true,
+    "createdAt": "2026-05-25T10:00:00Z"
+  },
+  {
+    "id": "job-12",
+    "title": "HR Generalist/in",
+    "company": "PeopleFirst Services",
+    "location": "Munich, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Mid-Level",
+    "salaryRange": {
+      "min": 50000,
+      "max": 68000,
+      "currency": "EUR"
+    },
+    "description": "Betreue Mitarbeitende entlang des Employee Life Cycle und unterstütze Recruiting, Onboarding und Personalentwicklung.",
+    "requirements": [
+      "Erfahrung im Personalwesen, HR Administration oder Recruiting",
+      "Kenntnisse in Arbeitsrecht, Onboarding und Mitarbeiterbetreuung",
+      "Sicherer Umgang mit HR-Systemen und vertraulichen Daten",
+      "Empathische Kommunikation und strukturierte Arbeitsweise"
+    ],
+    "responsibilities": [
+      "Betreue Mitarbeitende und Führungskräfte bei HR-Fragen",
+      "Koordiniere Recruiting-Prozesse und Onboarding",
+      "Pflege Personalakten, Verträge und HR-Daten",
+      "Unterstütze Personalentwicklung und interne Kommunikation"
+    ],
+    "skills": [
+      "Human Resources",
+      "Recruiting",
+      "Onboarding",
+      "Arbeitsrecht",
+      "Personaladministration",
+      "Mitarbeiterbetreuung",
+      "HR Systeme"
+    ],
+    "keywords": [
+      "HR",
+      "Personalwesen",
+      "Employee Life Cycle",
+      "Bewerbermanagement",
+      "Personalentwicklung"
+    ],
+    "benefits": [
+      "Homeoffice-Tage",
+      "Weiterbildung",
+      "Betriebliche Altersvorsorge"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-26T12:00:00Z"
+  },
+  {
+    "id": "job-13",
+    "title": "Projektmanager/in Bau und Innenausbau",
+    "company": "Constructa Projektbau GmbH",
+    "location": "Frankfurt, Germany",
+    "employmentType": "Full-time",
+    "seniority": "Senior",
+    "salaryRange": {
+      "min": 70000,
+      "max": 95000,
+      "currency": "EUR"
+    },
+    "description": "Steuere Bau- und Innenausbauprojekte mit Fokus auf Termine, Qualität, Kosten und Kommunikation.",
+    "requirements": [
+      "Erfahrung in Projektmanagement, Bauleitung oder Innenausbau",
+      "Kenntnisse in Terminplanung, Kostenkontrolle und Ausschreibung",
+      "Sicherer Umgang mit Auftraggebern, Gewerken und Planungsbüros",
+      "Technisches Verständnis für Ausbau, Möbel, Materialien und Bauabläufe"
+    ],
+    "responsibilities": [
+      "Plane und überwache Termine, Budgets und Projektmeilensteine",
+      "Koordiniere Gewerke, Lieferanten und interne Teams",
+      "Erstelle Statusberichte, Protokolle und Entscheidungsvorlagen",
+      "Sichere Qualität und reibungslose Übergaben auf der Baustelle"
+    ],
+    "skills": [
+      "Projektmanagement",
+      "Bauleitung",
+      "Innenausbau",
+      "Terminplanung",
+      "Kostenkontrolle",
+      "Ausschreibung",
+      "Gewerke Koordination"
+    ],
+    "keywords": [
+      "Bauprojekt",
+      "Innenarchitektur",
+      "Ausbau",
+      "Baustelle",
+      "Materialien",
+      "Projektsteuerung"
+    ],
+    "benefits": [
+      "Firmenhandy",
+      "Weiterbildung",
+      "Bonusmodell"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-27T09:45:00Z"
+  },
+  {
+    "id": "job-14",
+    "title": "Office Manager/in",
+    "company": "CampusWorks GmbH",
+    "location": "Vienna, Austria",
+    "employmentType": "Part-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 32000,
+      "max": 44000,
+      "currency": "EUR"
+    },
+    "description": "Sorge für einen reibungslosen Büroalltag und unterstütze Teamassistenz, Administration und interne Abläufe.",
+    "requirements": [
+      "Erfahrung in Office Management, Assistenz oder Administration",
+      "Gute Organisation, Kommunikationsstärke und Serviceorientierung",
+      "Sicherer Umgang mit MS Office, Kalendern und Dokumenten",
+      "Zuverlässige und eigenständige Arbeitsweise"
+    ],
+    "responsibilities": [
+      "Koordiniere Termine, Post, Bestellungen und Büroorganisation",
+      "Unterstütze Rechnungen, Dokumente und interne Abläufe",
+      "Empfange Gäste und betreue Dienstleister",
+      "Organisiere Teammeetings und kleinere Events"
+    ],
+    "skills": [
+      "Office Management",
+      "Administration",
+      "Teamassistenz",
+      "MS Office",
+      "Organisation",
+      "Kommunikation",
+      "Dokumentenmanagement"
+    ],
+    "keywords": [
+      "Assistenz",
+      "Büroorganisation",
+      "Backoffice",
+      "Terminplanung",
+      "Service"
+    ],
+    "benefits": [
+      "Teilzeit möglich",
+      "Zentrales Büro",
+      "Familienfreundliche Zeiten"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-28T08:20:00Z"
+  },
+  {
+    "id": "job-15",
+    "title": "UI/UX Designer/in",
+    "company": "Interface Studio GmbH",
+    "location": "Klagenfurt, Austria",
+    "employmentType": "Full-time",
+    "seniority": "Junior",
+    "salaryRange": {
+      "min": 38000,
+      "max": 52000,
+      "currency": "EUR"
+    },
+    "description": "Gestalte benutzerfreundliche Web- und Mobile-Oberflächen vom ersten Wireframe bis zum klickbaren Prototyp.",
+    "requirements": [
+      "Erste Erfahrung mit UI/UX Design, Screendesign oder Webdesign",
+      "Sicherer Umgang mit Figma oder vergleichbaren Design-Tools",
+      "Grundverständnis für Webtechnologien wie HTML, CSS, JavaScript oder moderne Frontend-Frameworks",
+      "Portfolio mit Wireframes, Prototypen, Websites oder visuellen Designprojekten"
+    ],
+    "responsibilities": [
+      "Erstelle Wireframes, Prototypen und Screendesigns",
+      "Entwickle verständliche User Flows für Web- und Mobile-Projekte",
+      "Arbeite mit Entwicklung und Projektmanagement an nutzerfreundlichen Lösungen",
+      "Bereite Designsysteme, Komponenten und Übergaben für die Umsetzung vor"
+    ],
+    "skills": [
+      "UI/UX",
+      "UX Design",
+      "Screendesign",
+      "Figma",
+      "Wireframes",
+      "Prototyping",
+      "Designsysteme",
+      "Webdesign",
+      "JavaScript"
+    ],
+    "keywords": [
+      "User Experience",
+      "User Interface",
+      "Frontend",
+      "Portfolio",
+      "Mobile Design",
+      "Designsystem",
+      "Prototyp",
+      "Website"
+    ],
+    "benefits": [
+      "Mentoring",
+      "Kreatives Team",
+      "Weiterbildungsbudget"
+    ],
+    "remote": false,
+    "createdAt": "2026-05-29T09:10:00Z"
   }
 ]

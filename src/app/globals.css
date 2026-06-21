@@ -39,11 +39,15 @@
 }
 
 html {
+  width: 100%;
+  overflow-x: hidden;
   background: #f6f0e6;
 }
 
 body {
+  width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(132, 145, 94, 0.12), transparent 28%),
     radial-gradient(circle at bottom right, rgba(216, 201, 165, 0.2), transparent 32%),

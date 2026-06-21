@@ -2,9 +2,31 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { signUpAction } from "../actions/auth";
+import { PasswordInput } from "../../components/PasswordInput";
 import TurnstileWidget from "../../components/turnstile-widget";
 
-export default function SignUpPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+const getParam = (params: SearchParams | undefined, key: string) => {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const signUpErrorMessages: Record<string, string> = {
+  missing_fields: "Bitte fülle E-Mail-Adresse, Benutzername und Passwort aus.",
+  password_too_short: "Das Passwort muss mindestens 8 Zeichen lang sein.",
+  username_whitespace: "Der Benutzername darf keine Leerzeichen enthalten.",
+};
+
+export default async function SignUpPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams | Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const errorKey = getParam(params, "error");
+  const errorMessage = errorKey ? signUpErrorMessages[errorKey] : undefined;
+
   return (
     <main className="min-h-screen px-4 py-4 text-[var(--color-ink)] sm:px-6 sm:py-6 lg:px-10 bg-cover bg-center flex items-center justify-center"
       style={{
@@ -30,21 +52,35 @@ export default function SignUpPage() {
           </div>
 
           <form action={signUpAction} className="mt-8 space-y-5">
+            {errorMessage ? (
+              <div
+                className="rounded-2xl border border-[#e8a5a5] bg-[#fff4f1] px-4 py-3 text-sm text-[#9f2f24]"
+                role="alert"
+              >
+                {errorMessage}
+              </div>
+            ) : null}
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="name">
-                Name <span className="text-[#d32f2f]">*</span>
+                Benutzername <span className="text-[#d32f2f]">*</span>
               </label>
               <input
                 id="name"
                 type="text"
                 name="name"
-                placeholder="Dein Name"
+                placeholder="deinbenutzername"
                 required
-                autoComplete="name"
+                autoComplete="username"
+                pattern={"\\S+"}
                 aria-required="true"
-                aria-label="Vor- und Nachname"
+                aria-label="Benutzername"
+                aria-describedby="username-help"
                 className="w-full rounded-2xl border border-[var(--color-line)] bg-white px-4 py-3 text-sm text-[#5b5a48] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#7b8750]/40"
               />
+              <p id="username-help" className="text-xs text-[#7a745f]">
+                Ohne Leerzeichen.
+              </p>
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="email">
@@ -67,9 +103,8 @@ export default function SignUpPage() {
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="password">
                 Passwort <span className="text-[#d32f2f]">*</span>
               </label>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Mindestens 8 Zeichen"
                 required

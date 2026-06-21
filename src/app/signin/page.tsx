@@ -3,9 +3,31 @@ import Link from "next/link";
 
 import { signInAction } from "../actions/auth";
 import { LoginMicrosoft } from "../../components/loginMicrosoft";
+import { PasswordInput } from "../../components/PasswordInput";
 import TurnstileWidget from "../../components/turnstile-widget";
 
-export default function SignInPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+const getParam = (params: SearchParams | undefined, key: string) => {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const signInErrorMessages: Record<string, string> = {
+  invalid_credentials:
+    "E-Mail-Adresse oder Passwort ist falsch. Bitte prüfe deine Eingaben und versuche es erneut.",
+  missing_credentials: "Bitte gib deine E-Mail-Adresse und dein Passwort ein.",
+};
+
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams | Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const errorKey = getParam(params, "error");
+  const errorMessage = errorKey ? signInErrorMessages[errorKey] : undefined;
+
   return (
     <main className="min-h-screen px-4 py-4 text-[var(--color-ink)] sm:px-6 sm:py-6 lg:px-10 bg-cover bg-center flex items-center justify-center"
       style={{
@@ -74,6 +96,15 @@ export default function SignInPage() {
           </div>
 
           <form action={signInAction} className="mt-8 space-y-5">
+            {errorMessage ? (
+              <div
+                className="rounded-2xl border border-[#e8a5a5] bg-[#fff4f1] px-4 py-3 text-sm text-[#9f2f24]"
+                role="alert"
+              >
+                {errorMessage}
+              </div>
+            ) : null}
+
             <div className="space-y-2">
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="email">
                 Email <span className="text-[#d32f2f]">*</span>
@@ -95,9 +126,8 @@ export default function SignInPage() {
               <label className="text-sm font-medium text-[#4f503f]" htmlFor="password">
                 Passwort <span className="text-[#d32f2f]">*</span>
               </label>
-              <input
+              <PasswordInput
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Dein Passwort"
                 required

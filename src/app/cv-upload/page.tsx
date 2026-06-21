@@ -4,6 +4,8 @@ import { headers } from "next/headers";
 import { CvUploadForm } from "../../components/cv-upload-form";
 import { auth } from "../../lib/auth";
 import { prisma } from "../../lib/prisma";
+import { SiteFooter } from "../../components/SiteFooter";
+
 
 export const metadata = {
   title: "CV Upload",
@@ -39,6 +41,7 @@ export default async function CvUploadPage() {
     : [];
 
   return (
+    <div>
     <main
       className="min-h-screen px-4 py-6 text-stone-900 sm:px-6 sm:py-8 lg:px-8 flex items-center justify-center"
       style={{
@@ -144,6 +147,9 @@ export default async function CvUploadPage() {
           </div>
         </div>
       </section>
+      
     </main>
+    <SiteFooter/>
+    </div>
   );
 }

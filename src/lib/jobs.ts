@@ -392,6 +392,8 @@ export const computeMatchScore = (extractedText: string, job: Job): number => {
     return words.every((w) => cvWords.has(w));
   });
 
+  if (matches.length === 0) return 0;
+
   const raw = Math.round((matches.length / jobTerms.length) * 100);
   // Clamp between 10 and 99 so scores always feel plausible
   return clampHeuristicMatchScore(raw);
@@ -429,20 +431,17 @@ const getAiMatchScores = async (
       {
         role: 'system',
         content:
-          'Bewerte Job-Matches deterministisch und konsistent. Antworte ausschließlich mit gültigem JSON. Bewerte, wie gut der Lebenslauf fachlich, erfahrungsbezogen und senioritätsbezogen zur Stelle passt. Verwende nur die gegebenen Job-IDs.',
+          'Bewerte Job-Matches deterministisch und konsistent. Antworte ausschließlich mit gültigem JSON. Bewerte, wie gut der Lebenslauf fachlich, erfahrungsbezogen und senioritätsbezogen zur Stelle passt. Verwende nur die gegebenen Job-IDs. Gib nicht pauschal 0 Punkte, wenn einzelne passende Skills, Projekte oder Berufserfahrungen vorhanden sind.',
       },
       {
         role: 'user',
         content: `
 Analysiere, wie gut dieser Lebenslauf zu den folgenden Jobs passt.
 
-Gib exakt dieses JSON zurück:
-
-{
-  "matches": [
-    { "id": "job-id", "score": 0 }
-  ]
-}
+Gib nur ein JSON-Objekt mit dem Feld "matches" zurück.
+"matches" enthält für jeden Job genau einen Eintrag mit:
+- id: die gegebene Job-ID
+- score: eine Zahl von 0 bis 100
 
 Wichtig:
 - Kein Markdown
@@ -451,6 +450,11 @@ Wichtig:
 - Gib für jeden Job genau einen Eintrag zurück
 - Bewerte Skills, Technologien, Aufgaben, Erfahrung, Seniorität und Rollenprofil
 - Wenn wichtige Anforderungen fehlen, senke den Score
+- Wenn der Lebenslauf einige passende Begriffe oder Projekte enthält, nutze Zwischenwerte statt 0
+- 0 bedeutet: keine erkennbare fachliche Überschneidung
+- 20-40 bedeutet: einzelne passende Skills oder Projekte
+- 40-70 bedeutet: mehrere relevante Überschneidungen
+- 70-100 bedeutet: sehr klare fachliche Passung
 
 Lebenslauf:
 ${extractedText.slice(0, 7000)}
@@ -498,7 +502,7 @@ export const getTopMatchingJobs = async (
       return preselectedJobs
         .map((job) => ({
           ...job,
-          matchScore: aiScores.get(job.id) ?? job.matchScore,
+          matchScore: Math.max(aiScores.get(job.id) ?? 0, job.matchScore),
         }))
         .sort((a, b) => b.matchScore - a.matchScore)
         .slice(0, limit);

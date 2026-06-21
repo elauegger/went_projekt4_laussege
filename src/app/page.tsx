@@ -3,8 +3,10 @@ import type { ReactNode } from "react";
 import { headers } from "next/headers";
 
 import { MobileNav } from "../components/dashboard/MobileNav";
+import { SiteFooter } from "../components/SiteFooter";
 import { auth } from "../lib/auth";
 import { prisma } from "../lib/prisma";
+import { getCVAnalysisModelLabel } from "../lib/cv-analysis";
 import { getTopMatchingJobs } from "../lib/jobs";
 import { signOutAction } from "./actions/auth";
 
@@ -12,6 +14,12 @@ function stringArrayFromJson(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
 
   return value.filter((item): item is string => typeof item === "string");
+}
+
+function containsPlaceholderFeedback(items: string[]) {
+  return items.some((item) =>
+    /kurzer text|\bstring\b|beispiel|platzhalter/i.test(item)
+  );
 }
 
 type NavItem = {
@@ -97,10 +105,10 @@ export default async function Home() {
   const displayName = session?.user?.name?.split(" ")[0] ?? "Gast";
   const headline = authenticated ? `Hallo ${displayName}!` : "Willkommen !";
 
-  const latestCv = authenticated
-    ? await prisma.cv_uploads.findFirst({
+  const userCvUploads = authenticated
+    ? await prisma.cv_uploads.findMany({
       where: { userId: session!.user.id },
-      orderBy: { createdAt: "desc" },
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       select: {
         id: true,
         originalFilename: true,
@@ -111,40 +119,53 @@ export default async function Home() {
         analysisStrengths: true,
         analysisWeaknesses: true,
         analysisImprovements: true,
+        analysisModelUsed: true,
         analyzedAt: true,
       },
     })
+    : [];
+
+  const latestCv = userCvUploads[0] ?? null;
+  const cvCount = userCvUploads.length;
+  const currentAnalysisModelLabel = getCVAnalysisModelLabel();
+
+  const latestAnalyzedCv =
+    userCvUploads.find((cv) => {
+      const strengths = stringArrayFromJson(cv.analysisStrengths);
+      const weaknesses = stringArrayFromJson(cv.analysisWeaknesses);
+      const improvements = stringArrayFromJson(cv.analysisImprovements);
+      const hasStoredAnalysis = !!(
+        cv.analysisScore !== null &&
+        strengths.length > 0 &&
+        weaknesses.length > 0 &&
+        improvements.length > 0
+      );
+      const hasPlaceholderFeedback =
+        containsPlaceholderFeedback(strengths) ||
+        containsPlaceholderFeedback(weaknesses) ||
+        containsPlaceholderFeedback(improvements);
+
+      return (
+        hasStoredAnalysis &&
+        !hasPlaceholderFeedback &&
+        cv.analysisModelUsed === currentAnalysisModelLabel
+      );
+    }) ?? null;
+
+  const latestAnalysis = latestAnalyzedCv
+    ? {
+      originalFilename: latestAnalyzedCv.originalFilename,
+      score: latestAnalyzedCv.analysisScore!,
+      strengths: stringArrayFromJson(latestAnalyzedCv.analysisStrengths),
+      weaknesses: stringArrayFromJson(latestAnalyzedCv.analysisWeaknesses),
+      improvements: stringArrayFromJson(latestAnalyzedCv.analysisImprovements),
+      analyzedAt: latestAnalyzedCv.analyzedAt,
+    }
     : null;
-
-  const cvCount = authenticated
-    ? await prisma.cv_uploads.count({ where: { userId: session!.user.id } })
-    : 0;
-
-  const latestAnalysis =
-    latestCv &&
-      latestCv.analysisScore !== null &&
-      latestCv.analysisStrengths &&
-      latestCv.analysisWeaknesses &&
-      latestCv.analysisImprovements
-      ? {
-        score: latestCv.analysisScore,
-        strengths: stringArrayFromJson(latestCv.analysisStrengths),
-        weaknesses: stringArrayFromJson(latestCv.analysisWeaknesses),
-        improvements: stringArrayFromJson(latestCv.analysisImprovements),
-        analyzedAt: latestCv.analyzedAt,
-      }
-      : null;
 
   const cvText = latestCv?.extractedText?.trim() ?? "";
 
-  const recentUploads = authenticated
-    ? await prisma.cv_uploads.findMany({
-      where: { userId: session!.user.id },
-      orderBy: { createdAt: "desc" },
-      take: 3,
-      select: { originalFilename: true, createdAt: true },
-    })
-    : [];
+  const recentUploads = userCvUploads.slice(0, 3);
 
   const activities = recentUploads.map((u) => ({
     title: `Lebenslauf hochgeladen: ${u.originalFilename}`,
@@ -158,8 +179,9 @@ export default async function Home() {
   const topMatches = cvText ? await getTopMatchingJobs(cvText, 3) : [];
 
   return (
+    <div>
     <main className="min-h-screen px-3 py-3 text-[#2f3628] sm:px-5 sm:py-5 lg:px-6">
-      <div className="relative mx-auto min-h-[calc(100vh-1.5rem)] max-w-screen-2xl overflow-hidden rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] shadow-[0_24px_90px_rgba(98,87,55,0.14)]">
+      <div className="relative mx-auto min-h-[calc(100vh-1.5rem)] max-w-screen-2xl overflow-hidden rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] ">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute left-[-5%] top-[-8%] h-72 w-72 rounded-full bg-[#8e9a63]/12 blur-3xl" />
           <div className="absolute right-[8%] top-[10%] h-96 w-96 rounded-full bg-[#e9d972]/18 blur-3xl" />
@@ -167,7 +189,7 @@ export default async function Home() {
         </div>
 
         <div className="relative grid min-h-[calc(100vh-1.5rem)] lg:grid-cols-[250px_minmax(0,1fr)]">
-          <aside className="hidden border-r border-[#dccfb0] bg-[#75824e]/92 text-[#f8f1de] lg:flex lg:flex-col">
+          <aside className="hidden border-r border-[#dccfb0] bg-[#75824e] text-[#f8f1de] lg:flex lg:flex-col">
             <div className="flex items-center justify-between px-6 py-6">
               <p className="font-serif text-4xl leading-none text-[#f6efd8]">
                 Jobsy
@@ -195,20 +217,7 @@ export default async function Home() {
               </div>
             </nav>
 
-            <div className="px-4 pb-4">
-              <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[#f3e5bd]/14 p-5">
-                <div className="absolute -right-6 bottom-0 h-28 w-28 opacity-90">
-                  <LeafMark />
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.4em] text-[#f0e5bf]/70">
-                  Profi-Tipp
-                </p>
-                <p className="mt-4 max-w-56 text-sm leading-6 text-[#f8f0d3]">
-                  Formuliere Erfolge messbar, halte Lebensläufe kurz und nutze
-                  dieselbe Wortwahl wie die Zielrolle.
-                </p>
-              </div>
-            </div>
+           
           </aside>
 
           <div className="flex min-w-0 flex-col">
@@ -295,7 +304,7 @@ export default async function Home() {
                   ) : !latestAnalysis ? (
                     <div className="rounded-[20px] border border-dashed border-[#d9ccb1] bg-[#faf5e9] p-6 text-center">
                       <p className="text-sm text-[#6f6a58]">
-                        Für diesen Lebenslauf ist noch keine gespeicherte KI-Analyse vorhanden.
+                        Für deine Lebensläufe ist noch keine gespeicherte KI-Analyse vorhanden.
                       </p>
                       <Link
                         href="/ai-analysis"
@@ -324,8 +333,8 @@ export default async function Home() {
                             </div>
                           </div>
                         </div>
-                        <p className="mt-2 max-w-40 truncate text-center text-[11px] text-[#8a8467]" title={latestCv.originalFilename}>
-                          {latestCv.originalFilename}
+                        <p className="mt-2 max-w-40 truncate text-center text-[11px] text-[#8a8467]" title={latestAnalysis.originalFilename}>
+                          {latestAnalysis.originalFilename}
                         </p>
                         {latestAnalysis.analyzedAt ? (
                           <p className="mt-2 text-[11px] text-[#8a8467]">
@@ -494,6 +503,10 @@ export default async function Home() {
           </div>
         </div>
       </div>
+      
+      
     </main>
+    <SiteFooter/>
+    </div>
   );
 }

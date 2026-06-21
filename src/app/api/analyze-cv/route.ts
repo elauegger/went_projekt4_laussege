@@ -3,7 +3,10 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { auth } from "../../../lib/auth";
 import { prisma } from "../../../lib/prisma";
-import { analyzeCV } from "../../../lib/cv-analysis";
+import {
+  analyzeCV,
+  getCVAnalysisModelLabel,
+} from "../../../lib/cv-analysis";
 import { extractTextFromPDF } from "../../../lib/pdf-extract";
 import type { CVAnalysis } from "../../../lib/cv-analysis";
 
@@ -11,6 +14,12 @@ function stringArrayFromJson(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
 
   return value.filter((item): item is string => typeof item === "string");
+}
+
+function containsPlaceholderFeedback(items: string[]) {
+  return items.some((item) =>
+    /kurzer text|\bstring\b|platzhalter|beispiel/i.test(item),
+  );
 }
 
 export async function POST(request: Request) {
@@ -86,13 +95,22 @@ export async function POST(request: Request) {
         improvements: stringArrayFromJson(cvUpload.analysisImprovements),
       };
 
-      return Response.json({
-        success: true,
-        cached: true,
-        analysis: cachedAnalysis,
-        cvId,
-        originalFilename: cvUpload.originalFilename,
-      });
+      const hasPlaceholderFeedback =
+        containsPlaceholderFeedback(cachedAnalysis.strengths) ||
+        containsPlaceholderFeedback(cachedAnalysis.weaknesses) ||
+        containsPlaceholderFeedback(cachedAnalysis.improvements);
+      const isCurrentPromptVersion =
+        cvUpload.analysisModelUsed === getCVAnalysisModelLabel();
+
+      if (!hasPlaceholderFeedback && isCurrentPromptVersion) {
+        return Response.json({
+          success: true,
+          cached: true,
+          analysis: cachedAnalysis,
+          cvId,
+          originalFilename: cvUpload.originalFilename,
+        });
+      }
     }
 
     const analysis = await analyzeCV(extractedText);
@@ -106,7 +124,7 @@ export async function POST(request: Request) {
         analysisStrengths: analysis.strengths,
         analysisWeaknesses: analysis.weaknesses,
         analysisImprovements: analysis.improvements,
-        analysisModelUsed: process.env.GROQ_MODEL ?? "llama-3.1-8b-instant",
+        analysisModelUsed: getCVAnalysisModelLabel(),
         analyzedAt: new Date(),
       },
     });
