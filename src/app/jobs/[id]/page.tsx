@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import { getAllJobs } from '../../../lib/jobs';
 import { auth } from '../../../lib/auth';
-import { prisma } from '../../../lib/prisma';
+import { isSavedJob } from '../../../lib/saved-jobs';
 import { JobTag } from '../../../components/jobs/JobTag';
 import { JobPanel } from '../../../components/jobs/JobPanel';
 import { FavoriteJobButton } from '../../../components/jobs/FavoriteJobButton';
@@ -29,17 +29,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
   const userId = session?.user?.id;
 
-  const favorite = userId
-    ? await prisma.saved_jobs.findUnique({
-        where: {
-          userId_jobId: {
-            userId,
-            jobId: job.id,
-          },
-        },
-        select: { id: true },
-      })
-    : null;
+  const favorite = userId ? await isSavedJob(userId, job.id) : false;
 
   return (
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
@@ -62,7 +52,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
             <FavoriteJobButton
               jobId={job.id}
-              initialFavorite={Boolean(favorite)}
+              initialFavorite={favorite}
             />
           </div>
 

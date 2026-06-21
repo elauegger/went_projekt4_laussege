@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
+import { unstable_noStore as noStore } from "next/cache";
 
 import { MobileNav } from "../components/dashboard/MobileNav";
 import { SiteFooter } from "../components/SiteFooter";
@@ -9,6 +10,8 @@ import { prisma } from "../lib/prisma";
 import { getCVAnalysisModelLabel } from "../lib/cv-analysis";
 import { getTopMatchingJobs } from "../lib/jobs";
 import { signOutAction } from "./actions/auth";
+
+export const dynamic = "force-dynamic";
 
 function stringArrayFromJson(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
@@ -97,6 +100,8 @@ function SectionCard({
 }
 
 export default async function Home() {
+  noStore();
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -155,6 +160,8 @@ export default async function Home() {
   const latestAnalysis = latestAnalyzedCv
     ? {
       originalFilename: latestAnalyzedCv.originalFilename,
+      fileSizeBytes: latestAnalyzedCv.fileSizeBytes,
+      createdAt: latestAnalyzedCv.createdAt,
       score: latestAnalyzedCv.analysisScore!,
       strengths: stringArrayFromJson(latestAnalyzedCv.analysisStrengths),
       weaknesses: stringArrayFromJson(latestAnalyzedCv.analysisWeaknesses),
@@ -163,7 +170,7 @@ export default async function Home() {
     }
     : null;
 
-  const cvText = latestCv?.extractedText?.trim() ?? "";
+  const cvText = latestAnalyzedCv?.extractedText?.trim() ?? "";
 
   const recentUploads = userCvUploads.slice(0, 3);
 
@@ -396,35 +403,37 @@ export default async function Home() {
 
                     <div className="grid gap-6 lg:grid-cols-2">
                       <SectionCard title="CV Details">
-                        {latestCv ? (
+                        {latestAnalysis ? (
                           <div className="space-y-3">
                             <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
                               <p className="text-sm font-medium text-[#4f5341]">Datei</p>
-                              <p className="min-w-0 truncate text-right text-xs text-[#7c765d]" title={latestCv.originalFilename}>
-                                {latestCv.originalFilename}
+                              <p className="min-w-0 truncate text-right text-xs text-[#7c765d]" title={latestAnalysis.originalFilename}>
+                                {latestAnalysis.originalFilename}
                               </p>
                             </div>
                             <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
                               <p className="text-sm font-medium text-[#4f5341]">Größe</p>
                               <p className="text-xs text-[#7c765d]">
-                                {Math.max(1, Math.round(Number(latestCv.fileSizeBytes) / 1024))} KB
+                                {Math.max(1, Math.round(Number(latestAnalysis.fileSizeBytes) / 1024))} KB
                               </p>
                             </div>
                             <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
                               <p className="text-sm font-medium text-[#4f5341]">Hochgeladen</p>
                               <p className="text-xs text-[#7c765d]">
-                                {latestCv.createdAt.toLocaleDateString("de-DE")}
+                                {latestAnalysis.createdAt.toLocaleDateString("de-DE")}
                               </p>
                             </div>
                             <div className="flex items-center justify-between gap-3 rounded-[18px] border border-[#e4d8bc] bg-white/70 px-4 py-3">
                               <p className="text-sm font-medium text-[#4f5341]">Analyse</p>
                               <p className="text-xs font-semibold text-[#627146]">
-                                {latestAnalysis ? "Gespeichert" : "Nicht vorhanden"}
+                                Gespeichert
                               </p>
                             </div>
                           </div>
                         ) : (
-                          <p className="text-sm text-[#6f6a58]">Kein CV hochgeladen.</p>
+                          <p className="text-sm text-[#6f6a58]">
+                            Noch kein analysierter Lebenslauf vorhanden.
+                          </p>
                         )}
                       </SectionCard>
 

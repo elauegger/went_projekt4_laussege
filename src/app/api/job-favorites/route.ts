@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { auth } from '../../../lib/auth';
-import { prisma } from '../../../lib/prisma';
+import {
+  deleteSavedJob,
+  getSavedJobIds,
+  isSavedJobsStorageError,
+  saveJob,
+} from '../../../lib/saved-jobs';
 
 async function getUserId() {
   const session = await auth.api.getSession({
@@ -18,13 +23,8 @@ export async function GET() {
     return NextResponse.json({ favorites: [] });
   }
 
-  const favorites = await prisma.saved_jobs.findMany({
-    where: { userId },
-    select: { jobId: true },
-  });
-
   return NextResponse.json({
-    favorites: favorites.map((favorite) => favorite.jobId),
+    favorites: await getSavedJobIds(userId),
   });
 }
 
@@ -41,19 +41,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: 'jobId fehlt' }, { status: 400 });
   }
 
-  await prisma.saved_jobs.upsert({
-    where: {
-      userId_jobId: {
-        userId,
-        jobId,
-      },
-    },
-    update: {},
-    create: {
-      userId,
-      jobId,
-    },
-  });
+  try {
+    await saveJob(userId, jobId);
+  } catch (error) {
+    if (isSavedJobsStorageError(error)) {
+      return NextResponse.json(
+        { message: 'Job-Favoriten sind in der Datenbank noch nicht eingerichtet.' },
+        { status: 503 },
+      );
+    }
+
+    throw error;
+  }
 
   return NextResponse.json({ success: true });
 }
@@ -71,12 +70,18 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ message: 'jobId fehlt' }, { status: 400 });
   }
 
-  await prisma.saved_jobs.deleteMany({
-    where: {
-      userId,
-      jobId,
-    },
-  });
+  try {
+    await deleteSavedJob(userId, jobId);
+  } catch (error) {
+    if (isSavedJobsStorageError(error)) {
+      return NextResponse.json(
+        { message: 'Job-Favoriten sind in der Datenbank noch nicht eingerichtet.' },
+        { status: 503 },
+      );
+    }
+
+    throw error;
+  }
 
   return NextResponse.json({ success: true });
 }
