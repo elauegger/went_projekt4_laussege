@@ -1,5 +1,8 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { getAllJobs } from '../../lib/jobs';
+import { auth } from '../../lib/auth';
+import { prisma } from '../../lib/prisma';
 import type { Job } from '../../types/job';
 import { JobFilters } from '../../components/jobs/JobFilters';
 import { JobGroupList } from '../../components/jobs/JobGroupList';
@@ -15,40 +18,22 @@ const getParam = (params: SearchParams | undefined, key: string) => {
 };
 
 const parseBoolean = (value?: string) => {
-  if (!value) {
-    return undefined;
-  }
-
-  if (value.toLowerCase() === 'true') {
-    return true;
-  }
-
-  if (value.toLowerCase() === 'false') {
-    return false;
-  }
-
+  if (!value) return undefined;
+  if (value.toLowerCase() === 'true') return true;
+  if (value.toLowerCase() === 'false') return false;
   return undefined;
 };
 
-// Alex yol
-
 const parseSeniority = (value?: string): Job['seniority'] | undefined => {
-  if (!value) {
-    return undefined;
-  }
-
+  if (!value) return undefined;
   const options: Job['seniority'][] = ['Junior', 'Mid-Level', 'Senior', 'Lead'];
-
   return options.includes(value as Job['seniority'])
     ? (value as Job['seniority'])
     : undefined;
 };
 
 const parseEmployment = (value?: string): Job['employmentType'] | undefined => {
-  if (!value) {
-    return undefined;
-  }
-
+  if (!value) return undefined;
   const options: Job['employmentType'][] = [
     'Full-time',
     'Part-time',
@@ -56,17 +41,13 @@ const parseEmployment = (value?: string): Job['employmentType'] | undefined => {
     'Internship',
     'Remote',
   ];
-
   return options.includes(value as Job['employmentType'])
     ? (value as Job['employmentType'])
     : undefined;
 };
 
 const parseSort = (value?: string): 'asc' | 'desc' | undefined => {
-  if (value === 'asc' || value === 'desc') {
-    return value;
-  }
-
+  if (value === 'asc' || value === 'desc') return value;
   return undefined;
 };
 
@@ -76,6 +57,7 @@ export default async function JobsPage({
   searchParams?: SearchParams | Promise<SearchParams>;
 }) {
   const params = await searchParams;
+
   const q = getParam(params, 'q');
   const skill = getParam(params, 'skill');
   const company = getParam(params, 'company');
@@ -85,6 +67,7 @@ export default async function JobsPage({
   const remoteValue = getParam(params, 'remote');
   const sortValue = getParam(params, 'sort');
   const pageValue = getParam(params, 'page');
+
   const currentPage = Math.max(1, Number.parseInt(pageValue ?? '1', 10) || 1);
   const pageSize = 12;
 
@@ -104,6 +87,22 @@ export default async function JobsPage({
   const safePage = Math.min(currentPage, totalPages);
   const startIndex = (safePage - 1) * pageSize;
   const pageJobs = jobs.slice(startIndex, startIndex + pageSize);
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const userId = session?.user?.id;
+
+  const favoriteJobs = userId
+    ? await prisma.saved_jobs.findMany({
+        where: { userId },
+        select: { jobId: true },
+      })
+    : [];
+
+  const favoriteJobIds = favoriteJobs.map((favorite) => favorite.jobId);
+
   const paginationQuery = {
     q,
     skill,
@@ -119,29 +118,39 @@ export default async function JobsPage({
     <div>
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
-
-        {/* HEADER */}
         <div className="rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] p-8 shadow-[0_24px_90px_rgba(98,87,55,0.14)]">
           <p className="text-[10px] uppercase tracking-[0.42em] text-[#8d8667]">
             Jobsy Karriereboard
           </p>
+
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <h1 className="font-serif text-4xl text-[#4d5240]">
               Jobs für deinen nächsten Schritt
             </h1>
-            <Link
-              href="/"
-              className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
-            >
-              Zurück zu Home
-            </Link>
+
+            <div className="flex flex-wrap gap-2">
+              <Link
+                href="/jobs/favorites"
+                className="rounded-full border border-[#d6caa9] bg-white px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+              >
+                Meine Favoriten
+              </Link>
+
+              <Link
+                href="/"
+                className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+              >
+                Zurück zu Home
+              </Link>
+            </div>
           </div>
+
           <p className="mt-3 text-sm text-[#6f6a58]">
-            Entdecke aktuelle Rollen und finde Positionen, die zu deinen Skills und deiner Seniörität passen.
+            Entdecke aktuelle Rollen und finde Positionen, die zu deinen Skills
+            und deiner Seniörität passen.
           </p>
         </div>
 
-        {/* FILTERS & CONTENT */}
         <div className="space-y-6">
           <JobFilters
             values={{
@@ -157,13 +166,14 @@ export default async function JobsPage({
           />
 
           {pageJobs.length ? (
-            <div className="space-y-1 text-sm text-[#8a8467]">
-              <p className="font-medium">{totalCount} Positionen insgesamt • Seite {safePage} von {totalPages}</p>
-            </div>
+            <p className="text-sm font-medium text-[#8a8467]">
+              {totalCount} Positionen insgesamt • Seite {safePage} von{' '}
+              {totalPages}
+            </p>
           ) : null}
 
           {pageJobs.length ? (
-            <JobGroupList jobs={pageJobs} />
+            <JobGroupList jobs={pageJobs} favoriteJobIds={favoriteJobIds} />
           ) : (
             <div className="rounded-[28px] border border-[#e5dcc1] bg-white/75 p-8 text-center shadow-[0_14px_40px_rgba(116,101,65,0.07)] backdrop-blur">
               <p className="text-sm text-[#6f6a58]">

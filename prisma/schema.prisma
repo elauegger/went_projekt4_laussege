@@ -21,6 +21,7 @@ model User {
   improvedFiles    improved_files[]
   savedSuggestions saved_suggestions[]
   cvUploads        cv_uploads[]
+  savedJobs        saved_jobs[]
 
   @@map("user")
 }
@@ -174,4 +175,17 @@ model cv_uploads {
 
   @@index([userId])
   @@map("cv_uploads")
+}
+
+model saved_jobs {
+  id        String   @id @default(uuid())
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@map("saved_jobs")
 }

@@ -5,6 +5,8 @@ import { Trash2 } from "lucide-react";
 
 import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
+import { getAllJobs } from "../../lib/jobs";
+import { JobFavoritesSlider } from "../../components/jobs/JobFavoritesSlider";
 import {
   changePasswordAction,
   deleteCvUploadAction,
@@ -88,22 +90,43 @@ export default async function ProfilePage({
     redirect("/signin");
   }
 
-  const displayName = user.name ?? "User";
+  const favoriteRows = await prisma.saved_jobs.findMany({
+    where: {
+      userId: user.id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      jobId: true,
+    },
+  });
+
+  const favoriteJobIds = favoriteRows.map((favorite) => favorite.jobId);
+
+  const allJobs = await getAllJobs({});
+
+  const favoriteJobs = allJobs.filter((job) =>
+    favoriteJobIds.includes(job.id),
+  );
+
+  const displayName = user.name?.split(" ")[0] ?? "User";
 
   return (
     <div>
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
-
         {/* HEADER */}
         <div className="rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] p-8 shadow-[0_24px_90px_rgba(98,87,55,0.14)]">
           <p className="text-[10px] uppercase tracking-[0.42em] text-[#8d8667]">
             Profilbereich
           </p>
+
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
             <h1 className="font-serif text-4xl text-[#4d5240]">
               Hallo {displayName}
             </h1>
+
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/ai-analysis"
@@ -111,6 +134,14 @@ export default async function ProfilePage({
               >
                 KI-Analyse
               </Link>
+
+              <Link
+                href="/jobs"
+                className="rounded-full border border-[#d6caa9] bg-white px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
+              >
+                Jobs entdecken
+              </Link>
+
               <Link
                 href="/"
                 className="rounded-full border border-[#d6caa9] bg-[#f9f4e7] px-4 py-2 text-xs font-semibold text-[#6e7456] transition hover:bg-[#f3ecd9]"
@@ -119,23 +150,31 @@ export default async function ProfilePage({
               </Link>
             </div>
           </div>
+
           <p className="mt-3 text-sm text-[#6f6a58]">
-            Hier kannst du deine Daten verwalten, dein Profil bearbeiten und deine Lebensläufe einsehen.
+            Hier kannst du deine Daten verwalten, dein Profil bearbeiten und
+            deine Lebensläufe einsehen.
           </p>
         </div>
 
         {/* GRID */}
         <div className="grid gap-6 lg:grid-cols-2">
-
           {/* USER INFO */}
           <SectionCard title="Benutzerinformationen">
             <div className="space-y-3 text-sm text-[#4f5341]">
-              <p><strong>Benutzername:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
+              <p>
+                <strong>Name:</strong> {user.name}
+              </p>
+
+              <p>
+                <strong>Email:</strong> {user.email}
+              </p>
+
               <p>
                 <strong>Email verifiziert:</strong>{" "}
                 {user.emailVerified ? "Ja" : "Nein"}
               </p>
+
               <p>
                 <strong>Erstellt am:</strong>{" "}
                 {user.createdAt.toLocaleDateString()}
@@ -159,6 +198,7 @@ export default async function ProfilePage({
                 <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
                   Benutzername
                 </label>
+
                 <input
                   type="text"
                   name="name"
@@ -182,6 +222,7 @@ export default async function ProfilePage({
               </button>
             </form>
           </SectionCard>
+
           {/* PASSWORD CHANGE */}
           <SectionCard title="Passwort ändern">
             <form action={changePasswordAction} className="space-y-4">
@@ -207,6 +248,7 @@ export default async function ProfilePage({
                 <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
                   Aktuelles Passwort
                 </label>
+
                 <input
                   type="password"
                   name="currentPassword"
@@ -219,6 +261,7 @@ export default async function ProfilePage({
                 <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
                   Neues Passwort
                 </label>
+
                 <input
                   type="password"
                   name="newPassword"
@@ -245,9 +288,7 @@ export default async function ProfilePage({
         {/* CV SECTION */}
         <SectionCard title="Meine Lebensläufe">
           {user.cvUploads.length === 0 ? (
-            <p className="text-sm text-[#6f6a58]">
-              Keine CVs hochgeladen.
-            </p>
+            <p className="text-sm text-[#6f6a58]">Keine CVs hochgeladen.</p>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               {user.cvUploads.map((cv) => (
@@ -261,8 +302,10 @@ export default async function ProfilePage({
                         {cv.originalFilename}
                       </p>
                     </div>
+
                     <form action={deleteCvUploadAction} className="shrink-0">
                       <input type="hidden" name="cvId" value={cv.id} />
+
                       <button
                         type="submit"
                         className="rounded-full border border-[#e8a5a5] bg-[#fef2f2] p-1.5 text-[#d32f2f] transition hover:bg-[#ffe8e8]"
@@ -275,7 +318,9 @@ export default async function ProfilePage({
 
                   <div className="mt-3 space-y-1 text-xs text-[#7c765d]">
                     <p>Typ: {cv.fileType}</p>
-                    <p>Größe: {Math.round(Number(cv.fileSizeBytes) / 1024)} KB</p>
+                    <p>
+                      Größe: {Math.round(Number(cv.fileSizeBytes) / 1024)} KB
+                    </p>
                   </div>
 
                   <div className="mt-3">
@@ -293,6 +338,10 @@ export default async function ProfilePage({
           )}
         </SectionCard>
 
+        {/* JOB FAVORITES */}
+        <SectionCard title="Meine Job-Favoriten">
+          <JobFavoritesSlider jobs={favoriteJobs} />
+        </SectionCard>
       </div>
       
     </main>
