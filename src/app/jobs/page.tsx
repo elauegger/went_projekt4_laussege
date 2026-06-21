@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { headers } from 'next/headers';
 import { getAllJobs } from '../../lib/jobs';
 import { auth } from '../../lib/auth';
-import { prisma } from '../../lib/prisma';
+import { getSavedJobIds } from '../../lib/saved-jobs';
 import type { Job } from '../../types/job';
 import { JobFilters } from '../../components/jobs/JobFilters';
 import { JobGroupList } from '../../components/jobs/JobGroupList';
@@ -94,14 +94,7 @@ export default async function JobsPage({
 
   const userId = session?.user?.id;
 
-  const favoriteJobs = userId
-    ? await prisma.saved_jobs.findMany({
-        where: { userId },
-        select: { jobId: true },
-      })
-    : [];
-
-  const favoriteJobIds = favoriteJobs.map((favorite) => favorite.jobId);
+  const favoriteJobIds = userId ? await getSavedJobIds(userId) : [];
 
   const paginationQuery = {
     q,

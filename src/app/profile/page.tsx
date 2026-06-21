@@ -6,6 +6,7 @@ import { Trash2 } from "lucide-react";
 import { prisma } from "../../lib/prisma";
 import { auth } from "../../lib/auth";
 import { getAllJobs } from "../../lib/jobs";
+import { getSavedJobIds } from "../../lib/saved-jobs";
 import { JobFavoritesSlider } from "../../components/jobs/JobFavoritesSlider";
 import {
   changePasswordAction,
@@ -90,19 +91,7 @@ export default async function ProfilePage({
     redirect("/signin");
   }
 
-  const favoriteRows = await prisma.saved_jobs.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      jobId: true,
-    },
-  });
-
-  const favoriteJobIds = favoriteRows.map((favorite) => favorite.jobId);
+  const favoriteJobIds = await getSavedJobIds(user.id, true);
 
   const allJobs = await getAllJobs({});
 

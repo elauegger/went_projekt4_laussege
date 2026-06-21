@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
@@ -103,6 +104,10 @@ export async function POST(request: NextRequest) {
         extractedText: extractedText || null,
       },
     });
+
+    revalidatePath("/");
+    revalidatePath("/cv-upload");
+    revalidatePath("/ai-analysis");
 
     return NextResponse.json({
       success: true,

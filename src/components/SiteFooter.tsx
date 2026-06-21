@@ -46,7 +46,7 @@ function FooterLink({
 
 export function SiteFooter() {
   return (
-    <footer className="w-full border-x border-b border-[#d9ceb1] bg-[#75824e] text-[#fbf4df]">
+    <footer className="relative left-1/2 w-[100dvw] -translate-x-1/2 border-x border-b border-[#d9ceb1] bg-[#75824e] text-[#fbf4df]">
       <div className="mx-auto flex max-w-screen-2xl flex-col gap-8 px-5 py-11 sm:px-7 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:pt-20">
         <section className="flex min-w-0 items-start gap-4 lg:max-w-xl">
           

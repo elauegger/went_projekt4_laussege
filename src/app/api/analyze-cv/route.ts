@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { readFile } from "fs/promises";
 import path from "path";
 import { auth } from "../../../lib/auth";
@@ -128,6 +129,9 @@ export async function POST(request: Request) {
         analyzedAt: new Date(),
       },
     });
+
+    revalidatePath("/");
+    revalidatePath("/ai-analysis");
 
     return Response.json({
       success: true,
