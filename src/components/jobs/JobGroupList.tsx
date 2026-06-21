@@ -19,9 +19,13 @@ const groupLabels: Record<Job['employmentType'], string> = {
 
 type JobGroupListProps = {
   jobs: Job[];
+  favoriteJobIds?: string[];
 };
 
-export const JobGroupList = ({ jobs }: JobGroupListProps) => {
+export const JobGroupList = ({
+  jobs,
+  favoriteJobIds = [],
+}: JobGroupListProps) => {
   const grouped = groupOrder
     .map((type) => ({
       type,
@@ -37,12 +41,15 @@ export const JobGroupList = ({ jobs }: JobGroupListProps) => {
             <h2 className="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--color-muted)]">
               {groupLabels[group.type]}
             </h2>
+
             <span className="h-px flex-1 bg-[var(--color-line)]" />
+
             <span className="text-xs text-[var(--color-muted)]">
               {group.jobs.length}
             </span>
           </div>
-          <JobList jobs={group.jobs} />
+
+          <JobList jobs={group.jobs} favoriteJobIds={favoriteJobIds} />
         </section>
       ))}
     </div>
