@@ -2,10 +2,16 @@ import Link from 'next/link';
 import type { Job } from '../../types/job';
 import { JobPanel } from './JobPanel';
 import { JobTag } from './JobTag';
+import { FavoriteJobButton } from './FavoriteJobButton';
 
 const formatDate = (value: string) => value.split('T')[0] ?? value;
 
-export const JobCard = ({ job }: { job: Job }) => {
+type JobCardProps = {
+  job: Job;
+  isFavorite?: boolean;
+};
+
+export const JobCard = ({ job, isFavorite = false }: JobCardProps) => {
   const topSkills = job.skills.slice(0, 4);
 
   return (
@@ -15,15 +21,22 @@ export const JobCard = ({ job }: { job: Job }) => {
           <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[var(--color-muted)]">
             {job.company}
           </p>
+
           <h3 className="mt-2 font-serif text-2xl text-[var(--color-ink)]">
             {job.title}
           </h3>
+
           <p className="mt-2 text-sm text-[var(--color-muted)]">
             {job.location}
           </p>
         </div>
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-sm font-semibold text-[var(--color-olive-strong)]">
-          {job.company.slice(0, 2).toUpperCase()}
+
+        <div className="flex flex-col items-end gap-2">
+          <FavoriteJobButton jobId={job.id} initialFavorite={isFavorite} />
+
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-surface-strong)] text-sm font-semibold text-[var(--color-olive-strong)]">
+            {job.company.slice(0, 2).toUpperCase()}
+          </div>
         </div>
       </div>
 
@@ -43,6 +56,7 @@ export const JobCard = ({ job }: { job: Job }) => {
         <span className="text-xs text-[var(--color-muted)]">
           Erstellt am {formatDate(job.createdAt)}
         </span>
+
         <Link
           href={`/jobs/${job.id}`}
           className="rounded-full border border-[var(--color-line)] bg-white px-4 py-2 text-xs font-semibold text-[var(--color-olive-strong)]"

@@ -3,12 +3,19 @@ import { JobCard } from './JobCard';
 
 type JobListProps = {
   jobs: Job[];
+  favoriteJobIds?: string[];
 };
 
-export const JobList = ({ jobs }: JobListProps) => (
-  <div className="grid gap-6 lg:grid-cols-2">
-    {jobs.map((job) => (
-      <JobCard key={job.id} job={job} />
-    ))}
-  </div>
-);
+export const JobList = ({ jobs, favoriteJobIds = [] }: JobListProps) => {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      {jobs.map((job) => (
+        <JobCard
+          key={job.id}
+          job={job}
+          isFavorite={favoriteJobIds.includes(job.id)}
+        />
+      ))}
+    </div>
+  );
+};
