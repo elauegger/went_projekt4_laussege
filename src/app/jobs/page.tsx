@@ -7,6 +7,8 @@ import type { Job } from '../../types/job';
 import { JobFilters } from '../../components/jobs/JobFilters';
 import { JobGroupList } from '../../components/jobs/JobGroupList';
 import { JobPagination } from '../../components/jobs/JobPagination';
+import { JobPanel } from '../../components/jobs/JobPanel';
+import { SiteFooter } from '../../components/SiteFooter';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -113,6 +115,7 @@ export default async function JobsPage({
   };
 
   return (
+    <div>
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="rounded-[36px] border border-[#d9ceb1] bg-[#f6f0e6] p-8 shadow-[0_24px_90px_rgba(98,87,55,0.14)]">
@@ -188,5 +191,7 @@ export default async function JobsPage({
         </div>
       </div>
     </main>
+    <SiteFooter/>
+    </div>
   );
 }

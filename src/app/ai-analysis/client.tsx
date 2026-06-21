@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { AlertCircle, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import type { CVAnalysis } from "../../lib/cv-analysis";
+import { SiteFooter } from "../../components/SiteFooter";
 
 interface CVUpload {
   id: string;
@@ -57,20 +58,23 @@ export default function AIAnalysisClient({
   const [error, setError] = useState<string | null>(null);
 
   const toggleExpanded = (cvId: string) => {
-    const newExpanded = new Set(expandedCVs);
-    if (newExpanded.has(cvId)) {
-      newExpanded.delete(cvId);
-    } else {
-      newExpanded.add(cvId);
-    }
-    setExpandedCVs(newExpanded);
+    setExpandedCVs((currentExpanded) => {
+      const newExpanded = new Set(currentExpanded);
+      if (newExpanded.has(cvId)) {
+        newExpanded.delete(cvId);
+      } else {
+        newExpanded.add(cvId);
+      }
+      return newExpanded;
+    });
   };
 
   async function handleAnalyze(cvId: string) {
-    // Prüfe ob bereits analysiert
     const cvUpload = cvUploads.find(cv => cv.id === cvId);
-    if (cvUpload?.hasAnalysis) {
-      // Nur expandieren wenn bereits analysiert
+    const existingResult = results.get(cvId);
+    const hasAnalysis = Boolean(cvUpload?.hasAnalysis || existingResult?.analysis);
+
+    if (hasAnalysis) {
       toggleExpanded(cvId);
       return;
     }
@@ -92,10 +96,11 @@ export default function AIAnalysisClient({
         setResults(new Map(results).set(cvId, data));
       } else {
         setResults(new Map(results).set(cvId, data));
-        // Automatisch expandieren nach erfolgreicher Analyse
-        const newExpanded = new Set(expandedCVs);
-        newExpanded.add(cvId);
-        setExpandedCVs(newExpanded);
+        setExpandedCVs((currentExpanded) => {
+          const newExpanded = new Set(currentExpanded);
+          newExpanded.add(cvId);
+          return newExpanded;
+        });
       }
     } catch (err) {
       const message =
@@ -110,6 +115,7 @@ export default function AIAnalysisClient({
   }
 
   return (
+    <div>
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* HEADER */}
@@ -193,6 +199,7 @@ export default function AIAnalysisClient({
                         </p>
                       </div>
                       <button
+                        type="button"
                         onClick={() => handleAnalyze(cv.id)}
                         disabled={analyzing === cv.id}
                         className="rounded-full bg-[#74824a] px-4 py-2 text-xs font-semibold text-[#f8f3e3] shadow-sm transition disabled:opacity-50 hover:bg-[#65743f] disabled:cursor-not-allowed"
@@ -327,5 +334,7 @@ export default function AIAnalysisClient({
         </SectionCard>
       </div>
     </main>
+    <SiteFooter/>
+    </div>
   );
 }

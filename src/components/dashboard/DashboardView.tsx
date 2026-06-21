@@ -289,7 +289,7 @@ const MobileHeader = ({ initials }: { initials: string }) => (
           className="h-4 w-4 text-[var(--color-olive-strong)] transition group-open:rotate-90"
         />
       </summary>
-      <div className="border-t border-[#D9D1C7]/40 px-3 py-3">
+      <div className="border border-[#D9D1C7]/40 px-3 py-3">
         <div className="grid gap-2">
           {navItems.map((item) => (
             <a

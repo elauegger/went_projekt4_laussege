@@ -12,6 +12,26 @@ import {
   deleteCvUploadAction,
   updateProfileAction,
 } from "../actions/auth";
+import { SiteFooter } from "../../components/SiteFooter";
+
+type SearchParams = Record<string, string | string[] | undefined>;
+
+const getParam = (params: SearchParams | undefined, key: string) => {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const passwordErrorMessages: Record<string, string> = {
+  current_password:
+    "Das aktuelle Passwort stimmt nicht. Bitte prüfe dein Passwort und versuche es erneut.",
+  missing_fields: "Bitte fülle das aktuelle und das neue Passwort aus.",
+  too_short: "Das neue Passwort muss mindestens 8 Zeichen lang sein.",
+};
+
+const profileErrorMessages: Record<string, string> = {
+  username_missing: "Bitte gib einen Benutzernamen ein.",
+  username_whitespace: "Der Benutzername darf keine Leerzeichen enthalten.",
+};
 
 function SectionCard({
   title,
@@ -33,7 +53,22 @@ function SectionCard({
   );
 }
 
-export default async function ProfilePage() {
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams?: SearchParams | Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const passwordErrorKey = getParam(params, "passwordError");
+  const passwordErrorMessage = passwordErrorKey
+    ? passwordErrorMessages[passwordErrorKey]
+    : undefined;
+  const profileErrorKey = getParam(params, "profileError");
+  const profileErrorMessage = profileErrorKey
+    ? profileErrorMessages[profileErrorKey]
+    : undefined;
+  const successKey = getParam(params, "success");
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -78,6 +113,7 @@ export default async function ProfilePage() {
   const displayName = user.name?.split(" ")[0] ?? "User";
 
   return (
+    <div>
     <main className="min-h-screen px-4 py-6 text-[#2f3628] sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* HEADER */}
@@ -149,17 +185,33 @@ export default async function ProfilePage() {
           {/* EDIT PROFILE */}
           <SectionCard title="Profil bearbeiten">
             <form action={updateProfileAction} className="space-y-4">
+              {profileErrorMessage ? (
+                <div
+                  className="rounded-2xl border border-[#e8a5a5] bg-[#fff4f1] px-4 py-3 text-sm text-[#9f2f24]"
+                  role="alert"
+                >
+                  {profileErrorMessage}
+                </div>
+              ) : null}
+
               <div>
                 <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
-                  Name
+                  Benutzername
                 </label>
 
                 <input
                   type="text"
                   name="name"
                   defaultValue={user.name}
+                  required
+                  pattern={"\\S+"}
+                  autoComplete="username"
+                  aria-describedby="profile-username-help"
                   className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm text-[#4f5341] outline-none focus:border-[#9aa56a]"
                 />
+                <p id="profile-username-help" className="mt-2 text-xs text-[#7c765d]">
+                  Ohne Leerzeichen.
+                </p>
               </div>
 
               <button
@@ -174,6 +226,24 @@ export default async function ProfilePage() {
           {/* PASSWORD CHANGE */}
           <SectionCard title="Passwort ändern">
             <form action={changePasswordAction} className="space-y-4">
+              {passwordErrorMessage ? (
+                <div
+                  className="rounded-2xl border border-[#e8a5a5] bg-[#fff4f1] px-4 py-3 text-sm text-[#9f2f24]"
+                  role="alert"
+                >
+                  {passwordErrorMessage}
+                </div>
+              ) : null}
+
+              {successKey === "password" ? (
+                <div
+                  className="rounded-2xl border border-[#c9d9a8] bg-[#f2f8e8] px-4 py-3 text-sm text-[#526335]"
+                  role="status"
+                >
+                  Dein Passwort wurde erfolgreich aktualisiert.
+                </div>
+              ) : null}
+
               <div>
                 <label className="text-xs uppercase tracking-[0.25em] text-[#8a8467]">
                   Aktuelles Passwort
@@ -197,7 +267,12 @@ export default async function ProfilePage() {
                   name="newPassword"
                   className="mt-2 w-full rounded-2xl border border-[#e3d7bc] bg-white/70 px-4 py-3 text-sm"
                   required
+                  minLength={8}
+                  aria-describedby="new-password-help"
                 />
+                <p id="new-password-help" className="mt-2 text-xs text-[#7c765d]">
+                  Mindestens 8 Zeichen.
+                </p>
               </div>
 
               <button
@@ -268,6 +343,9 @@ export default async function ProfilePage() {
           <JobFavoritesSlider jobs={favoriteJobs} />
         </SectionCard>
       </div>
+      
     </main>
+    <SiteFooter/>
+    </div>
   );
 }
