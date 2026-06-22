@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs';
 import path from 'path';
+import { z } from 'zod';
 import type { Job } from '../types/job';
+import { groq } from './groq';
 
 const dataPath = path.join(process.cwd(), 'data', 'jobs.json');
 
@@ -346,6 +348,170 @@ export const getAllJobs = async (filters?: JobFilters): Promise<Job[]> => {
   const jobs = await readJobs();
 
   return applyFilters(jobs, filters);
+};
+
+const AIMatchSchema = z.object({
+  matches: z
+    .array(
+      z.object({
+        id: z.string(),
+        score: z.number().min(0).max(100),
+      }),
+    )
+    .default([]),
+});
+
+const clampAiMatchScore = (score: number) => Math.min(100, Math.max(0, score));
+const clampHeuristicMatchScore = (score: number) =>
+  Math.min(99, Math.max(10, score));
+
+/**
+ * Computes a 0-100 match score between a CV's extracted text and a job.
+ * Uses keyword + skill overlap as a simple fallback and preselection heuristic.
+ */
+export const computeMatchScore = (extractedText: string, job: Job): number => {
+  if (!extractedText) return 0;
+
+  const cvWords = new Set(
+    extractedText
+      .toLowerCase()
+      .split(/[\s,;:()\[\]\-\/\n]+/)
+      .filter((w) => w.length > 2),
+  );
+
+  const jobTerms = [
+    ...job.skills,
+    ...job.keywords,
+    ...(job.requirements ?? []),
+  ].map((t) => t.toLowerCase());
+
+  if (jobTerms.length === 0) return 0;
+
+  const matches = jobTerms.filter((term) => {
+    const words = term.split(/\s+/);
+    return words.every((w) => cvWords.has(w));
+  });
+
+  if (matches.length === 0) return 0;
+
+  const raw = Math.round((matches.length / jobTerms.length) * 100);
+  // Clamp between 10 and 99 so scores always feel plausible
+  return clampHeuristicMatchScore(raw);
+};
+
+const summarizeJobForMatching = (job: Job) => ({
+  id: job.id,
+  title: job.title,
+  company: job.company,
+  location: job.location,
+  employmentType: job.employmentType,
+  seniority: job.seniority,
+  description: job.description,
+  requirements: job.requirements,
+  responsibilities: job.responsibilities,
+  skills: job.skills,
+  keywords: job.keywords,
+  remote: job.remote,
+});
+
+const getAiMatchScores = async (
+  extractedText: string,
+  candidateJobs: Job[],
+): Promise<Map<string, number>> => {
+  if (!process.env.GROQ_API_KEY) {
+    return new Map();
+  }
+
+  const response = await groq.chat.completions.create({
+    model: process.env.GROQ_MODEL ?? 'llama-3.1-8b-instant',
+    temperature: 0,
+    top_p: 1,
+    response_format: { type: 'json_object' },
+    messages: [
+      {
+        role: 'system',
+        content:
+          'Bewerte Job-Matches deterministisch und konsistent. Antworte ausschließlich mit gültigem JSON. Bewerte, wie gut der Lebenslauf fachlich, erfahrungsbezogen und senioritätsbezogen zur Stelle passt. Verwende nur die gegebenen Job-IDs. Gib nicht pauschal 0 Punkte, wenn einzelne passende Skills, Projekte oder Berufserfahrungen vorhanden sind.',
+      },
+      {
+        role: 'user',
+        content: `
+Analysiere, wie gut dieser Lebenslauf zu den folgenden Jobs passt.
+
+Gib nur ein JSON-Objekt mit dem Feld "matches" zurück.
+"matches" enthält für jeden Job genau einen Eintrag mit:
+- id: die gegebene Job-ID
+- score: eine Zahl von 0 bis 100
+
+Wichtig:
+- Kein Markdown
+- Keine Erklärungen außerhalb des JSON
+- score muss eine Zahl von 0 bis 100 sein
+- Gib für jeden Job genau einen Eintrag zurück
+- Bewerte Skills, Technologien, Aufgaben, Erfahrung, Seniorität und Rollenprofil
+- Wenn wichtige Anforderungen fehlen, senke den Score
+- Wenn der Lebenslauf einige passende Begriffe oder Projekte enthält, nutze Zwischenwerte statt 0
+- 0 bedeutet: keine erkennbare fachliche Überschneidung
+- 20-40 bedeutet: einzelne passende Skills oder Projekte
+- 40-70 bedeutet: mehrere relevante Überschneidungen
+- 70-100 bedeutet: sehr klare fachliche Passung
+
+Lebenslauf:
+${extractedText.slice(0, 7000)}
+
+Jobs:
+${JSON.stringify(candidateJobs.map(summarizeJobForMatching))}
+`,
+      },
+    ],
+  });
+
+  const text = response.choices[0]?.message?.content;
+
+  if (!text) {
+    return new Map();
+  }
+
+  const parsed = AIMatchSchema.parse(JSON.parse(text));
+
+  return new Map(
+    parsed.matches.map((match) => [
+      match.id,
+      clampAiMatchScore(Math.round(match.score)),
+    ]),
+  );
+};
+
+/**
+ * Returns the top N jobs sorted by AI match score for a given CV text.
+ */
+export const getTopMatchingJobs = async (
+  extractedText: string,
+  limit = 5,
+): Promise<Array<Job & { matchScore: number }>> => {
+  const jobs = await readJobs();
+  const preselectedJobs = jobs
+    .map((job) => ({ ...job, matchScore: computeMatchScore(extractedText, job) }))
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, Math.max(20, limit * 8));
+
+  try {
+    const aiScores = await getAiMatchScores(extractedText, preselectedJobs);
+
+    if (aiScores.size > 0) {
+      return preselectedJobs
+        .map((job) => ({
+          ...job,
+          matchScore: Math.max(aiScores.get(job.id) ?? 0, job.matchScore),
+        }))
+        .sort((a, b) => b.matchScore - a.matchScore)
+        .slice(0, limit);
+    }
+  } catch (error) {
+    console.error('AI job matching error:', error);
+  }
+
+  return preselectedJobs.slice(0, limit);
 };
 
 export const getJobById = async (id: string): Promise<Job | undefined> => {

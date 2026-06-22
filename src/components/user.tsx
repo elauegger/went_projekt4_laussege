@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useCallback } from 'react';
+import { Loader2, AlertCircle } from 'lucide-react';
 import { authClient } from '../lib/auth-client';
 
 export function User() {
@@ -12,22 +13,27 @@ export function User() {
 
   if (isPending) {
     return (
-      <div className="w-full max-w-3xl rounded-md border p-4 text-sm text-gray-700">
-        Loading session...
+      <div className="w-full max-w-3xl rounded-2xl border border-[var(--color-line)] bg-[var(--color-surface-raise)] p-4 flex items-center justify-center gap-3 text-sm text-[var(--color-muted)]">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        Session wird geladen...
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="w-full max-w-3xl rounded-md border p-4 text-sm text-red-700">
-        Error loading session: {String(error?.message ?? error)}
+      <div className="w-full max-w-3xl rounded-2xl border border-[#d8a4a4] bg-[#faecec] p-4 text-sm text-[#8b4343] flex items-start gap-3">
+        <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+        <div>
+          <strong>Fehler beim Laden der Session</strong>
+          <p className="text-xs mt-1">{String(error?.message ?? error)}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full max-w-3xl rounded-md border p-4">
+    <div className="w-full max-w-3xl rounded-2xl border border-[var(--color-line)] bg-white/75 p-4">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-lg font-semibold">User Profile</h2>
         <button

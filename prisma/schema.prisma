@@ -21,6 +21,7 @@ model User {
   improvedFiles    improved_files[]
   savedSuggestions saved_suggestions[]
   cvUploads        cv_uploads[]
+  savedJobs        saved_jobs[]
 
   @@map("user")
 }
@@ -152,17 +153,39 @@ model saved_suggestions {
 }
 
 model cv_uploads {
-  id               String   @id @default(uuid())
+  id               String  @id @default(uuid())
   userId           String?
   originalFilename String
   fileType         String
   fileUrl          String
   storageKey       String
   fileSizeBytes    BigInt
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extractedText    String? @db.Text
+
+  analysisScore        Int?
+  analysisStrengths    Json?
+  analysisWeaknesses   Json?
+  analysisImprovements Json?
+  analysisModelUsed    String?
+  analyzedAt           DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("cv_uploads")
+}
+
+model saved_jobs {
+  id        String   @id @default(uuid())
+  userId    String
+  jobId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, jobId])
+  @@index([userId])
+  @@map("saved_jobs")
 }
